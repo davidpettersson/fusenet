@@ -7,9 +7,10 @@
 CXX = g++
 CXXFLAGS = -pipe -O2 -Wall -W -ansi -pedantic-errors -Wmissing-braces
 CXXFLAGS += -Wparentheses -Wold-style-cast -g
+VPATH	= ../src:./
 
 program = fusenet
-sources = $(wildcard *.cc)
+sources = $(notdir $(wildcard ../src/*.cc))
 objects = $(sources:.cc=.o)
 depends = $(sources:.cc=.d)
 
