@@ -64,7 +64,7 @@ namespace fusenet {
      * @param protocol the protocol instance
      */
     void initiate(const char* const hostName, int portNumber, 
-		  const Protocol* protocol);
+		  const ProtocolCreator* protocolCreator);
 
     /**
      * Destroys a network reactor instance.

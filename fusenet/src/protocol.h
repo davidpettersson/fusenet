@@ -43,6 +43,11 @@ namespace fusenet {
     virtual void onDataReceived(uint8_t data) = 0;
 
     /**
+     * Called on made connection.
+     */
+    virtual void onConnectionMade(void) = 0;
+
+    /**
      * Called on lost connection.
      */
     virtual void onConnectionLost(void) = 0;
