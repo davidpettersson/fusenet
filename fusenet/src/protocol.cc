@@ -10,7 +10,7 @@
 
 namespace fusenet {
 
-  Protocol::Protocol(const Transport* transport) {
+  Protocol::Protocol(Transport* transport) {
     this->transport = transport;
   }
 

@@ -12,7 +12,7 @@
 
 namespace fusenet {
 
-  Protocol* ClientProtocolCreator::create(const Transport* transport) const {
+  Protocol* ClientProtocolCreator::create(Transport* const transport) const {
     return new ClientProtocol(transport);
   }
 

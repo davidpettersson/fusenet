@@ -15,11 +15,8 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include "cs-connection.h"
-#include "cs-connectionclosedexception.h"
-#include "cs-server.h"
 #include "protocol-creator.h"
-
+#include "socket-transport.h"
 
 #include <iostream>
 #include <map>
@@ -74,32 +71,32 @@ namespace fusenet {
     ~NetworkReactor(void);
 
   private:
+    
+    /**
+     * Creates the accept socket.
+     */
+    int createAcceptSocket(int portNumber);
 
     /**
      * Handle incoming data on a connection.
      */
-    void handleIncomingData(client_server::Connection* connection);
+    void handleIncomingData(SocketTransport* transport);
 
     /**
      * Handle incoming data on a connection.
      */
-    void handleLostConnection(client_server::Connection* connection);
+    void handleLostConnection(SocketTransport* transport);
 
     /**
      * Handle incoming data on a connection.
      */
-    void handleNewConnection(void);
+    int handleNewConnection(int socket);
 
     /**
      * Stop serving.
      */
     void stopServing(void);
     
-    /**
-     * Internal server instance.
-     */
-    client_server::Server* server;
-
     /**
      * Internal protocol creator.
      */
@@ -108,7 +105,7 @@ namespace fusenet {
     /**
      * Internal connection -> (transport, protocol) mapping.
      */
-    std::map<client_server::Connection*, std::pair<Transport*, Protocol*> > table;
+    std::map<SocketTransport*, Protocol*> table;
   };
 }
 

@@ -23,7 +23,7 @@ namespace fusenet {
     /**
      * Create a new socket transport.
      */
-    SocketTransport(const client_server::Connection* connection);
+    SocketTransport(int descriptor);
     
     /**
      * Send data via socket. If something should go wrong, the
@@ -33,7 +33,7 @@ namespace fusenet {
      *
      * @todo Should we not have any sort of error handling?
      */
-    void send(uint8_t data) const;
+    void send(uint8_t data);
 
     /**
      * Receive data via socket. If something should go wrong, the eror
@@ -43,19 +43,35 @@ namespace fusenet {
      *
      * @todo Should we not have any sort of error handling?
      */
-    uint8_t receive(void) const;
+    uint8_t receive(void);
+
+    /**
+     * Get the socket descriptor.
+     */
+
+    int getDescriptor(void);
+
+    /**
+     * Close socket.
+     */
+    void close(void);
+
+    /**
+     * Is socket closed.
+     */
+    bool isClosed(void) const;
 
     /**
      * Destroy a socket transport.
      */
-    ~SocketTransport(void);
+    virtual ~SocketTransport(void);
 
   private:
 
     /**
      * Internal connection.
      */
-    const client_server::Connection* connection;
+    int descriptor;
   };
 }
 

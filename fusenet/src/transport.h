@@ -22,24 +22,36 @@ namespace fusenet {
 
   public:
 
+    Transport(void);
+
     /**
      * Send data.
      *
      * @param data the data to send
      */
-    virtual void send(uint8_t data) const = 0;
+    virtual void send(uint8_t data) = 0;
 
     /**
      * Receive data.
      */
-    virtual uint8_t receive(void) const = 0;
+    virtual uint8_t receive(void) = 0;
+
+    /**
+     * Close transport.
+     */
+    virtual void close(void) = 0;
+
+    /**
+     * Is transport closed.
+     */
+    virtual bool isClosed(void) const = 0;
 
     /**
      * Destruct instance.
      *
      * @todo Why can't I just say that the destructor should be = 0?
      */
-    virtual ~Transport(void) { };
+    virtual ~Transport(void);
   };
 }
 

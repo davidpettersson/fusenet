@@ -32,7 +32,7 @@ namespace fusenet {
      *
      * @param transport the transport
      */
-    Protocol(const Transport* transport);
+    Protocol(Transport* const transport);
 
     /**
      * Called on made connection.
@@ -62,9 +62,9 @@ namespace fusenet {
   protected:
 
     /**
-     * The transport. Stored by the constructed.
+     * The transport. Stored by the constructor.
      */
-    const Transport* transport;
+    Transport* transport;
   };
 
 }

@@ -30,7 +30,7 @@ namespace fusenet {
      *
      * @param transport the transport
      */
-    MessageProtocol(const Transport* transport) : Protocol(transport) { }
+    MessageProtocol(Transport* transport) : Protocol(transport) { }
 
     /**
      * Called on made connection.

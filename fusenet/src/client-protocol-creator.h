@@ -24,7 +24,7 @@ namespace fusenet {
     /**
      * Creates instances of client protocols.
      */
-    Protocol* create(const Transport* transport) const;
+    Protocol* create(Transport* const transport) const;
   };
 }
 

@@ -36,7 +36,7 @@ namespace fusenet {
      *
      * @param transport the transport
      */
-    ServerProtocol(const Transport* transport) : MessageProtocol(transport) { }
+    ServerProtocol(Transport* transport) : MessageProtocol(transport) { }
 
     /**
      * List newsgroups.
