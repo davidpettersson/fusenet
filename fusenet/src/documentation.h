@@ -22,4 +22,10 @@ namespace client_server { }
  */
 namespace fusenet { }
 
+/**
+ * Namespace defined by Per Holm and friends for the sole purpose of
+ * containing the protocol's message identifiers. (?)
+ */
+namespace protocol { }
+
 #endif
