@@ -17,7 +17,7 @@ depends = $(sources:.cc=.d)
 
 all: test-database
 
-test-database: test-database.o memory-database.o database.o
+test-database: test-database.o memory-database.o filesystem-database.o database.o
 	$(CXX) $(LDFLAGS) -o $@ $^
 
 %.d: %.cc
