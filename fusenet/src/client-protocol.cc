@@ -54,14 +54,18 @@ namespace fusenet {
 
   void ClientProtocol::receiveCreateNewsgroup(void) {
     MessageIdentifier_t status = receiveCommand();
-    assert(receiveCommand() == ANS_END);
 
     if (status == ANS_ACK) {
       onCreateNewsgroup(true);
     } else {
-      receiveCommand();
-      onCreateNewsgroup(false);
+      status = receiveCommand();
+      if (status == ERR_NG_ALREADY_EXISTS)
+	      onCreateNewsgroup(false);
+      else
+	      std::cout << "Unknwn error, error message not defined."
+		      << std::endl;
     }
+    assert(receiveCommand() == ANS_END);
   }
 
   void ClientProtocol::onCreateNewsgroup(bool success) {
@@ -86,9 +90,14 @@ namespace fusenet {
     if (status == ANS_ACK) {
       onDeleteNewsgroup(true);
     } else {
-      receiveCommand();
-      onDeleteNewsgroup(false);
+      status = receiveCommand();
+      if (status == ERR_NG_DOES_NOT_EXIST)
+	      onDeleteNewsgroup(false);
+      else
+	      std::cout << "Unknown error, error message not defined."
+		      << std::endl;
     }
+    assert(receiveCommand() == ANS_END);
   }
 
   void ClientProtocol::onDeleteNewsgroup(bool success) {

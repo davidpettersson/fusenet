@@ -36,6 +36,7 @@ namespace fusenet {
 }
 
 static void serverBehaviour(void) {
+  std::cout << "fusenet server started." << std::endl;
   fusenet::NetworkReactor networkReactor;
 
 #ifdef ENABLE_ECHO
@@ -48,6 +49,7 @@ static void serverBehaviour(void) {
 }
 
 static void clientBehaviour(void) {
+  std::cout << "fusenet client started." << std::endl;
   fusenet::NetworkReactor networkReactor;
 
 #ifdef ENABLE_ECHO
