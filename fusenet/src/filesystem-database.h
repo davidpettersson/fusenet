@@ -100,11 +100,6 @@ namespace fusenet {
 
   private:
 
-    /**
-     * Check if path is available.
-     */
-    bool pathAvailable(const std::string& path);
-
   };
 }
 
