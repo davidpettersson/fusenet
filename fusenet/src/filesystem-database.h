@@ -15,7 +15,25 @@
 namespace fusenet {
 
   /**
-   * Filesystem database.
+   * Filesystem database. The filesystem database uses a simple
+   * directory structure with plain text files as its back end. The
+   * directory for a working database looks like this:
+   *
+   *  db/ --+-- 1/ ---+--- meta
+   *        |         |
+   *        |         +--- 1
+   *        |         |
+   *        |         +--- 2
+   *        |
+   *        +-- 2/
+   *        |
+   *        :
+   *
+   * The database is contained in a db/ directory that lies in the
+   * current working directory. Inside the db directory, there exists
+   * one directory per newsgroup. Each group has one meta file
+   * containing the name of the group, and each article is one plain
+   * text file in this directory.
    */
   class FilesystemDatabase : public Database {
 
