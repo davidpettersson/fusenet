@@ -32,7 +32,7 @@ static void serverBehaviour(int port, bool useMemoryBackend) {
   } else {
     std::cout << "File system backend selected" << std::endl;
     fusenet::FilesystemDatabase database;
-    fusenet::ServerCreator creator(NULL);
+    fusenet::ServerCreator creator(&database);
     networkReactor.serve(port, &creator);
   }
 }
