@@ -118,6 +118,7 @@ namespace fusenet {
 	    {
 		    for (size_t j = 0; j < mapping[i]->second->size(); ++j)
 			    delete mapping[i]->second->at(j);
+		    delete mapping[i]->second;
 	    }
 	    delete mapping[i];
 	    delete idmap[i];
