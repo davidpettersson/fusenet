@@ -17,7 +17,7 @@ namespace fusenet {
   }
 
   Protocol* ServerCreator::create(Transport* const transport) const {
-    return new Server(transport);
+    return new Server(transport, database);
   }
 
 }

@@ -15,36 +15,26 @@
 
 namespace fusenet {
 
-  Server::Server(Transport* transport) : ServerProtocol(transport) {
-    newsgroupCounter = 0;
+  Server::Server(Transport* transport, Database* database) : ServerProtocol(transport) {
+    this->database = database;
   }
 
   void Server::onListNewsgroups(void) {
-    std::cout << PREFIX << "Replying to list newsgroups" << std::endl;
+    NewsgroupList_t newsgroupList;
+    database->getNewsgroupList(newsgroupList);
 
-    // FIXME: Replace with calls to database interface
+    std::cout << PREFIX << "Replying to list newsgroups" << std::endl;
     replyListNewsgroups(newsgroupList);
   }
 
   void Server::onCreateNewsgroup(std::string& newsgroupName) {
-    Newsgroup_t newsgroup;
-
     std::cout << PREFIX << "Creating newsgroup '" << newsgroupName << "'" << std::endl;
-    
-    // FIXME: Replace with calls to database interface
-    newsgroup.id = newsgroupCounter++;
-    newsgroup.name = newsgroupName;
-    newsgroupList.push_back(newsgroup);
-
-    std::cout << PREFIX << "Replying to create newsgroup" << std::endl;
-    replyCreateNewsgroup(STATUS_SUCCESS);
+    replyCreateNewsgroup(database->createNewsgroup(newsgroupName));
   }
 
   void Server::onDeleteNewsgroup(int newsgroupIdentifier) {
     std::cout << PREFIX << "Replying to delete newsgroup" << std::endl;
-
-    // FIXME: Broken!
-    replyDeleteNewsgroup(STATUS_SUCCESS);
+    replyDeleteNewsgroup(database->deleteNewsgroup(newsgroupIdentifier));
   }
 
   void Server::onListArticles(int newsgroupIdentifier) {
