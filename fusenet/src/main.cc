@@ -18,10 +18,6 @@
 #include "server.h"
 #include "transport.h"
 
-#ifdef ENABLE_ECHO
-#include "echo.h"
-#endif
-
 namespace fusenet {
 
   class TerminalTransport : public Transport {
@@ -39,30 +35,23 @@ static void serverBehaviour(int port, bool useMemoryBackend) {
   std::cout << "Fusenet server started" << std::endl;
   fusenet::NetworkReactor networkReactor;
 
-#ifdef ENABLE_ECHO
-  fusenet::EchoServerCreator creator;
-  networkReactor.serve(port, &creator);
-#else
   if (useMemoryBackend) {
     std::cout << "Memory backend selected" << std::endl;
-    fusenet::ServerCreator creator;
+    // FIXME: Add database: MemoryDatabase database;
+    fusenet::ServerCreator creator(NULL);
     networkReactor.serve(port, &creator);
   } else {
     std::cout << "File system backend selected" << std::endl;
+    // FIXME: Add database
+    fusenet::ServerCreator creator(NULL);
+    networkReactor.serve(port, &creator);
   }
-#endif
 }
 
 static void clientBehaviour(const char* const host, int port) {
   std::cout << "Fusenet client started" << std::endl;
   fusenet::NetworkReactor networkReactor;
-
-#ifdef ENABLE_ECHO
-  fusenet::EchoClientCreator creator;
-#else
   fusenet::ClientCreator creator;
-#endif
-
   networkReactor.initiate(host, port, &creator);
 }
 
