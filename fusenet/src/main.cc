@@ -35,7 +35,7 @@ namespace fusenet {
   };
 }
 
-static void serverBehaviour(void) {
+static void serverBehaviour(int port) {
   std::cout << "fusenet server started." << std::endl;
   fusenet::NetworkReactor networkReactor;
 
@@ -45,10 +45,10 @@ static void serverBehaviour(void) {
   fusenet::ServerProtocolCreator creator;
 #endif
 
-  networkReactor.serve(4000, &creator);
+  networkReactor.serve(port, &creator);
 }
 
-static void clientBehaviour(void) {
+static void clientBehaviour(const char* const host, int port) {
   std::cout << "fusenet client started." << std::endl;
   fusenet::NetworkReactor networkReactor;
 
@@ -58,11 +58,11 @@ static void clientBehaviour(void) {
   fusenet::ClientProtocolCreator creator;
 #endif
 
-  networkReactor.initiate("pi", 4000, &creator);
+  networkReactor.initiate(host, port, &creator);
 }
 
 static void printUsage(void) {
-  std::cerr << "usage: fusenet [--client|--server]" << std::endl;
+  std::cerr << "usage: fusenet [ --client HOST PORT | --server PORT ]" << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -71,12 +71,10 @@ int main(int argc, char* argv[]) {
    * This argument handling is ugly, fix it sometime. :-)
    */
 
-  if (argc != 2) {
-    printUsage();
-  } else if (strcmp(argv[1], "--client") == 0) {
-    clientBehaviour();
-  } else if (strcmp(argv[1], "--server") == 0) {
-    serverBehaviour();
+  if (argc == 4 && strcmp(argv[1], "--client") == 0) {
+    clientBehaviour(argv[2], atoi(argv[3]));
+  } else if (argc == 3 && strcmp(argv[1], "--server") == 0) {
+    serverBehaviour(atoi(argv[2]));
   } else {
     printUsage();
   }

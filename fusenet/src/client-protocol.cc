@@ -10,10 +10,9 @@
 
 #include "client-protocol.h"
 
-#define ERR_NG	std::cout << "newsgroup does not exist" << std::endl
-#define ERR_ART	std::cout << "article does not exist" << std::endl
-#define ERR_UNK std::cout << \
-	"Unknwn error, error message not defined." << std::endl
+#define PRINT_ERR_NG  std::cout << "Newsgroup does not exist" << std::endl
+#define PRINT_ERR_ART std::cout << "Article does not exist" << std::endl
+#define PRINT_ERR_UNK std::cout << "Unknown error, error message not defined." << std::endl
 
 namespace fusenet {
 
@@ -35,6 +34,7 @@ namespace fusenet {
       receiveParameter(newsgroup.second);
       newsgroupList.push_back(newsgroup);
     }
+
     status = receiveCommand();
     assert(status == ANS_END);
     
@@ -60,18 +60,21 @@ namespace fusenet {
   void ClientProtocol::receiveCreateNewsgroup(void) {
     MessageIdentifier_t status = receiveCommand();
 
-    if (status == ANS_ACK)
+    if (status == ANS_ACK) {
       std::cout << "Newsgroup created" << std::endl;
-    else
-    {
+    } else {
       status = receiveCommand();
-      if (status == ERR_NG_ALREADY_EXISTS)
-	      std::cout << "Newsgroup already exists" << std::endl;
-      else
-	      ERR_UNK;
+
+      if (status == ERR_NG_ALREADY_EXISTS) {
+	std::cout << "Newsgroup already exists" << std::endl;
+      } else {
+	PRINT_ERR_UNK;
+      }
     }
+
     status = receiveCommand();
     assert(status == ANS_END);
+
     interact();
   }
 
@@ -84,19 +87,22 @@ namespace fusenet {
   void ClientProtocol::receiveDeleteNewsgroup(void) {
     MessageIdentifier_t status = receiveCommand();
 
-    if (status == ANS_ACK)
+    if (status == ANS_ACK) {
       std::cout << "Newsgroup deleted" << std::endl;
-    else
-    {
+    } else {
       std::cout << "Error, newsgroup not deleted: ";
       status = receiveCommand();
-      if (status == ERR_NG_DOES_NOT_EXIST)
-	      ERR_NG;
-      else
-	      ERR_UNK;
+
+      if (status == ERR_NG_DOES_NOT_EXIST) {
+	PRINT_ERR_NG;
+      } else {
+	PRINT_ERR_UNK;
+      }
     }
+
     status = receiveCommand();
     assert(status == ANS_END);
+
     interact();
   }
 
@@ -158,19 +164,23 @@ namespace fusenet {
   void ClientProtocol::receiveCreateArticle(void) {
     MessageIdentifier_t status;
     status = receiveCommand();
-    if (status == ANS_ACK)
+
+    if (status == ANS_ACK) {
       std::cout << "Article created" << std::endl;
-    else
-    {
+    } else {
       std::cout << "Error, article not created: ";
       status = receiveCommand();
-      if (status == ERR_NG_DOES_NOT_EXIST)
-	ERR_NG;
-      else
-	ERR_UNK;
+
+      if (status == ERR_NG_DOES_NOT_EXIST) {
+	PRINT_ERR_NG;
+      } else {
+	PRINT_ERR_UNK;
+      }
     }
+
     status = receiveCommand();
     assert(status == ANS_END);
+
     interact();
   }
   
@@ -185,21 +195,25 @@ namespace fusenet {
   void ClientProtocol::receiveDeleteArticle(void) {
     MessageIdentifier_t status;
     status = receiveCommand();
-    if (status == ANS_ACK)
+
+    if (status == ANS_ACK) {
       std::cout << "Article deleted" << std::endl;
-    else
-    {
+    } else {
       std::cout << "Error, article not deleted: ";
       status = receiveCommand();
-      if (status == ERR_NG_DOES_NOT_EXIST)
-        ERR_NG;
-      else if (status == ERR_ART_DOES_NOT_EXIST)
-        ERR_ART;
-      else
-	ERR_UNK;
+
+      if (status == ERR_NG_DOES_NOT_EXIST) {
+        PRINT_ERR_NG;
+      } else if (status == ERR_ART_DOES_NOT_EXIST) {
+        PRINT_ERR_ART;
+      } else {
+	PRINT_ERR_UNK;
+      }
     }
+
     status = receiveCommand();
     assert(status == ANS_END);
+
     interact();
   }
 
@@ -214,24 +228,35 @@ namespace fusenet {
   void ClientProtocol::receiveGetArticle(void) {
     MessageIdentifier_t status;
     status = receiveCommand();
-    if (status == ANS_ACK)
-    {
-      /* XXX: FIXME! */
-      std::cout << "Article got, note: needs handeling!" << std::endl;
-    }
-    else
-    {
+    std::string articleTitle;
+    std::string articleAuthor;
+    std::string articleText;
+
+    if (status == ANS_ACK) {
+      receiveParameter(articleTitle);
+      receiveParameter(articleAuthor);
+      receiveParameter(articleText);
+
+      std::cout << "Title  : " << articleTitle << std::endl;
+      std::cout << "Author : " << articleAuthor << std::endl;
+      std::cout << "-------------------------------------------------------------------" << std:: endl;
+      std::cout << articleText << std::endl;
+    } else {
       std::cout << "Error, article not sent: ";
       status = receiveCommand();
-      if (status == ERR_NG_DOES_NOT_EXIST)
-        ERR_NG;
-      else if (status == ERR_ART_DOES_NOT_EXIST)
-        ERR_ART;
-      else
-	ERR_UNK;
+
+      if (status == ERR_NG_DOES_NOT_EXIST) {
+        PRINT_ERR_NG;
+      } else if (status == ERR_ART_DOES_NOT_EXIST) {
+        PRINT_ERR_ART;
+      } else {
+	PRINT_ERR_UNK;
+      }
     }
+
     status = receiveCommand();
     assert(status == ANS_END);
+
     interact();
   }
   
@@ -331,6 +356,11 @@ namespace fusenet {
 	break;
       }
 
+    case 'q':
+      {
+	exit(0);
+      }
+
     default: 
       {
 	printHelpMsg();
@@ -365,7 +395,7 @@ namespace fusenet {
       break;
     default:
       std::cout << "Throwing away data " << static_cast<int>(data)
-	      << " (this is a bad thing)" << std::endl;
+		<< " (this is a bad thing)" << std::endl;
       break;
     }
   }
