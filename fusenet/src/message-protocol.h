@@ -59,18 +59,32 @@ namespace fusenet {
     void sendParameter(int parameter);
 
     /**
+     * Receive an answer.
+     *
+     * @return the answer
+     */
+    MessageIdentifier_t receiveAnswer(void);
+
+    /**
+     * Receive a string parameter.
+     *
+     * @param parameter the parameter.
+     */
+    void receiveParameter(std::string& parameter);
+
+    /**
+     * Receive a number parameter.
+     *
+     * @param parameter the parameter.
+     */
+    void receiveParameter(int* const parameter);
+
+    /**
      * Called on lost connection.
      */
     virtual void onConnectionLost(void);
 
   private:
-
-    /**
-     * Called on data receival.
-     *
-     * @param data the data received
-     */
-    void onDataReceived(uint8_t data);
 
     /**
      * Unpack to a byte array.

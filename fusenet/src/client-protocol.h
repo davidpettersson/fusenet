@@ -10,10 +10,13 @@
  */
 
 #include <string>
+#include <vector>
 
 #include "message-protocol.h"
 
 namespace fusenet {
+
+  typedef std::pair<int, std::string> Newsgroup_t;
 
   /**
    * Client protocol class. This class extends the base protocol class
@@ -36,14 +39,14 @@ namespace fusenet {
     ClientProtocol(const Transport* transport) : MessageProtocol(transport) { }
 
     /**
-     * Called on made connection.
-     */
-    void onConnectionMade(void);
-
-    /**
      * List newsgroups.
      */
     void listNewsgroups(void);
+
+    /**
+     * List newsgroups callback.
+     */
+    void onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList);
 
     /**
      * Create newsgroup.
@@ -97,6 +100,29 @@ namespace fusenet {
     void getArticle(int newsgroupIdentifier,
 		    int articleIdentifier);
 
+  private:
+
+    /**
+     * Called on made connection.
+     */
+    void onConnectionMade(void);
+
+    /**
+     * Receive newsgroup list.
+     */
+    void receiveListNewsgroups(void);
+
+    /**
+     * Interact with the user.
+     */
+    void interact(void);
+
+    /**
+     * Called on data receival.
+     *
+     * @param data the data received
+     */
+    void onDataReceived(uint8_t data);
   };
 
 }
