@@ -135,11 +135,11 @@ namespace fusenet {
   }
 
   void ClientProtocol::onListArticles(bool success,
-				      std::vector<Newsgroup_t> newsgroupList) {
+				      std::vector<Article_t> articleList) {
     std::vector<Newsgroup_t>::iterator i;
 
     if (success) {
-      for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
+      for (i = articleList.begin(); i != articleList.end(); i++) {
 	std::cout << (*i).first << " " << (*i).second << std::endl;
       }
     } else {
