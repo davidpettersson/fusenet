@@ -75,9 +75,13 @@ public:
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getNewsgroupList(newsgroupList)));
     CPPUNIT_ASSERT(newsgroupList.size() == 1);
-    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
+    CPPUNIT_ASSERT(pDatabase->createNewsgroup(name) == STATUS_FAILURE_ALREADY_EXISTS);
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getNewsgroupList(newsgroupList)));
     CPPUNIT_ASSERT(newsgroupList.size() == 2);
+    name = "bar";
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getNewsgroupList(newsgroupList)));
+    CPPUNIT_ASSERT(newsgroupList.size() == 4);
   }
   void testEmpty() {
     NewsgroupList_t newsgroupList;
