@@ -16,8 +16,6 @@
 
 namespace fusenet {
 
-  typedef std::pair<int, std::string> Newsgroup_t;
-
   /**
    * Server protocol class. This class extends the base protocol class
    * with the ability to send and parse server messages as defined in
@@ -62,9 +60,7 @@ namespace fusenet {
      * Create article.
      */
     void onCreateArticle(int newsgroupIdentifier,
-			 std::string& articleTitle,
-			 std::string& articleAuthor,
-			 std::string& articleText);
+			 Article_t& article);
 
     /**
      * Delete article.
