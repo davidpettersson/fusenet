@@ -31,6 +31,8 @@
 #include <unistd.h>      /* close(), select() */
 #include <sys/time.h>    /* select() */
 #include <netinet/in.h>  /* sockaddr_in */
+#include <sys/types.h>
+#include <sys/socket.h>
 
 namespace client_server {
     Server::Server(int port) {
@@ -41,6 +43,8 @@ namespace client_server {
         if (my_socket < 0)
             my_socket = -1;
         else {
+	    int yes = 1;
+	    setsockopt(my_socket,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int));
             sockaddr_in server;
             server.sin_family      = AF_INET;
             server.sin_addr.s_addr = INADDR_ANY;

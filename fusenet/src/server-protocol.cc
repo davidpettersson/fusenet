@@ -7,7 +7,7 @@
  */
 
 #include <cassert>
-
+#include <string>
 #include "server-protocol.h"
 
 namespace fusenet {
@@ -18,24 +18,13 @@ namespace fusenet {
   }
   
   void ServerProtocol::receiveListNewsgroups(void) {
-    size_t n;
-    size_t i;
-    std::vector<Newsgroup_t> newsgroupList;
-    Newsgroup_t newsgroup;
-    
-    receiveParameter(reinterpret_cast<int*>(&n));
-    
-    std::cout << "Awaiting " << n << " newsgroups" << std::endl;
-    
-    for (i = 0; i < n; i++) {
-      receiveParameter(&newsgroup.first);
-      receiveParameter(newsgroup.second);
-      newsgroupList.push_back(newsgroup);
-    }
-
-    assert(receiveCommand() == ANS_END);
-    
-    onListNewsgroups(newsgroupList);
+    sendCommand(ANS_LIST_NG);
+    sendParameter(2);
+    sendParameter(1);
+    sendParameter("foo");
+    sendParameter(2);
+    sendParameter("bar");
+    sendCommand(ANS_END);
   }
 
   void ServerProtocol::onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList) {
@@ -46,79 +35,107 @@ namespace fusenet {
     }
   }
 
-  void ServerProtocol::createNewsgroup(const std::string& name) {
-    sendCommand(COM_CREATE_NG);
-    sendParameter(name);
-    sendCommand(COM_END);
+  void ServerProtocol::createNewsgroup(void) {
+    std::string name;
+    receiveParameter(name);
+    receiveCommand();
+    sendCommand(ANS_CREATE_NG);
+    sendCommand(ANS_ACK);
+    sendCommand(ANS_END);
   }
 
-  void ServerProtocol::deleteNewsgroup(int newsgroupIdentifier) {
-    sendCommand(COM_DELETE_NG);
-    sendParameter(newsgroupIdentifier);
-    sendCommand(COM_END);
+  void ServerProtocol::deleteNewsgroup(void) {
+    int id;
+    receiveParameter(&id);
+    receiveCommand();
+    sendCommand(ANS_DELETE_NG);
+    sendCommand(ANS_ACK);
+    sendCommand(ANS_END);
   }
 
-  void ServerProtocol::listArticles(int newsgroupIdentifier) {
-    sendCommand(COM_LIST_ART);
-    sendParameter(newsgroupIdentifier);
-    sendCommand(COM_END);    
+  void ServerProtocol::listArticles(void) {
+    int group;
+    receiveParameter(&group);
+    receiveCommand();
+    sendCommand(ANS_LIST_ART);
+    if (group == 1)
+    {
+    	sendCommand(ANS_ACK);
+	sendParameter(2);
+	sendParameter(1);
+	sendParameter("haXX0r");
+	sendParameter(2);
+	sendParameter("eller ngt");
+    }
+    else
+    {
+	sendCommand(ANS_NAK);
+	sendCommand(ERR_NG_DOES_NOT_EXIST);
+    }
+    sendCommand(ANS_END);
   }
 
-  void ServerProtocol::createArticle(int newsgroupIdentifier,
-				     const std::string& title,
-				     const std::string& author,
-				     const std::string& text) {
-    sendCommand(COM_CREATE_ART);
-    sendParameter(newsgroupIdentifier);
-    sendParameter(title);
-    sendParameter(author);
-    sendParameter(text);
-    sendCommand(COM_END);
+  void ServerProtocol::createArticle(void) {
+    int ngid;
+    std::string title, author, text;
+    receiveParameter(&ngid);
+    receiveParameter(title);
+    receiveParameter(author);
+    receiveParameter(text);
+    receiveCommand();
+    sendCommand(ANS_CREATE_ART);
+    sendCommand(ANS_NAK);
+    sendCommand(ERR_NG_DOES_NOT_EXIST);
+    sendCommand(ANS_END);
   }
   
-  void ServerProtocol::deleteArticle(int newsgroupIdentifier,
-				     int articleIdentifier) {
-    sendCommand(COM_DELETE_ART);
-    sendParameter(newsgroupIdentifier);
-    sendParameter(articleIdentifier);
-    sendCommand(COM_END);
+  void ServerProtocol::deleteArticle(void) {
+    int gid, aid;
+    receiveParameter(&gid);
+    receiveParameter(&aid);
+    receiveCommand();
+    sendCommand(ANS_DELETE_ART);
+    sendCommand(ANS_ACK);
+    sendCommand(ANS_END);
   }
 
-  void ServerProtocol::getArticle(int newsgroupIdentifier,
-				  int articleIdentifier) {
-    sendCommand(COM_GET_ART);
-    sendParameter(newsgroupIdentifier);
-    sendParameter(articleIdentifier);
-    sendCommand(COM_END);
+  void ServerProtocol::getArticle(void) {
+    int gid, aid;
+    receiveParameter(&gid);
+    receiveParameter(&aid);
+    receiveCommand();
+    sendCommand(ANS_GET_ART);
+    sendCommand(ANS_NAK);
+    sendCommand(ERR_NG_DOES_NOT_EXIST);
+    sendCommand(ANS_END);
   }
 
   void ServerProtocol::onConnectionMade(void) {
-    interact();
-  }
-
-  void ServerProtocol::interact(void) {
-    char command;
-
-    std::cout << "Enter command: ";
-    std::cin >> command;
-
-    std::cout << "Got " << command << ", hehe..." << std::endl;
-
-    switch (command) {
-    case 'l':
-      listNewsgroups();
-      break;
-    default:
-      std::cout << "Huh?" << std::endl;
-      break;
-    }
   }
 
   void ServerProtocol::onDataReceived(uint8_t data) {
 
     switch (data) {
-    case ANS_LIST_NG:
+    case COM_LIST_NG:
       receiveListNewsgroups();
+      break;
+    case COM_CREATE_NG:
+      createNewsgroup();
+      break;
+    case COM_DELETE_NG:
+      deleteNewsgroup();
+      break;
+    case COM_LIST_ART:
+      listArticles();
+      break;
+    case COM_CREATE_ART:
+      createArticle();
+      break;
+    case COM_DELETE_ART:
+      deleteArticle();
+      break;
+    case COM_GET_ART:
+      getArticle();
       break;
     default:
       break;
