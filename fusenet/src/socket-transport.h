@@ -23,6 +23,11 @@ namespace fusenet {
      * Create a new socket transport.
      */
     SocketTransport(int descriptor);
+
+    /**
+     * Create a new named socket transport.
+     */
+    SocketTransport(int descriptor, std::string& name);
     
     /**
      * Send data via socket. If something should go wrong, the

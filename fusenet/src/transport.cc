@@ -6,14 +6,20 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include <iostream>
-
 #include "transport.h"
 
 namespace fusenet {
 
   Transport::Transport(void) {
-    // Does nothing
+    transportName = "<unknown>";
+  }
+
+  Transport::Transport(std::string& name) {
+    transportName = name;
+  }
+
+  std::string& Transport::getName(void) {
+    return transportName;
   }
 
   Transport::~Transport(void) {

@@ -350,6 +350,7 @@ namespace fusenet {
     case 'q':
       {
 	exit(0);
+	break;
       }
 
     default: 

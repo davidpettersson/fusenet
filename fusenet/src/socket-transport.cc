@@ -20,6 +20,10 @@ namespace fusenet {
     descriptor = d;
   }
 
+  SocketTransport::SocketTransport(int d, std::string& name) : Transport(name) {
+    descriptor = d;
+  }
+
   void SocketTransport::send(uint8_t data) {
     if (isClosed()) {
       return;
