@@ -9,8 +9,6 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include <map>
-
 #include "fusenet-types.h"
 #include "database.h"
 
