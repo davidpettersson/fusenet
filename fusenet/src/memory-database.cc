@@ -16,6 +16,7 @@
 
 namespace fusenet {
 
+  std::map<int, Newsgroup_t> Newsgroups;
   MemoryDatabase::MemoryDatabase(void) {
     // Does nothing
   }
@@ -35,7 +36,7 @@ namespace fusenet {
   Status_t MemoryDatabase::createNewsgroup(std::string& newsgroupName) {
     for (size_t i = 0; i < idmap.size(); ++i)
     {
-	    if (idmap[i] && idmap[i]->compare(newsgroupName))
+	    if (idmap[i] && !idmap[i]->compare(newsgroupName))
 	    	return STATUS_FAILURE_ALREADY_EXISTS;
     }
     Newsgroup_t ng = {idmap.size(), newsgroupName};
@@ -103,7 +104,7 @@ namespace fusenet {
     article = *(mapping[newsgroupIdentifier]->second->at(articleIdentifier));
     return STATUS_SUCCESS;
   }
-
+  
   MemoryDatabase::~MemoryDatabase(void) {
   }
 }
