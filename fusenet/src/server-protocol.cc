@@ -18,6 +18,7 @@ namespace fusenet {
   }
   
   void ServerProtocol::receiveListNewsgroups(void) {
+    receiveCommand();
     sendCommand(ANS_LIST_NG);
     sendParameter(2);
     sendParameter(1);
@@ -111,6 +112,7 @@ namespace fusenet {
   }
 
   void ServerProtocol::onConnectionMade(void) {
+    // Do nothing yet
   }
 
   void ServerProtocol::onDataReceived(uint8_t data) {
@@ -139,7 +141,7 @@ namespace fusenet {
       break;
     default:
       std::cerr << "Error, unknown command byte: " 
-	      << static_cast<int>(data) << std::endl;
+		<< static_cast<int>(data) << std::endl;
       break;
     }
   }

@@ -28,7 +28,7 @@ namespace fusenet {
     /**
      * Creates instances of protocols.
      */
-    virtual Protocol* create(const Transport* transport) const = 0;
+    virtual Protocol* create(Transport* const transport) const = 0;
   };
 }
 

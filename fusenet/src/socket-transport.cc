@@ -6,49 +6,82 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <cassert>
+
 #include "socket-transport.h"
 
 #define PREFIX "[SocketTransport] "
 
 namespace fusenet {
   
-  SocketTransport::SocketTransport(const client_server::Connection* connection) {
-    this->connection = connection;
+  SocketTransport::SocketTransport(int d) {
+    descriptor = d;
   }
 
-  void SocketTransport::send(uint8_t data) const {
-    if (connection->isConnected()) {
-      try {
+  void SocketTransport::send(uint8_t data) {
+    if (isClosed()) {
+      return;
+    }
+
+    int n = ::send(descriptor, &data, 1, 0);
+
+    if (n == -1) {
+      close();
+    } else if (n == 0) {
+      close();
+    } else {
+      // All is well
+    }
+
 #ifdef ENABLE_DEBUG
-	std::cout << PREFIX "send(" << static_cast<int>(data) 
-		<< ")" << std::endl;
+    std::cout << PREFIX "send(" << static_cast<int>(data) << ")" << std::endl;
 #endif
-	connection->write(static_cast<unsigned char>(data));
-      } catch (client_server::ConnectionClosedException e) {
-	// Silently ignore as in comment
-      }
+  }
+
+  uint8_t SocketTransport::receive(void)  {
+    if (isClosed()) {
+      return 0;
+    }
+
+    uint8_t data;
+    int n = recv(descriptor, &data, 1, 0);
+
+    if (n == -1) {
+      close();
+    } else if (n == 0) {
+      close();
+    } else {
+      // All is well
+    }
+
+#ifdef ENABLE_DEBUG
+    std::cout << PREFIX "receive() -> " << static_cast<int>(data) << std::endl;
+#endif
+
+    return data;
+  }
+
+  int SocketTransport::getDescriptor(void) {
+    return descriptor;
+  }
+
+  void SocketTransport::close(void) {
+    if (descriptor != -1) {
+      ::close(descriptor);
+      descriptor = -1;
     }
   }
 
-  uint8_t SocketTransport::receive(void) const {
-    if (connection->isConnected()) {
-      try {
-	uint8_t data = connection->read();
-#ifdef ENABLE_DEBUG
-	std::cout << PREFIX "receive() = " << static_cast<int>(data) 
-		<< std::endl;
-#endif
-	return data;
-      } catch (client_server::ConnectionClosedException e) {
-	// Silently ignore as in comment
-      }
-    }
-
-    return 0;
+  bool SocketTransport::isClosed(void) const {
+    return descriptor == -1;
   }
 
   SocketTransport::~SocketTransport(void) {
-    // Do nothing
+    if (descriptor != -1) {
+      ::close(descriptor);
+    }
   }
 }
 
