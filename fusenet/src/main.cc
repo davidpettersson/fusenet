@@ -12,24 +12,13 @@
 
 #include "client-creator.h"
 #include "client.h"
+#include "filesystem-database.h"
+#include "memory-database.h"
 #include "network-reactor.h"
 #include "protocol.h"
 #include "server-creator.h"
 #include "server.h"
 #include "transport.h"
-
-namespace fusenet {
-
-  class TerminalTransport : public Transport {
-  public:
-    void send(uint8_t data) const {
-      printf("%02x ", data);
-    }
-    ~TerminalTransport(void) {
-      printf("\n");
-    }
-  };
-}
 
 static void serverBehaviour(int port, bool useMemoryBackend) {
   std::cout << "Fusenet server started" << std::endl;
@@ -37,12 +26,12 @@ static void serverBehaviour(int port, bool useMemoryBackend) {
 
   if (useMemoryBackend) {
     std::cout << "Memory backend selected" << std::endl;
-    // FIXME: Add database: MemoryDatabase database;
-    fusenet::ServerCreator creator(NULL);
+    fusenet::MemoryDatabase database;
+    fusenet::ServerCreator creator(&database);
     networkReactor.serve(port, &creator);
   } else {
     std::cout << "File system backend selected" << std::endl;
-    // FIXME: Add database
+    fusenet::FilesystemDatabase database;
     fusenet::ServerCreator creator(NULL);
     networkReactor.serve(port, &creator);
   }

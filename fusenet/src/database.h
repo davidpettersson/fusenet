@@ -9,6 +9,8 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
+#include <string>
+
 #include "fusenet-types.h"
 
 namespace fusenet {
@@ -26,6 +28,45 @@ namespace fusenet {
      * Create instance.
      */
     Database(void);
+
+    /**
+     * Get all newsgroups.
+     */
+    virtual Status_t getNewsgroupList(NewsgroupList_t& newsgroupList) = 0;
+
+    /**
+     * Create newsgroups.
+     */
+    virtual Status_t createNewsgroup(std::string& newsgroupName) = 0;
+
+    /**
+     * Delete newsgroup.
+     */
+    virtual Status_t deleteNewsgroup(int newsgroupIdentifier) = 0;
+
+    /**
+     * List articles.
+     */
+    virtual Status_t listArticles(int newsgroupIdentifier,
+				  ArticleList_t& articleList) = 0;
+
+    /**
+     * Create article.
+     */
+    virtual Status_t createArticle(Article_t& article) = 0;
+
+    /**
+     * Delete article.
+     */
+    virtual Status_t deleteArticle(int newsgroupIdentifer,
+				   int articleIdentifier) = 0;
+
+    /**
+     * Get article.
+     */
+    virtual Status_t getArticle(int newsgroupIdentifer,
+				int articleIdentifier,
+				Article_t& article) = 0;
 
     /**
      * Destroy instance.

@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "server-protocol.h"
+#include "database.h"
 
 namespace fusenet {
 
@@ -28,7 +29,7 @@ namespace fusenet {
      *
      * @param transport the transport
      */
-    Server(Transport* transport);
+    Server(Transport* transport, Database* database);
 
     /**
      * List newsgroups callback.
@@ -81,14 +82,9 @@ namespace fusenet {
     void onConnectionLost(void);
 
     /**
-     * Internal newsgroup counter.
+     * Database.
      */
-    int newsgroupCounter;
-
-    /**
-     * Internal newsgroup list.
-     */
-    NewsgroupList_t newsgroupList;
+    Database* database;
   };
 
 }
