@@ -12,7 +12,6 @@ namespace fusenet {
 
   Protocol::Protocol(const Transport* transport) {
     this->transport = transport;
-    transport->send(NULL, 0);
   }
 
 }
