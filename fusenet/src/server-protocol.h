@@ -50,55 +50,33 @@ namespace fusenet {
 
     /**
      * Create newsgroup.
-     *
-     * @param name the name of the new newsgroup
      */
-    void createNewsgroup(const std::string& name);
+    void createNewsgroup(void);
 
     /**
      * Delete newsgroup.
-     *
-     * @param newsgroupIdentifier the newsgroup identifier
      */
-    void deleteNewsgroup(int newsgroupIdentifier);
+    void deleteNewsgroup(void);
 
     /**
      * List articles.
-     *
-     * @param newsgroupIdentifier the newsgroup identifier
      */
-    void listArticles(int newsgroupIdentifier);
+    void listArticles(void);
 
     /**
      * Create article.
-     *
-     * @param newsgroupIdentifier the newsgroup identifier
-     * @param title the article title
-     * @param author the article author
-     * @param text the article text
      */
-    void createArticle(int newsgroupIdentifier,
-		       const std::string& title,
-		       const std::string& author,
-		       const std::string& text);
+    void createArticle(void);
 
     /**
      * Delete article.
-     *
-     * @param newsgroupIdentifier the newsgroup identifier
-     * @param articleIdentifier the article identifier
      */
-    void deleteArticle(int newsgroupIdentifier,
-		       int articleIdentifier);
+    void deleteArticle(void);
 
     /**
      * Get article.
-     *
-     * @param newsgroupIdentifier the newsgroup identifier
-     * @param articleIdentifier the article identifier
      */
-    void getArticle(int newsgroupIdentifier,
-		    int articleIdentifier);
+    void getArticle(void);
 
   private:
 
@@ -111,11 +89,6 @@ namespace fusenet {
      * Receive newsgroup list.
      */
     void receiveListNewsgroups(void);
-
-    /**
-     * Interact with the user.
-     */
-    void interact(void);
 
     /**
      * Called on data receival.
