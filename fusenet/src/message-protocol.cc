@@ -82,7 +82,7 @@ namespace fusenet {
       number[i] = transport->receive();
     }
 
-    pack(number, reinterpret_cast<uint32_t*>(parameter));
+    pack(number, reinterpret_cast<size_t*>(parameter));
   }
 
   void MessageProtocol::onConnectionLost(void) {
@@ -98,7 +98,7 @@ namespace fusenet {
   }
 
   void MessageProtocol::pack(const uint8_t* const array, 
-			     uint32_t* const integer) {
+			     size_t* const integer) {
     *integer  = (array[0] << 24);
     *integer |= (array[1] << 16);
     *integer |= (array[2] <<  8);

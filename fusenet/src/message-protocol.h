@@ -100,7 +100,7 @@ namespace fusenet {
      * @param array the array to pack
      * @param integer the packed integer
      */
-    void pack(const uint8_t* const array, uint32_t* const integer);
+    void pack(const uint8_t* const array, size_t* const integer);
   };
 
 
