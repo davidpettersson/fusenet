@@ -14,7 +14,29 @@
 #define PRINT_ERR_ART std::cout << "Article does not exist" << std::endl
 #define PRINT_ERR_UNK std::cout << "Unknown error, error message not defined." << std::endl
 
+
 namespace fusenet {
+  
+  static Status_t TranslateError(MessageIdentifier_t identifier) {
+    Status_t status;
+    
+    switch (identifier) {
+    case ERR_NG_ALREADY_EXISTS:
+      status = STATUS_FAILURE_ALREADY_EXISTS;
+      break;
+    case ERR_NG_DOES_NOT_EXIST:
+      status = STATUS_FAILURE_DOES_NOT_EXIST;
+      break;
+    case ERR_ART_DOES_NOT_EXIST:
+      status = STATUS_FAILURE_DOES_NOT_EXIST;
+      break;
+    default:
+      status = STATUS_FAILURE;
+      break;
+    }
+    
+    return status;
+  }
 
   void ClientProtocol::listNewsgroups(void) {
     sendCommand(COM_LIST_NG);
@@ -35,18 +57,7 @@ namespace fusenet {
     }
 
     expectCommand(ANS_END);
-    onListNewsgroups(newsgroupList);
-  }
-
-  void ClientProtocol::onListNewsgroups(NewsgroupList_t& newsgroupList) {
-    NewsgroupList_t::iterator i;
-
-    for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
-      Newsgroup_t& n = *i;
-      std::cout << n.id << " " << n.name << std::endl;
-    }
-
-    interact();
+    onListNewsgroups(STATUS_SUCCESS, newsgroupList);
   }
 
   void ClientProtocol::createNewsgroup(const std::string& name) {
@@ -56,22 +67,16 @@ namespace fusenet {
   }
 
   void ClientProtocol::receiveCreateNewsgroup(void) {
-    MessageIdentifier_t status = receiveCommand();
+    Status_t status;
 
-    if (status == ANS_ACK) {
-      std::cout << "Newsgroup created" << std::endl;
+    if (receiveCommand() == ANS_ACK) {
+      status = STATUS_SUCCESS;
     } else {
-      status = receiveCommand();
-
-      if (status == ERR_NG_ALREADY_EXISTS) {
-	std::cout << "Newsgroup already exists" << std::endl;
-      } else {
-	PRINT_ERR_UNK;
-      }
+      status = TranslateError(receiveCommand());
     }
 
     expectCommand(ANS_END);
-    interact();
+    onCreateNewsgroup(status);
   }
 
   void ClientProtocol::deleteNewsgroup(int newsgroupIdentifier) {
@@ -81,23 +86,16 @@ namespace fusenet {
   }
 
   void ClientProtocol::receiveDeleteNewsgroup(void) {
-    MessageIdentifier_t status = receiveCommand();
+    Status_t status;
 
-    if (status == ANS_ACK) {
-      std::cout << "Newsgroup deleted" << std::endl;
+    if (receiveCommand() == ANS_ACK) {
+      status = STATUS_SUCCESS;
     } else {
-      std::cout << "Error, newsgroup not deleted: ";
-      status = receiveCommand();
-
-      if (status == ERR_NG_DOES_NOT_EXIST) {
-	PRINT_ERR_NG;
-      } else {
-	PRINT_ERR_UNK;
-      }
+      status = TranslateError(receiveCommand());
     }
 
     expectCommand(ANS_END);
-    interact();
+    onDeleteNewsgroup(status);
   }
 
   void ClientProtocol::listArticles(int newsgroupIdentifier) {
@@ -107,14 +105,13 @@ namespace fusenet {
   }
 
   void ClientProtocol::receiveListArticles(void) {
-    MessageIdentifier_t status = receiveCommand();
     ArticleList_t articleList;
     Article_t article;
+    Status_t status;
     int n;
     int i;
-    bool success;
 
-    if (status == ANS_ACK) {
+    if (receiveCommand() == ANS_ACK) {
       receiveParameter(&n);
 
       for (i = 0; i < n; i++) {
@@ -123,29 +120,13 @@ namespace fusenet {
 	articleList.push_back(article);
       }
 
-      success = true;
+      status = STATUS_SUCCESS;
     } else {
-      success = false;
+      status = STATUS_FAILURE;
     }
 
     expectCommand(ANS_END);
-    onListArticles(success, articleList);
-  }
-
-  void ClientProtocol::onListArticles(bool success,
-				      ArticleList_t& articleList) {
-    ArticleList_t::iterator i;
-
-    if (success) {
-      for (i = articleList.begin(); i != articleList.end(); i++) {
-	Article_t& a = *i;
-	std::cout << a.id << " " << a.title << " " << std::endl;
-      }
-    } else {
-      std::cout << "No such newsgroup" << std::endl;
-    }
-
-    interact();
+    onListArticles(status, articleList);
   }
 
   void ClientProtocol::createArticle(int newsgroupIdentifier,
@@ -161,24 +142,16 @@ namespace fusenet {
   }
 
   void ClientProtocol::receiveCreateArticle(void) {
-    MessageIdentifier_t status;
-    status = receiveCommand();
+    Status_t status;
 
-    if (status == ANS_ACK) {
-      std::cout << "Article created" << std::endl;
+    if (receiveCommand() == ANS_ACK) {
+      status = STATUS_SUCCESS;
     } else {
-      std::cout << "Error, article not created: ";
-      status = receiveCommand();
-
-      if (status == ERR_NG_DOES_NOT_EXIST) {
-	PRINT_ERR_NG;
-      } else {
-	PRINT_ERR_UNK;
-      }
+      status = TranslateError(receiveCommand());
     }
 
     expectCommand(ANS_END);
-    interact();
+    onCreateArticle(status);
   }
   
   void ClientProtocol::deleteArticle(int newsgroupIdentifier,
@@ -190,26 +163,16 @@ namespace fusenet {
   }
 
   void ClientProtocol::receiveDeleteArticle(void) {
-    MessageIdentifier_t status;
-    status = receiveCommand();
+    Status_t status;
 
-    if (status == ANS_ACK) {
-      std::cout << "Article deleted" << std::endl;
+    if (receiveCommand() == ANS_ACK) {
+      status = STATUS_SUCCESS;
     } else {
-      std::cout << "Error, article not deleted: ";
-      status = receiveCommand();
-
-      if (status == ERR_NG_DOES_NOT_EXIST) {
-        PRINT_ERR_NG;
-      } else if (status == ERR_ART_DOES_NOT_EXIST) {
-        PRINT_ERR_ART;
-      } else {
-	PRINT_ERR_UNK;
-      }
+      status = TranslateError(receiveCommand());
     }
 
     expectCommand(ANS_END);
-    interact();
+    onDeleteArticle(status);
   }
 
   void ClientProtocol::getArticle(int newsgroupIdentifier,
@@ -221,150 +184,23 @@ namespace fusenet {
   }
 
   void ClientProtocol::receiveGetArticle(void) {
-    MessageIdentifier_t status;
-    status = receiveCommand();
-    std::string articleTitle;
-    std::string articleAuthor;
-    std::string articleText;
+    Status_t status;
+    Article_t article;
 
-    if (status == ANS_ACK) {
-      receiveParameter(articleTitle);
-      receiveParameter(articleAuthor);
-      receiveParameter(articleText);
-
-      std::cout << "Title  : " << articleTitle << std::endl;
-      std::cout << "Author : " << articleAuthor << std::endl;
-      std::cout << "-------------------------------------------------------------------" << std:: endl;
-      std::cout << articleText << std::endl;
+    if (receiveCommand() == ANS_ACK) {
+      receiveParameter(article.title);
+      receiveParameter(article.author);
+      receiveParameter(article.text);
+      status = STATUS_SUCCESS;
     } else {
-      std::cout << "Error, article not sent: ";
-      status = receiveCommand();
-
-      if (status == ERR_NG_DOES_NOT_EXIST) {
-        PRINT_ERR_NG;
-      } else if (status == ERR_ART_DOES_NOT_EXIST) {
-        PRINT_ERR_ART;
-      } else {
-	PRINT_ERR_UNK;
-      }
+      status = TranslateError(receiveCommand());
     }
 
     expectCommand(ANS_END);
-    interact();
+    onGetArticle(status, article);
   }
-  
-  void ClientProtocol::onConnectionMade(void) {
-    interact();
-  }
-  
-  std::string ClientProtocol::askString(const std::string& question) {
-    std::string answer;
-    
-    std::cout << question << ": ";
-    std::cin >> answer;
-    
-    return answer;
-  }
-  
-  int ClientProtocol::askInteger(const std::string& question) {
-    int answer;
-    
-    std::cout << question << ": ";
-    std::cin >> answer;
-    
-    return answer;
-  }
-  
-  void ClientProtocol::printHelpMsg(void) {
-    std::cout << "l\t-\tlist newsgroups" << std::endl;
-    std::cout << "c\t-\tcreate newsgroup" << std::endl;
-    std::cout << "k\t-\tdelete newsgroup" << std::endl;
-    std::cout << "a\t-\tlist articles" << std::endl;
-    std::cout << "n\t-\tcreate article" << std::endl;
-    std::cout << "d\t-\tdelete article" << std::endl;
-    std::cout << "g\t-\tget article" << std::endl;
-    std::cout << "h\t-\tthis help message" << std::endl;
-    interact();
-  }
-  
-  void ClientProtocol::interact(void) {
-    std::string command;
-    
-    command = askString("Enter command");
-    std::cout << "Got " << command << ", hehe..." << std::endl;
-    
-    switch (command[0]) {
-      
-    case 'l': 
-      {
-	listNewsgroups();
-	break;
-      }
-      
-    case 'c': 
-      {
-	std::string newsgroupName = askString("Enter newsgroup name");
-	createNewsgroup(newsgroupName);
-	break;
-      }
-      
-    case 'k': 
-      {
-	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
-	deleteNewsgroup(newsgroupIdentifier);
-	break;
-      }
-      
-    case 'a': 
-      {
-	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
-	listArticles(newsgroupIdentifier);
-	break;
-      }
-      
-    case 'n': 
-      {
-	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
-	std::string articleTitle = askString("Enter article title");
-	std::string articleAuthor = askString("Enter article author");
-	std::string articleText = askString("Enter article text");
-	createArticle(newsgroupIdentifier, articleTitle, 
-			articleAuthor, articleText);
-	break;
-      }
-   
-    case 'd':
-      {
-	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
-	int articleIdentifier = askInteger("Enter article identifier");
-	deleteArticle(newsgroupIdentifier, articleIdentifier);
-	break;
-      }
 
-    case 'g':
-      {
-	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
-	int articleIdentifier = askInteger("Enter article identifier");
-	getArticle(newsgroupIdentifier, articleIdentifier);
-	break;
-      }
-
-    case 'q':
-      {
-	exit(0);
-	break;
-      }
-
-    default: 
-      {
-	printHelpMsg();
-	break;
-      }
-    }
-  }
-  
   void ClientProtocol::onDataReceived(uint8_t data) {
-    
     switch (data) {
     case ANS_LIST_NG:
       receiveListNewsgroups();
