@@ -1,23 +1,23 @@
 /**
- * @file client-protocol.cc
+ * @file server-protocol.cc
  *
- * This file contains the implementation of the client protocol class.
+ * This file contains the implementation of the server protocol class.
  *
  * @author David Pettersson <david@shebang.nu>
  */
 
 #include <cassert>
 
-#include "client-protocol.h"
+#include "server-protocol.h"
 
 namespace fusenet {
 
-  void ClientProtocol::listNewsgroups(void) {
+  void ServerProtocol::listNewsgroups(void) {
     sendCommand(COM_LIST_NG);
     sendCommand(COM_END);
   }
   
-  void ClientProtocol::receiveListNewsgroups(void) {
+  void ServerProtocol::receiveListNewsgroups(void) {
     size_t n;
     size_t i;
     std::vector<Newsgroup_t> newsgroupList;
@@ -38,7 +38,7 @@ namespace fusenet {
     onListNewsgroups(newsgroupList);
   }
 
-  void ClientProtocol::onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList) {
+  void ServerProtocol::onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList) {
     std::vector<Newsgroup_t>::iterator i;
 
     for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
@@ -46,25 +46,25 @@ namespace fusenet {
     }
   }
 
-  void ClientProtocol::createNewsgroup(const std::string& name) {
+  void ServerProtocol::createNewsgroup(const std::string& name) {
     sendCommand(COM_CREATE_NG);
     sendParameter(name);
     sendCommand(COM_END);
   }
 
-  void ClientProtocol::deleteNewsgroup(int newsgroupIdentifier) {
+  void ServerProtocol::deleteNewsgroup(int newsgroupIdentifier) {
     sendCommand(COM_DELETE_NG);
     sendParameter(newsgroupIdentifier);
     sendCommand(COM_END);
   }
 
-  void ClientProtocol::listArticles(int newsgroupIdentifier) {
+  void ServerProtocol::listArticles(int newsgroupIdentifier) {
     sendCommand(COM_LIST_ART);
     sendParameter(newsgroupIdentifier);
     sendCommand(COM_END);    
   }
 
-  void ClientProtocol::createArticle(int newsgroupIdentifier,
+  void ServerProtocol::createArticle(int newsgroupIdentifier,
 				     const std::string& title,
 				     const std::string& author,
 				     const std::string& text) {
@@ -76,7 +76,7 @@ namespace fusenet {
     sendCommand(COM_END);
   }
   
-  void ClientProtocol::deleteArticle(int newsgroupIdentifier,
+  void ServerProtocol::deleteArticle(int newsgroupIdentifier,
 				     int articleIdentifier) {
     sendCommand(COM_DELETE_ART);
     sendParameter(newsgroupIdentifier);
@@ -84,7 +84,7 @@ namespace fusenet {
     sendCommand(COM_END);
   }
 
-  void ClientProtocol::getArticle(int newsgroupIdentifier,
+  void ServerProtocol::getArticle(int newsgroupIdentifier,
 				  int articleIdentifier) {
     sendCommand(COM_GET_ART);
     sendParameter(newsgroupIdentifier);
@@ -92,11 +92,11 @@ namespace fusenet {
     sendCommand(COM_END);
   }
 
-  void ClientProtocol::onConnectionMade(void) {
+  void ServerProtocol::onConnectionMade(void) {
     interact();
   }
 
-  void ClientProtocol::interact(void) {
+  void ServerProtocol::interact(void) {
     char command;
 
     std::cout << "Enter command: ";
@@ -114,7 +114,7 @@ namespace fusenet {
     }
   }
 
-  void ClientProtocol::onDataReceived(uint8_t data) {
+  void ServerProtocol::onDataReceived(uint8_t data) {
 
     switch (data) {
     case ANS_LIST_NG:

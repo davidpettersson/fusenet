@@ -1,10 +1,10 @@
-#ifndef CLIENT_PROTOCOL_CREATOR_H
-#define CLIENT_PROTOCOL_CREATOR_H
+#ifndef SERVER_PROTOCOL_CREATOR_H
+#define SERVER_PROTOCOL_CREATOR_H
 
 /**
- * @file client-protocol-creator.h
+ * @file server-protocol-creator.h
  *
- * This file contains the client protocol creator interface.
+ * This file contains the server protocol creator interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */
@@ -16,13 +16,13 @@
 namespace fusenet {
 
   /**
-   * Class for creating instances of the client protocol.
+   * Class for creating instances of the server protocol.
    */
-  class ClientProtocolCreator : public ProtocolCreator {
+  class ServerProtocolCreator : public ProtocolCreator {
 
   public:
     /**
-     * Creates instances of client protocols.
+     * Creates instances of server protocols.
      */
     Protocol* create(const Transport* transport) const;
   };

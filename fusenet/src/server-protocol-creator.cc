@@ -1,19 +1,19 @@
 /**
- * @file client-protocol-creator.h
+ * @file server-protocol-creator.h
  *
- * This file contains the implementation of the client protocol
+ * This file contains the implementation of the server protocol
  * creator class.
  *
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include "client-protocol-creator.h"
-#include "client-protocol.h"
+#include "server-protocol-creator.h"
+#include "server-protocol.h"
 
 namespace fusenet {
 
-  Protocol* ClientProtocolCreator::create(const Transport* transport) const {
-    return new ClientProtocol(transport);
+  Protocol* ServerProtocolCreator::create(const Transport* transport) const {
+    return new ServerProtocol(transport);
   }
 
 }
