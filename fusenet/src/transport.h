@@ -30,7 +30,7 @@ namespace fusenet {
      * @param data the data to send
      * @param size the size of the data
      */
-    virtual void send(uint8_t* data, size_t size) = 0;
+    virtual void send(uint8_t* data, size_t size) const = 0;
   };
 }
 
