@@ -7,6 +7,7 @@
 CXX = g++
 CXXFLAGS = -pipe -Wall -W -ansi -pedantic-errors -Wmissing-braces
 CXXFLAGS += -Wparentheses -Wold-style-cast -ggdb -I../src
+CXXFLAGS += -ftest-coverage -fprofile-arcs
 VPATH	= ../src:.
 LDFLAGS = -lcppunit -ldl
 
