@@ -40,7 +40,7 @@ namespace fusenet {
     }
 
 #ifdef ENABLE_DEBUG
-    std::cout << PREFIX "send(" << static_cast<int>(data) << ")" << std::endl;
+    std::cout << TRANSPORT_PREFIX(this) << "send " << static_cast<int>(data) << std::endl;
 #endif
   }
 
@@ -61,7 +61,7 @@ namespace fusenet {
     }
 
 #ifdef ENABLE_DEBUG
-    std::cout << PREFIX "receive() -> " << static_cast<int>(data) << std::endl;
+    std::cout << TRANSPORT_PREFIX(this) "receive " << static_cast<int>(data) << std::endl;
 #endif
 
     return data;

@@ -13,6 +13,8 @@
 #include <stdint.h>
 #include <string>
 
+#define TRANSPORT_PREFIX(tp) PREFIX << "[" << (tp)->getName() << "] "
+
 namespace fusenet {
 
   /**

@@ -7,20 +7,19 @@
  */
 
 #include <arpa/inet.h>
-#include <cassert>
-#include <math.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <signal.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+
+#include <cassert>
 #include <sstream>
+#include <csignal>
 
 #include "network-reactor.h"
 
-#define PREFIX "[NetworkReactor] "
-#define TRANSPORT_PREFIX(tp) PREFIX << "[" << (tp)->getName() << "] "
 #define BACKLOG 8
+#define PREFIX "[NetworkReactor] "
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
