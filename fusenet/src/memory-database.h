@@ -9,8 +9,18 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
+#include <map>
+
 #include "fusenet-types.h"
 #include "database.h"
+
+typedef struct {
+	fusenet::Newsgroup_t first;
+	std::vector<fusenet::Article_t*> *second;
+} pair_t;
+
+typedef std::vector<std::string*> idmap_t;
+typedef std::vector<pair_t*> mapping_t;
 
 namespace fusenet {
 
@@ -29,7 +39,7 @@ namespace fusenet {
     /**
      * Get all newsgroups.
      */
-    Status_t getNewsgroupList(NewsgroupListRef_t& newsgroupList);
+    Status_t getNewsgroupList(NewsgroupList_t& newsgroupList);
 
     /**
      * Create newsgroups.
@@ -45,7 +55,7 @@ namespace fusenet {
      * List articles.
      */
     Status_t listArticles(int newsgroupIdentifier,
-			  ArticleListRef_t& articleList);
+			  ArticleList_t& articleList);
 
     /**
      * Create article.
@@ -70,6 +80,10 @@ namespace fusenet {
      * Destroy instance.
      */
     virtual ~MemoryDatabase(void);
+
+  private:
+    idmap_t idmap;
+    mapping_t mapping;
   };
 }
 

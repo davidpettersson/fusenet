@@ -32,7 +32,7 @@ namespace fusenet {
     /**
      * Get all newsgroups.
      */
-    virtual Status_t getNewsgroupList(NewsgroupListRef_t& newsgroupList) = 0;
+    virtual Status_t getNewsgroupList(NewsgroupList_t& newsgroupList) = 0;
 
     /**
      * Create newsgroups.
@@ -48,7 +48,7 @@ namespace fusenet {
      * List articles.
      */
     virtual Status_t listArticles(int newsgroupIdentifier,
-				  ArticleListRef_t& articleList) = 0;
+				  ArticleList_t& articleList) = 0;
 
     /**
      * Create article.
