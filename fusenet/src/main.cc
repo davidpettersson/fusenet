@@ -8,8 +8,9 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include "protocol.h"
+#include "network-reactor.h"
 #include "protocol-creator.h"
+#include "protocol.h"
 #include "transport.h"
 
 namespace fusenet {
