@@ -138,6 +138,8 @@ namespace fusenet {
       getArticle();
       break;
     default:
+      std::cerr << "Error, unknown command byte: " 
+	      << static_cast<int>(data) << std::endl;
       break;
     }
   }

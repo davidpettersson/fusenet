@@ -159,6 +159,21 @@ namespace fusenet {
     void receiveListArticles(void);
 
     /**
+     * Receive create article answer.
+     */
+    void receiveCreateArticle(void);
+
+    /**
+     * Receive delete article answer.
+     */
+    void receiveDeleteArticle(void);
+
+    /**
+     * Receive get article answer.
+     */
+    void receiveGetArticle(void);
+
+    /**
      * Ask user for string value.
      *
      * @param question
