@@ -49,7 +49,7 @@ namespace fusenet {
     if (INVALID_NID(newsgroupIdentifier))
 	    return STATUS_FAILURE_N_DOES_NOT_EXIST;
     if (mapping[newsgroupIdentifier]->second)
-	    delete[] mapping[newsgroupIdentifier]->second;
+            delete mapping[newsgroupIdentifier]->second;
     delete idmap[newsgroupIdentifier];
     delete mapping[newsgroupIdentifier];
     idmap[newsgroupIdentifier] = NULL;

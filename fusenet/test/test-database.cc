@@ -164,9 +164,9 @@ public:
     Newsgroup_t newsgroup;
     Article_t article;
 
-    article.title = "a";
-    article.author = "b";
-    article.text = "c";
+    article.title = "1984";
+    article.author = "George Orwell";
+    article.text = "Big brother ...";
 
     std::string name("foo");
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
