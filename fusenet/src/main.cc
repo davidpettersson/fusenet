@@ -14,8 +14,8 @@
 #include "client.h"
 #include "network-reactor.h"
 #include "protocol.h"
-#include "memory-server-creator.h"
-#include "memory-server.h"
+#include "server-creator.h"
+#include "server.h"
 #include "transport.h"
 
 #ifdef ENABLE_ECHO
@@ -45,7 +45,7 @@ static void serverBehaviour(int port, bool useMemoryBackend) {
 #else
   if (useMemoryBackend) {
     std::cout << "Memory backend selected" << std::endl;
-    fusenet::MemoryServerCreator creator;
+    fusenet::ServerCreator creator;
     networkReactor.serve(port, &creator);
   } else {
     std::cout << "File system backend selected" << std::endl;
