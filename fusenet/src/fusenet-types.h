@@ -14,6 +14,8 @@
 
 #include "message-identifiers.h"
 
+#define IS_SUCCESS(s) ((s) == STATUS_SUCCESS)
+
 namespace fusenet {
 
   /**
@@ -43,6 +45,18 @@ namespace fusenet {
    * Article list.
    */
   typedef std::vector<Article_t> ArticleList_t;
+
+  /**
+   * Status type.
+   */
+  typedef enum {
+    STATUS_SUCCESS,
+    STATUS_FAILURE,
+    STATUS_FAILURE_ALREADY_EXISTS,
+    STATUS_FAILURE_DOES_NOT_EXIST
+  }
+  Status_t;
+    
 }
 
 #endif

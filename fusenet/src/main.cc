@@ -10,8 +10,8 @@
 
 #include <cstdio>
 
-#include "client-protocol-creator.h"
-#include "client-protocol.h"
+#include "client-creator.h"
+#include "client.h"
 #include "network-reactor.h"
 #include "protocol.h"
 #include "server-protocol-creator.h"
@@ -55,7 +55,7 @@ static void clientBehaviour(const char* const host, int port) {
 #ifdef ENABLE_ECHO
   fusenet::EchoClientCreator creator;
 #else
-  fusenet::ClientProtocolCreator creator;
+  fusenet::ClientCreator creator;
 #endif
 
   networkReactor.initiate(host, port, &creator);

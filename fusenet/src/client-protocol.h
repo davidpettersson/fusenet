@@ -38,6 +38,11 @@ namespace fusenet {
     ClientProtocol(Transport* transport) : MessageProtocol(transport) { }
 
     /**
+     * Called on made connection.
+     */
+    virtual void onConnectionMade(void) { }
+
+    /**
      * List newsgroups.
      */
     void listNewsgroups(void);
@@ -45,7 +50,8 @@ namespace fusenet {
     /**
      * List newsgroups callback.
      */
-    void onListNewsgroups(NewsgroupList_t& newsgroupList);
+    virtual void onListNewsgroups(Status_t status,
+				  NewsgroupList_t& newsgroupList) { }
 
     /**
      * Create newsgroup.
@@ -59,7 +65,7 @@ namespace fusenet {
      *
      * @param success if successful
      */
-    void onCreateNewsgroup(bool success);
+    virtual void onCreateNewsgroup(Status_t status) { }
 
     /**
      * Delete newsgroup.
@@ -73,7 +79,7 @@ namespace fusenet {
      *
      * @param success if successful
      */
-    void onDeleteNewsgroup(bool success);
+    virtual void onDeleteNewsgroup(Status_t status) { }
 
     /**
      * List articles.
@@ -83,15 +89,15 @@ namespace fusenet {
     void listArticles(int newsgroupIdentifier);
 
     /**
-     * List articles answer.
+     * List articles callback.
      *
      * @param success
      * @param articleList the article list
      */
-    void onListArticles(bool succces,
-			ArticleList_t& articleList);
-
-     /**
+    virtual void onListArticles(Status_t status,
+				ArticleList_t& articleList) { }
+    
+    /**
      * Create article.
      *
      * @param newsgroupIdentifier the newsgroup identifier
@@ -105,6 +111,13 @@ namespace fusenet {
 		       const std::string& text);
 
     /**
+     * Create article callback.
+     *
+     * @param success if successful
+     */
+    virtual void onCreateArticle(Status_t status) { }
+
+    /**
      * Delete article.
      *
      * @param newsgroupIdentifier the newsgroup identifier
@@ -112,6 +125,13 @@ namespace fusenet {
      */
     void deleteArticle(int newsgroupIdentifier,
 		       int articleIdentifier);
+
+    /**
+     * Delete article callback.
+     *
+     * @param success if successful.
+     */
+    virtual void onDeleteArticle(Status_t status) { }
 
     /**
      * Get article.
@@ -122,12 +142,18 @@ namespace fusenet {
     void getArticle(int newsgroupIdentifier,
 		    int articleIdentifier);
 
-  private:
+    /**
+     * Get article callback.
+     */
+    virtual void onGetArticle(Status_t status,
+			      Article_t& article) { }
 
     /**
-     * Called on made connection.
+     * Called on lost connection.
      */
-    void onConnectionMade(void);
+    virtual void onConnectionLost(void) { }
+
+  private:
 
     /**
      * Receive list newsgroup answer.
@@ -163,32 +189,6 @@ namespace fusenet {
      * Receive get article answer.
      */
     void receiveGetArticle(void);
-
-    /**
-     * Print the help message.
-     */
-    void printHelpMsg(void);
-
-    /**
-     * Ask user for string value.
-     *
-     * @param question
-     * @return the answer
-     */
-    std::string askString(const std::string& question);
-    
-    /**
-     * Ask user for integer value.
-     *
-     * @param question
-     * @return the answer
-     */
-    int askInteger(const std::string& question);
-    
-    /**
-     * Interact with the user.
-     */
-    void interact(void);
 
     /**
      * Called on data receival.
