@@ -94,19 +94,8 @@ namespace fusenet {
 	    handleNewConnection();
 	  }
 	} catch (client_server::ConnectionClosedException e) {
-	  std::cerr << PREFIX "Got ConnectionClosedException, aborting" << std::endl;
-	  std::cerr << PREFIX "This is due to a bug in client_server::Server" << std::endl;
-
-	  /*
-	   * The client_server::Server class only uses the read set
-	   * for the select call. This is quite weird, and forces us
-	   * to always catch an exception, which sort of defies the
-	   * purpose of an exception. Should be fixed by correcting
-	   * their code.
-	   */
-
-	  stopServing();
-	  return;
+	  std::cerr << PREFIX "Got ConnectionClosedException, closing connection" << std::endl;
+	  delete e.connection;
 	}
       }
     }

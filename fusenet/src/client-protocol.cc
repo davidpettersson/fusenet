@@ -25,8 +25,6 @@ namespace fusenet {
     
     receiveParameter(reinterpret_cast<int*>(&n));
     
-    std::cout << "Awaiting " << n << " newsgroups" << std::endl;
-    
     for (i = 0; i < n; i++) {
       receiveParameter(&newsgroup.first);
       receiveParameter(newsgroup.second);
@@ -56,6 +54,7 @@ namespace fusenet {
 
   void ClientProtocol::receiveCreateNewsgroup(void) {
     MessageIdentifier_t status = receiveCommand();
+    assert(receiveCommand() == ANS_END);
 
     if (status == ANS_ACK) {
       onCreateNewsgroup(true);
@@ -85,10 +84,10 @@ namespace fusenet {
     MessageIdentifier_t status = receiveCommand();
 
     if (status == ANS_ACK) {
-      onCreateNewsgroup(true);
+      onDeleteNewsgroup(true);
     } else {
       receiveCommand();
-      onCreateNewsgroup(false);
+      onDeleteNewsgroup(false);
     }
   }
 
@@ -141,6 +140,8 @@ namespace fusenet {
     } else {
       std::cout << "No such newsgroup" << std::endl;
     }
+
+    interact();
   }
 
   void ClientProtocol::createArticle(int newsgroupIdentifier,
@@ -271,7 +272,17 @@ namespace fusenet {
     case ANS_LIST_NG:
       receiveListNewsgroups();
       break;
+    case ANS_CREATE_NG:
+      receiveCreateNewsgroup();
+      break;
+    case ANS_DELETE_NG:
+      receiveDeleteNewsgroup();
+      break;
+    case ANS_LIST_ART:
+      receiveListArticles();
+      break;
     default:
+      std::cout << "Throwing away data (this is a bad thing)" << std::endl;
       break;
     }
   }
