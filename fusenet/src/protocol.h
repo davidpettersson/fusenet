@@ -32,7 +32,7 @@ namespace fusenet {
      *
      * @param transport the transport
      */
-    Protocol(Transport& transport);
+    Protocol(const Transport* transport);
 
   protected:
 
@@ -47,14 +47,12 @@ namespace fusenet {
     /**
      * Called on lost connection.
      */
-    virtual void onLostConnection(void) = 0;
-
-  private:
+    virtual void onConnectionLost(void) = 0;
 
     /**
      * The transport. Stored by the constructed.
      */
-    Transport& transport;
+    const Transport* transport;
   };
 
 }
