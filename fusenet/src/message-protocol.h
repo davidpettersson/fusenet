@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include "message-identifiers.h"
+#include "fusenet-types.h"
 #include "protocol.h"
 
 namespace fusenet {

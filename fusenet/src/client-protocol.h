@@ -12,20 +12,11 @@
 #include <string>
 #include <vector>
 
+#include "fusenet-types.h"
 #include "message-protocol.h"
 
 namespace fusenet {
   
-  /**
-   * Newsgroup type.
-   */
-  typedef std::pair<int, std::string> Newsgroup_t;
-
-  /**
-   * Article type.
-   */
-  typedef std::pair<int, std::string> Article_t;
-
   /**
    * Client protocol class. This class extends the base protocol class
    * with the ability to send and parse client messages as defined in
@@ -54,7 +45,7 @@ namespace fusenet {
     /**
      * List newsgroups callback.
      */
-    void onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList);
+    void onListNewsgroups(NewsgroupList_t& newsgroupList);
 
     /**
      * Create newsgroup.
@@ -98,7 +89,7 @@ namespace fusenet {
      * @param articleList the article list
      */
     void onListArticles(bool succces,
-			std::vector<Article_t> articleList);
+			ArticleList_t& articleList);
 
      /**
      * Create article.

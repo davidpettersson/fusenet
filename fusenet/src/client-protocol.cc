@@ -23,14 +23,14 @@ namespace fusenet {
   
   void ClientProtocol::receiveListNewsgroups(void) {
     size_t n, i;
-    std::vector<Newsgroup_t> newsgroupList;
+    NewsgroupList_t newsgroupList;
     Newsgroup_t newsgroup;
     
     receiveParameter(reinterpret_cast<int*>(&n));
     
     for (i = 0; i < n; i++) {
-      receiveParameter(&newsgroup.first);
-      receiveParameter(newsgroup.second);
+      receiveParameter(&newsgroup.id);
+      receiveParameter(newsgroup.name);
       newsgroupList.push_back(newsgroup);
     }
 
@@ -38,11 +38,12 @@ namespace fusenet {
     onListNewsgroups(newsgroupList);
   }
 
-  void ClientProtocol::onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList) {
-    std::vector<Newsgroup_t>::iterator i;
+  void ClientProtocol::onListNewsgroups(NewsgroupList_t& newsgroupList) {
+    NewsgroupList_t::iterator i;
 
     for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
-      std::cout << (*i).first << " " << (*i).second << std::endl;
+      Newsgroup_t& n = *i;
+      std::cout << n.id << " " << n.name << std::endl;
     }
 
     interact();
@@ -107,7 +108,7 @@ namespace fusenet {
 
   void ClientProtocol::receiveListArticles(void) {
     MessageIdentifier_t status = receiveCommand();
-    std::vector<Article_t> articleList;
+    ArticleList_t articleList;
     Article_t article;
     int n;
     int i;
@@ -117,8 +118,8 @@ namespace fusenet {
       receiveParameter(&n);
 
       for (i = 0; i < n; i++) {
-	receiveParameter(&article.first);
-	receiveParameter(article.second);
+	receiveParameter(&article.id);
+	receiveParameter(article.title);
 	articleList.push_back(article);
       }
 
@@ -132,12 +133,13 @@ namespace fusenet {
   }
 
   void ClientProtocol::onListArticles(bool success,
-				      std::vector<Article_t> articleList) {
-    std::vector<Newsgroup_t>::iterator i;
+				      ArticleList_t& articleList) {
+    ArticleList_t::iterator i;
 
     if (success) {
       for (i = articleList.begin(); i != articleList.end(); i++) {
-	std::cout << (*i).first << " " << (*i).second << std::endl;
+	Article_t& a = *i;
+	std::cout << a.id << " " << a.title << " " << std::endl;
       }
     } else {
       std::cout << "No such newsgroup" << std::endl;

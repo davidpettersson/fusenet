@@ -81,19 +81,17 @@ namespace fusenet {
 
   void ServerProtocol::handleCreateArticle(void) {
     int ngid;
-    std::string title, author, text;
+    Article_t article;
     receiveParameter(&ngid);
-    receiveParameter(title);
-    receiveParameter(author);
-    receiveParameter(text);
+    receiveParameter(article.title);
+    receiveParameter(article.author);
+    receiveParameter(article.text);
     receiveCommand();
-    onCreateArticle(ngid, title, author, text);
+    onCreateArticle(ngid, article);
   }
 
   void ServerProtocol::onCreateArticle(int newsgroupIdentifier,
-				       std::string& articleTitle,
-				       std::string& articleAuthor,
-				       std::string& articleText) {
+				       Article_t& article) {
     sendCommand(ANS_CREATE_ART);
     sendCommand(ANS_NAK);
     sendCommand(ERR_NG_DOES_NOT_EXIST);

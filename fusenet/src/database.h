@@ -9,8 +9,7 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include <iostream>
-#include <stdint.h>
+#include "fusenet-types.h"
 
 namespace fusenet {
 
