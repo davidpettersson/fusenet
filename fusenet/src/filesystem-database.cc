@@ -379,7 +379,6 @@ namespace fusenet {
 
     if (PathAvailable(newsgroupPath)) {
       if (Walk(newsgroupPath, clearVisitor)) {
-	// newsgroupPath.erase(newsgroupPath.length() - 1);
 	assert(rmdir(newsgroupPath.c_str()) == 0);
 	status = STATUS_SUCCESS;
       }
