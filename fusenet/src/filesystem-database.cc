@@ -44,10 +44,6 @@ namespace fusenet {
    */
   const int fileMode = 0644;
 
-  /*
-   * Utility functions
-   */
-
   /**
    * Base class for visitors.
    */
@@ -111,18 +107,56 @@ namespace fusenet {
    * Read article from path.
    */
   bool ReadArticle(std::string& path, Article_t& article) {
-    (void) path;
-    (void) article;
-    return false;
+    std::ifstream articleStream;
+    char byte;
+    int i;
+    int n;
+
+    // FIXME: Error handling
+    articleStream.open(path.c_str());
+    getline(articleStream, article.title);
+    getline(articleStream, article.author);
+
+    // Read number of bytes
+    articleStream >> n;
+
+    // Skip white space trick
+    articleStream >> byte;
+    article.text = byte;
+    articleStream >> std::noskipws;
+
+    // Read n - 1 bytes
+    for (i = 1; i < n; i++) {
+      articleStream.get(byte);
+      article.text += byte;
+    }
+
+    articleStream.close();
+    return true;
   }
 
   /**
    * Write article from path.
    */
   bool WriteArticle(std::string& path, Article_t& article) {
-    (void) path;
-    (void) article;
-    return false;
+    std::ofstream articleStream;
+    int i;
+    int n;
+
+    // FIXME: Error handling
+    articleStream.open(path.c_str());
+    articleStream << article.title << std::endl;
+    articleStream << article.author << std::endl;
+
+    n = article.text.length();
+    articleStream << n << std::endl;
+
+    for (i = 0; i < n; i++) {
+      articleStream << article.text[i];
+    }
+
+    articleStream.close();
+    return true;
   }
 
   /**
@@ -137,7 +171,7 @@ namespace fusenet {
 
     // FIXME: Error handling
     metaStream.open(path.c_str());
-    metaStream >> newsgroupName;
+    getline(metaStream, newsgroupName);
     metaStream.close();
 
     return true;
@@ -227,26 +261,12 @@ namespace fusenet {
     void visit(const std::string& directory, 
 	       const std::string& filename) {
       Newsgroup_t newsgroup;
-      std::string path = directory + filename + "/" + metaFilename;
+      std::string path = directory + filename + "/";
 
       if (ReadNewsgroupName(path, newsgroup.name)) {
+	newsgroup.id = atoi(filename.c_str());
 	newsgroupList->push_back(newsgroup);
       }
-
-      /*
-      std::istringstream identifierString(filename);
-
-
-      std::ifstream metaStream;
-
-      if (filename != metaFilename) {
-	identifierString >> newsgroup.id;
-	metaStream.open(path.c_str());
-	metaStream >> newsgroup.name;
-	metaStream.close();
-	newsgroupList->push_back(newsgroup);
-      }
-      */
     }
   };
 
@@ -266,8 +286,11 @@ namespace fusenet {
       Article_t article;
       std::string path = directory + filename;
 
-      if (ReadArticle(path, article)) {
-	articleList->push_back(article);
+      if (filename != metaFilename) {
+	if (ReadArticle(path, article)) {
+	  article.id = atoi(filename.c_str());
+	  articleList->push_back(article);
+	}
       }
     }
   };
@@ -346,59 +369,6 @@ namespace fusenet {
 
     return status;
   }
-      
-
-    /*
-    NewsgroupList_t::iterator listIterator;
-    MaxVisitor maxVisitor;
-    NewsgroupListVisitor listVisitor(newsgroupList);
-    std::ostringstream maxString;
-    std::ofstream metaStream;
-    std::string newDirectory;
-    std::string path;
-    int rv;
-
-    // Check if this name already exists
-    if (Walk(baseDirectory, listVisitor)) {
-      for (listIterator = newsgroupList.begin();
-	   listIterator != newsgroupList.end();
-	   listIterator++) {
-	if (newsgroupName == (*listIterator).name) {
-	  return STATUS_FAILURE_ALREADY_EXISTS;
-	}
-      }
-    }
-
-    path = getNewsgroupPath(getNextNumber(baseDirectory));
-    mkdir(path.c_str(), directoryMode);
-    // FIXME: write metadata
-    */
-
-    /*
-    if (Walk(baseDirectory, maxVisitor)) {
-      if (maxVisitor.getMax() >= 0) {
-	maxString << maxVisitor.getMax();
-	newDirectory = maxString.str() + "/";
-	path = baseDirectory + newDirectory;
-
-	rv = mkdir(path.c_str(), directoryMode);
-	if (rv == 0) {
-	  path += metaFilename;
-	  metaStream.open(path.c_str());
-	  metaStream << newsgroupName;
-	  metaStream.close();
-	  status = STATUS_SUCCESS;
-	} else {
-	  if (errno == EEXIST) {
-	    status = STATUS_FAILURE_ALREADY_EXISTS;
-	  }
-	}
-      }
-    }
-
-    return status;
-  }
-    */
 
   Status_t FilesystemDatabase::deleteNewsgroup(int newsgroupIdentifier) {
     Status_t status = STATUS_FAILURE;
@@ -422,9 +392,16 @@ namespace fusenet {
 					    ArticleList_t& articleList) {
     Status_t status = STATUS_FAILURE;
     ArticleListVisitor listVisitor(articleList);
+    std::string newsgroupPath;
 
-    if (Walk(GetNewsgroupPath(newsgroupIdentifier), listVisitor)) {
-      status = STATUS_SUCCESS;
+    newsgroupPath = GetNewsgroupPath(newsgroupIdentifier);
+
+    if (PathAvailable(newsgroupPath)) {
+      if (Walk(GetNewsgroupPath(newsgroupIdentifier), listVisitor)) {
+	status = STATUS_SUCCESS;
+      }
+    } else {
+      status = STATUS_FAILURE_N_DOES_NOT_EXIST;
     }
 
     return status;
