@@ -24,6 +24,18 @@ namespace fusenet {
     }
   }
 
+  uint8_t SocketTransport::receive(void) const {
+    if (connection->isConnected()) {
+      try {
+	return connection->read();
+      } catch (client_server::ConnectionClosedException e) {
+	// Silently ignore as in comment
+      }
+    }
+
+    return 0;
+  }
+
   SocketTransport::~SocketTransport(void) {
     // Do nothing
   }

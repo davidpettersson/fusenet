@@ -6,6 +6,8 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
+#include <cassert>
+
 #include "message-protocol.h"
 
 namespace fusenet {
@@ -24,7 +26,7 @@ namespace fusenet {
 
     unpack(parameter.length(), number);
     transport->send(PAR_STRING);
-
+    
     for (i = 0; i < 4; i++) {
       transport->send(number[i]);
     }
@@ -46,13 +48,44 @@ namespace fusenet {
     }
   }
 
-  void MessageProtocol::onConnectionLost(void) {
-    // Ignore for now
+  MessageIdentifier_t MessageProtocol::receiveAnswer(void) {
+    return static_cast<MessageIdentifier_t>(transport->receive());
   }
 
-  void MessageProtocol::onDataReceived(uint8_t data) {
-    (void) data;
+  void MessageProtocol::receiveParameter(std::string& parameter) {
+    uint8_t number[4];
+    size_t i;
+    size_t n;
 
+    assert(transport->receive() == PAR_STRING);
+
+    for (i = 0; i < 4; i++) {
+      number[i] = transport->receive();
+    }
+
+    pack(number, &n);
+
+    parameter.clear();
+
+    for (i = 0; i < n; i++) {
+      parameter += transport->receive();
+    }
+  }
+
+  void MessageProtocol::receiveParameter(int* const parameter) {
+    uint8_t number[4];
+    size_t i;
+
+    assert(transport->receive() == PAR_NUM);
+
+    for (i = 0; i < 4; i++) {
+      number[i] = transport->receive();
+    }
+
+    pack(number, reinterpret_cast<uint32_t*>(parameter));
+  }
+
+  void MessageProtocol::onConnectionLost(void) {
     // Ignore for now
   }
 

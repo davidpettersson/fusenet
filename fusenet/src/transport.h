@@ -30,6 +30,11 @@ namespace fusenet {
     virtual void send(uint8_t data) const = 0;
 
     /**
+     * Receive data.
+     */
+    virtual uint8_t receive(void) const = 0;
+
+    /**
      * Destruct instance.
      *
      * @todo Why can't I just say that the destructor should be = 0?

@@ -36,6 +36,16 @@ namespace fusenet {
     void send(uint8_t data) const;
 
     /**
+     * Receive data via socket. If something should go wrong, the eror
+     * is silently ignored.
+     *
+     * @return the data received
+     *
+     * @todo Should we not have any sort of error handling?
+     */
+    uint8_t receive(void) const;
+
+    /**
      * Destroy a socket transport.
      */
     ~SocketTransport(void);
