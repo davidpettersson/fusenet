@@ -84,16 +84,32 @@ namespace fusenet {
 				 Article_t& article) = 0;
 
     /**
+     * Reply create article.
+     */
+    void replyCreateArticle(Status_t status);
+
+    /**
      * Delete article.
      */
     virtual void onDeleteArticle(int newsgroupIdentifier,
 				 int articlIdentifier) = 0;
 
     /**
+     * Reply delete article.
+     */
+    void replyDeleteArticle(Status_t status);
+
+    /**
      * Get article.
      */
     virtual void onGetArticle(int newsgroupIdentifier,
 			      int articleIdentifier) = 0;
+
+    /**
+     * Reply get article.
+     */
+    void replyGetArticle(Status_t status,
+			 Article_t& article);
 
     /**
      * Called on made connection.
