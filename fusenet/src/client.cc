@@ -10,10 +10,6 @@
 
 #include "client.h"
 
-#define PRINT_ERR_NG  std::cout << "Newsgroup does not exist" << std::endl
-#define PRINT_ERR_ART std::cout << "Article does not exist" << std::endl
-#define PRINT_ERR_UNK std::cout << "Unknown error, error message not defined." << std::endl
-
 namespace fusenet {
 
   static void PrintStatus(Status_t status) {
