@@ -39,47 +39,52 @@ namespace fusenet {
     /**
      * List newsgroups callback.
      */
-    void onListNewsgroups(void);
+    virtual void onListNewsgroups(void) = 0;
 
     /**
      * Create newsgroup.
      */
-    void onCreateNewsgroup(std::string& newsgroupName);
+    virtual void onCreateNewsgroup(std::string& newsgroupName) = 0;
 
     /**
      * Delete newsgroup.
      */
-    void onDeleteNewsgroup(int newsgroupIdentifier);
+    virtual void onDeleteNewsgroup(int newsgroupIdentifier) = 0;
 
     /**
      * List articles.
      */
-    void onListArticles(int newsgroupIdentifier);
+    virtual void onListArticles(int newsgroupIdentifier) = 0;
 
     /**
      * Create article.
      */
-    void onCreateArticle(int newsgroupIdentifier,
-			 Article_t& article);
+    virtual void onCreateArticle(int newsgroupIdentifier,
+				 Article_t& article) = 0;
 
     /**
      * Delete article.
      */
-    void onDeleteArticle(int newsgroupIdentifier,
-			 int articlIdentifier);
+    virtual void onDeleteArticle(int newsgroupIdentifier,
+				 int articlIdentifier) = 0;
 
     /**
      * Get article.
      */
-    void onGetArticle(int newsgroupIdentifier,
-		      int articleIdentifier);
-
-  private:
+    virtual void onGetArticle(int newsgroupIdentifier,
+			      int articleIdentifier) = 0;
 
     /**
      * Called on made connection.
      */
-    void onConnectionMade(void);
+    virtual void onConnectionMade(void) = 0;
+
+    /**
+     * Called on lost connection.
+     */
+    virtual void onConnectionLost(void) = 0;
+
+  private:
 
     /**
      * Handle list newsgroups.
