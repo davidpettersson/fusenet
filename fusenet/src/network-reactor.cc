@@ -7,11 +7,11 @@
  */
 
 #include <cassert>
+#include <math.h>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <math.h>
 
 #include "network-reactor.h"
 
@@ -83,7 +83,7 @@ namespace fusenet {
     int yes = 1;
     int descriptor;
     int status;
-    struct ::sockaddr_in remote;
+    struct sockaddr_in remote;
 
     descriptor = socket(AF_INET, SOCK_STREAM, 0);
     
@@ -98,7 +98,7 @@ namespace fusenet {
     }
 
     remote.sin_family = AF_INET;
-    remote.sin_addr.s_addr = INADDR_ANY;
+    remote.sin_addr.s_addr = htonl(INADDR_ANY);
     remote.sin_port = htons(portNumber);
     
     status = bind(descriptor, reinterpret_cast<struct sockaddr*>(&remote), sizeof(remote));
@@ -134,7 +134,6 @@ namespace fusenet {
 
     while (!done) {
       fd_set read_set;
-      fd_set except_set;
       
       // Clear sets
       FD_ZERO(&read_set);

@@ -39,44 +39,44 @@ namespace fusenet {
     ServerProtocol(Transport* transport) : MessageProtocol(transport) { }
 
     /**
-     * List newsgroups.
-     */
-    void listNewsgroups(void);
-
-    /**
      * List newsgroups callback.
      */
-    void onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList);
+    void onListNewsgroups(void);
 
     /**
      * Create newsgroup.
      */
-    void createNewsgroup(void);
+    void onCreateNewsgroup(std::string& newsgroupName);
 
     /**
      * Delete newsgroup.
      */
-    void deleteNewsgroup(void);
+    void onDeleteNewsgroup(int newsgroupIdentifier);
 
     /**
      * List articles.
      */
-    void listArticles(void);
+    void onListArticles(int newsgroupIdentifier);
 
     /**
      * Create article.
      */
-    void createArticle(void);
+    void onCreateArticle(int newsgroupIdentifier,
+			 std::string& articleTitle,
+			 std::string& articleAuthor,
+			 std::string& articleText);
 
     /**
      * Delete article.
      */
-    void deleteArticle(void);
+    void onDeleteArticle(int newsgroupIdentifier,
+			 int articlIdentifier);
 
     /**
      * Get article.
      */
-    void getArticle(void);
+    void onGetArticle(int newsgroupIdentifier,
+		      int articleIdentifier);
 
   private:
 
@@ -86,9 +86,39 @@ namespace fusenet {
     void onConnectionMade(void);
 
     /**
-     * Receive newsgroup list.
+     * Handle list newsgroups.
      */
-    void receiveListNewsgroups(void);
+    void handleListNewsgroups(void);
+
+    /**
+     * Handle create newsgroup.
+     */
+    void handleCreateNewsgroup(void);
+
+    /**
+     * Handle delete newsgroup.
+     */
+    void handleDeleteNewsgroup(void);
+
+    /**
+     * Handle list articles.
+     */
+    void handleListArticles(void);
+
+    /**
+     * Handle create article.
+     */
+    void handleCreateArticle(void);
+
+    /**
+     * Handle delete article.
+     */
+    void handleDeleteArticle(void);
+
+    /**
+     * Handle get article.
+     */
+    void handleGetArticle(void);
 
     /**
      * Called on data receival.

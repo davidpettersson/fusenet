@@ -8,17 +8,17 @@
 
 #include <cassert>
 #include <string>
+
 #include "server-protocol.h"
 
 namespace fusenet {
 
-  void ServerProtocol::listNewsgroups(void) {
-    sendCommand(COM_LIST_NG);
-    sendCommand(COM_END);
-  }
-  
-  void ServerProtocol::receiveListNewsgroups(void) {
+  void ServerProtocol::handleListNewsgroups(void) {
     receiveCommand();
+    onListNewsgroups();
+  }
+
+  void ServerProtocol::onListNewsgroups(void) {
     sendCommand(ANS_LIST_NG);
     sendParameter(2);
     sendParameter(1);
@@ -28,55 +28,58 @@ namespace fusenet {
     sendCommand(ANS_END);
   }
 
-  void ServerProtocol::onListNewsgroups(std::vector<Newsgroup_t>& newsgroupList) {
-    std::vector<Newsgroup_t>::iterator i;
-
-    for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
-      std::cout << (*i).first << " " << (*i).second << std::endl;
-    }
-  }
-
-  void ServerProtocol::createNewsgroup(void) {
+  void ServerProtocol::handleCreateNewsgroup(void) {
     std::string name;
     receiveParameter(name);
     receiveCommand();
+    onCreateNewsgroup(name);
+  }
+
+  void ServerProtocol::onCreateNewsgroup(std::string& newsgroupName) {
     sendCommand(ANS_CREATE_NG);
     sendCommand(ANS_ACK);
     sendCommand(ANS_END);
   }
 
-  void ServerProtocol::deleteNewsgroup(void) {
+  void ServerProtocol::handleDeleteNewsgroup(void) {
     int id;
     receiveParameter(&id);
     receiveCommand();
+    onDeleteNewsgroup(id);
+  }
+
+  void ServerProtocol::onDeleteNewsgroup(int newsgroupIdentifier) {
     sendCommand(ANS_DELETE_NG);
     sendCommand(ANS_ACK);
     sendCommand(ANS_END);
   }
 
-  void ServerProtocol::listArticles(void) {
+  void ServerProtocol::handleListArticles(void) {
     int group;
     receiveParameter(&group);
     receiveCommand();
+    onListArticles(group);
+  }
+    
+  void ServerProtocol::onListArticles(int newsgroupIdentifier) {
     sendCommand(ANS_LIST_ART);
-    if (group == 1)
-    {
-    	sendCommand(ANS_ACK);
-	sendParameter(2);
-	sendParameter(1);
-	sendParameter("haXX0r");
-	sendParameter(2);
-	sendParameter("eller ngt");
+
+    if (newsgroupIdentifier == 1) {
+      sendCommand(ANS_ACK);
+      sendParameter(2);
+      sendParameter(1);
+      sendParameter("haXX0r");
+      sendParameter(2);
+      sendParameter("eller ngt");
+    } else {
+      sendCommand(ANS_NAK);
+      sendCommand(ERR_NG_DOES_NOT_EXIST);
     }
-    else
-    {
-	sendCommand(ANS_NAK);
-	sendCommand(ERR_NG_DOES_NOT_EXIST);
-    }
+
     sendCommand(ANS_END);
   }
 
-  void ServerProtocol::createArticle(void) {
+  void ServerProtocol::handleCreateArticle(void) {
     int ngid;
     std::string title, author, text;
     receiveParameter(&ngid);
@@ -84,27 +87,44 @@ namespace fusenet {
     receiveParameter(author);
     receiveParameter(text);
     receiveCommand();
+    onCreateArticle(ngid, title, author, text);
+  }
+
+  void ServerProtocol::onCreateArticle(int newsgroupIdentifier,
+				       std::string& articleTitle,
+				       std::string& articleAuthor,
+				       std::string& articleText) {
     sendCommand(ANS_CREATE_ART);
     sendCommand(ANS_NAK);
     sendCommand(ERR_NG_DOES_NOT_EXIST);
     sendCommand(ANS_END);
   }
   
-  void ServerProtocol::deleteArticle(void) {
+  void ServerProtocol::handleDeleteArticle(void) {
     int gid, aid;
     receiveParameter(&gid);
     receiveParameter(&aid);
     receiveCommand();
+    onDeleteArticle(gid, aid);
+  }
+
+  void ServerProtocol::onDeleteArticle(int newsgroupIdentifier,
+				       int articlIdentifier) {
     sendCommand(ANS_DELETE_ART);
     sendCommand(ANS_ACK);
     sendCommand(ANS_END);
   }
 
-  void ServerProtocol::getArticle(void) {
+  void ServerProtocol::handleGetArticle(void) {
     int gid, aid;
     receiveParameter(&gid);
     receiveParameter(&aid);
     receiveCommand();
+    onGetArticle(gid, aid);
+  }
+
+  void ServerProtocol::onGetArticle(int newsgroupIdentifier,
+				    int articleIdentifier) {
     sendCommand(ANS_GET_ART);
     sendCommand(ANS_NAK);
     sendCommand(ERR_NG_DOES_NOT_EXIST);
@@ -119,25 +139,25 @@ namespace fusenet {
 
     switch (data) {
     case COM_LIST_NG:
-      receiveListNewsgroups();
+      handleListNewsgroups();
       break;
     case COM_CREATE_NG:
-      createNewsgroup();
+      handleCreateNewsgroup();
       break;
     case COM_DELETE_NG:
-      deleteNewsgroup();
+      handleDeleteNewsgroup();
       break;
     case COM_LIST_ART:
-      listArticles();
+      handleListArticles();
       break;
     case COM_CREATE_ART:
-      createArticle();
+      handleCreateArticle();
       break;
     case COM_DELETE_ART:
-      deleteArticle();
+      handleDeleteArticle();
       break;
     case COM_GET_ART:
-      getArticle();
+      handleGetArticle();
       break;
     default:
       std::cerr << "Error, unknown command byte: " 
