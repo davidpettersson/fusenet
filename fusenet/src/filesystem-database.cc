@@ -17,7 +17,7 @@ namespace fusenet {
     // Does nothing
   }
 
-  Status_t FilesystemDatabase::getNewsgroupList(NewsgroupList_t& newsgroupList) {
+  Status_t FilesystemDatabase::getNewsgroupList(NewsgroupListRef_t& newsgroupList) {
     return STATUS_FAILURE;
   }
   
@@ -30,7 +30,7 @@ namespace fusenet {
   }
 
   Status_t FilesystemDatabase::listArticles(int newsgroupIdentifier,
-					    ArticleList_t& articleList) {
+					    ArticleListRef_t& articleList) {
     return STATUS_FAILURE;
   }
 

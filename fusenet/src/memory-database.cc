@@ -17,7 +17,7 @@ namespace fusenet {
     // Does nothing
   }
 
-  Status_t MemoryDatabase::getNewsgroupList(NewsgroupList_t& newsgroupList) {
+  Status_t MemoryDatabase::getNewsgroupList(NewsgroupListRef_t& newsgroupList) {
     return STATUS_FAILURE;
   }
   
@@ -30,7 +30,7 @@ namespace fusenet {
   }
 
   Status_t MemoryDatabase::listArticles(int newsgroupIdentifier,
-					ArticleList_t& articleList) {
+					ArticleListRef_t& articleList) {
     return STATUS_FAILURE;
   }
 
