@@ -40,7 +40,7 @@ namespace fusenet {
     /**
      * Called on made connection.
      */
-    virtual void onConnectionMade(void) { }
+    virtual void onConnectionMade(void) = 0;
 
     /**
      * List newsgroups.
@@ -51,7 +51,7 @@ namespace fusenet {
      * List newsgroups callback.
      */
     virtual void onListNewsgroups(Status_t status,
-				  NewsgroupList_t& newsgroupList) { }
+				  NewsgroupList_t& newsgroupList) = 0;
 
     /**
      * Create newsgroup.
@@ -65,7 +65,7 @@ namespace fusenet {
      *
      * @param success if successful
      */
-    virtual void onCreateNewsgroup(Status_t status) { }
+    virtual void onCreateNewsgroup(Status_t status) = 0;
 
     /**
      * Delete newsgroup.
@@ -79,7 +79,7 @@ namespace fusenet {
      *
      * @param success if successful
      */
-    virtual void onDeleteNewsgroup(Status_t status) { }
+    virtual void onDeleteNewsgroup(Status_t status) = 0;
 
     /**
      * List articles.
@@ -95,7 +95,7 @@ namespace fusenet {
      * @param articleList the article list
      */
     virtual void onListArticles(Status_t status,
-				ArticleList_t& articleList) { }
+				ArticleList_t& articleList) = 0;
     
     /**
      * Create article.
@@ -115,7 +115,7 @@ namespace fusenet {
      *
      * @param success if successful
      */
-    virtual void onCreateArticle(Status_t status) { }
+    virtual void onCreateArticle(Status_t status) = 0;
 
     /**
      * Delete article.
@@ -131,7 +131,7 @@ namespace fusenet {
      *
      * @param success if successful.
      */
-    virtual void onDeleteArticle(Status_t status) { }
+    virtual void onDeleteArticle(Status_t status) = 0;
 
     /**
      * Get article.
@@ -146,12 +146,12 @@ namespace fusenet {
      * Get article callback.
      */
     virtual void onGetArticle(Status_t status,
-			      Article_t& article) { }
+			      Article_t& article) = 0;
 
     /**
      * Called on lost connection.
      */
-    virtual void onConnectionLost(void) { }
+    virtual void onConnectionLost(void) = 0;
 
   private:
 

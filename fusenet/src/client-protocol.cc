@@ -122,7 +122,7 @@ namespace fusenet {
 
       status = STATUS_SUCCESS;
     } else {
-      status = STATUS_FAILURE;
+      status = TranslateError(receiveCommand());
     }
 
     expectCommand(ANS_END);

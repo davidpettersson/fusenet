@@ -39,9 +39,13 @@ namespace fusenet {
   void Client::onListNewsgroups(Status_t status, NewsgroupList_t& newsgroupList) {
     NewsgroupList_t::iterator i;
 
-    for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
-      Newsgroup_t& n = *i;
-      std::cout << n.id << " " << n.name << std::endl;
+    if (IS_SUCCESS(status)) {
+      for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
+	Newsgroup_t& n = *i;
+	std::cout << n.id << " " << n.name << std::endl;
+      }
+    } else {
+      PrintStatus(status);
     }
 
     interact();
@@ -84,7 +88,14 @@ namespace fusenet {
   }
 
   void Client::onGetArticle(Status_t status, Article_t& article) {
-    PrintStatus(status);
+    if (IS_SUCCESS(status)) {
+      std::cout << "Title   : " << article.title << std::endl;
+      std::cout << "Author  : " << article.author << std::endl;
+      std::cout << std::endl<< article.text << std::endl;
+    } else {
+      PrintStatus(status);
+    }
+
     interact();
   }
   
