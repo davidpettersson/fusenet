@@ -210,6 +210,7 @@ class DeleteArticleTest : public ArticleTestFixture {
   CPPUNIT_TEST_SUITE(DeleteArticleTest);
   CPPUNIT_TEST(testWrongNewsgroup);
   CPPUNIT_TEST(testWrongArticle);
+  CPPUNIT_TEST(testRight);
   CPPUNIT_TEST_SUITE_END();
 public:
   void testWrongNewsgroup() {
@@ -232,6 +233,38 @@ public:
   }
 };
 
+class GetArticleTest : public ArticleTestFixture {
+  CPPUNIT_TEST_SUITE(GetArticleTest);
+  CPPUNIT_TEST(testWrongNewsgroup);
+  CPPUNIT_TEST(testWrongArticle);
+  CPPUNIT_TEST(testRight);
+  CPPUNIT_TEST_SUITE_END();
+public:
+  void testWrongNewsgroup() {
+    Article_t article;
+    CPPUNIT_ASSERT(pDatabase->getArticle(newsgroup.id + 1, 0, article) == STATUS_FAILURE_N_DOES_NOT_EXIST);
+  }
+  void testWrongArticle() {
+    Article_t article;
+    CPPUNIT_ASSERT(pDatabase->getArticle(newsgroup.id, 0, article) == STATUS_FAILURE_A_DOES_NOT_EXIST);
+  }
+  void testRight() {
+    Article_t article;
+    ArticleList_t articleList;
+    article.title = "1984";
+    article.author = "George Orwell";
+    article.text = "Big brother ...";
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createArticle(newsgroup.id, article)));
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->listArticles(newsgroup.id, articleList)));
+    CPPUNIT_ASSERT(articleList.size() == 1);
+    article = articleList.front();
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getArticle(newsgroup.id, article.id, article)));
+    CPPUNIT_ASSERT(article.title == "1984");
+    CPPUNIT_ASSERT(article.author == "George Orwell");
+    CPPUNIT_ASSERT(article.text == "Big brother ...");
+  }
+};
+
 int main(void)
 {
   CppUnit::TestResult result;
@@ -245,6 +278,7 @@ int main(void)
   CPPUNIT_TEST_SUITE_REGISTRATION(CreateArticleTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(ListArticlesTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(DeleteArticleTest);
+  CPPUNIT_TEST_SUITE_REGISTRATION(GetArticleTest);
 
   CppUnit::Test* test =
     CppUnit::TestFactoryRegistry::getRegistry().makeTest();
