@@ -1,8 +1,8 @@
-#ifndef MEMORY_SERVER_H
-#define MEMORY_SERVER_H
+#ifndef SERVER_H
+#define SERVER_H
 
 /**
- * @file memory-server.h
+ * @file server.h
  *
  * This file contains the message protocol class.
  *
@@ -17,19 +17,18 @@
 namespace fusenet {
 
   /**
-   * Memory server class. This class contains the server application
-   * that uses random access memory as a backend.
+   * Server class.
    */
-  class MemoryServer : public ServerProtocol {
+  class Server : public ServerProtocol {
 
   public:
 
     /**
-     * Creates a memory server instance.
+     * Creates a server instance.
      *
      * @param transport the transport
      */
-    MemoryServer(Transport* transport);
+    Server(Transport* transport);
 
     /**
      * List newsgroups callback.
