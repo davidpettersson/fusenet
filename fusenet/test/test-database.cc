@@ -330,8 +330,6 @@ int main(int argc, char* argv[])
   CPPUNIT_TEST_SUITE_REGISTRATION(ListArticlesTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(DeleteArticleTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(GetArticleTest);
-  /*
-  */
 
   CppUnit::Test* test =
     CppUnit::TestFactoryRegistry::getRegistry().makeTest();
