@@ -34,8 +34,6 @@ namespace fusenet {
      */
     Protocol(const Transport* transport);
 
-  protected:
-
     /**
      * Called on data receival.
      *
@@ -48,6 +46,16 @@ namespace fusenet {
      * Called on lost connection.
      */
     virtual void onConnectionLost(void) = 0;
+
+    /**
+     * Destroys an instance.
+     *
+     * @todo Link errors occur if the destructor has no body. Is that
+     *       correct? Why can't I write virtual ~Foo(void) = 0;?
+     */
+    virtual ~Protocol(void) { };
+
+  protected:
 
     /**
      * The transport. Stored by the constructed.

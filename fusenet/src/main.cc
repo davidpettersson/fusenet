@@ -9,13 +9,15 @@
  */
 
 #include "protocol.h"
+#include "protocol-creator.h"
 #include "transport.h"
 
 namespace fusenet {
 
   class EchoServer : public Protocol {
   public:
-    EchoServer(Transport* transport) : Protocol(transport) {
+    EchoServer(const Transport* transport) : Protocol(transport) {
+      std::cout << "Created!" << std::endl;
     }
 
     void onDataReceived(uint8_t* data, size_t size) {
@@ -24,6 +26,17 @@ namespace fusenet {
     }
 
     void onConnectionLost(void) {
+    }
+
+    ~EchoServer(void) {
+      std::cout << "Destroyed!" << std::endl;
+    }
+  };
+
+  class EchoServerCreator : public ProtocolCreator {
+  public:
+    Protocol* create(const Transport* transport) {
+      return new EchoServer(transport);
     }
   };
 
@@ -38,16 +51,23 @@ namespace fusenet {
   };
 }
 
-int main(int argc, char* argv[]) {
-  uint8_t* data;
+static void serverBehaviour(void) {
+  fusenet::EchoServerCreator creator;
+  fusenet::Protocol* protocol;
 
+  uint8_t* data;
   data = new uint8_t[5];
   memcpy(data, "hello", 5);
 
   fusenet::TerminalTransport terminalTransport;
-  fusenet::EchoServer echoServer(&terminalTransport);
-  echoServer.onDataReceived(data, 5);
+  protocol = creator.create(&terminalTransport);
+  protocol->onDataReceived(data, 5);
+  protocol->onConnectionLost();
+  delete protocol;
+}
 
+int main(int argc, char* argv[]) {
+  serverBehaviour();
   return 0;
 }
 
