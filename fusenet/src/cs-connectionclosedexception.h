@@ -14,9 +14,19 @@
 #ifndef CONNECTION_CLOSED_EXCEPTION_H
 #define CONNECTION_CLOSED_EXCEPTION_H
 
+#include "cs-connection.h"
+
 namespace client_server {
-    /* ConnectionClosedException is thrown when a connection is closed */
-    struct ConnectionClosedException {};
+  class Connection;
+
+  /* ConnectionClosedException is thrown when a connection is closed */
+  class ConnectionClosedException {
+
+  public:
+    Connection *connection;
+    ConnectionClosedException() { connection = 0; }
+    ConnectionClosedException(Connection* c) { connection = c; }
+  };
 }
 
 #endif
