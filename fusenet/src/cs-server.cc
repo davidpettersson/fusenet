@@ -101,7 +101,8 @@ namespace client_server {
                     if (new_socket != -1) {
                         if (pending_socket != -1)
                             error("waitForActivity: registerConnection "
-                                  "not called to process previous connection from a client");
+                                  "not called to process previous "
+				  "connection from a client");
                         pending_socket = new_socket;
                         do_exit = true;
                     }

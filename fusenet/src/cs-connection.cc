@@ -89,6 +89,7 @@ namespace client_server {
     Connection::~Connection() {
         if (my_socket != -1) 
             close(my_socket);
+	my_socket = -1;
     }
     
     bool Connection::isConnected() const {
