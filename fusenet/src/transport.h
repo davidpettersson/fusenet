@@ -16,9 +16,7 @@ namespace fusenet {
 
   /**
    * Base class for all transport. A transport gives the owner of it
-   * the ability to send data using it. Receiving is often quite
-   * dependent on the transport, and is therefore something that only
-   * sub classes can export interfaces for.
+   * the ability to receive and send data using it.
    */
   class Transport {
 

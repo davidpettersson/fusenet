@@ -56,12 +56,13 @@ namespace fusenet {
 
     if (protocol == NULL) {
       std::cerr << PREFIX "Unable to create protocol, aborting" << std::endl;
-      delete protocol;
+      delete socketTransport;
       delete connection;
       return;
     }
 
     table[connection] = std::make_pair(socketTransport, protocol);
+    protocol->onConnectionMade();
   }
 
   void NetworkReactor::serve(int portNumber, 
@@ -110,7 +111,39 @@ namespace fusenet {
       }
     }
   }
- 
+
+  void NetworkReactor::initiate(const char* const hostName, int portNumber,
+				const ProtocolCreator* protocolCreator) {
+    client_server::Connection connection(hostName, portNumber);
+    SocketTransport socketTransport(&connection);
+    Protocol* protocol;
+
+    if (!connection.isConnected()) {
+      std::cerr << PREFIX "Not connected, aborting" << std::endl;
+      return;
+    }
+    
+    protocol = protocolCreator->create(&socketTransport);
+
+    if (protocol == NULL) {
+      std::cerr << PREFIX "Unable to create protocol, aborting" << std::endl;
+    } else {
+      protocol->onConnectionMade();
+
+      while (connection.isConnected()) {
+	try {
+	  uint8_t data = connection.read();
+	  protocol->onDataReceived(data);
+	} catch (client_server::ConnectionClosedException e) {
+	  break;
+	}
+      }
+
+      protocol->onConnectionLost();
+      delete protocol;
+    }
+  }
+
   void NetworkReactor::stopServing(void) {
     std::map<client_server::Connection*, std::pair<Transport*, Protocol*> >::iterator i;
     std::pair<Transport*, Protocol*> value;
