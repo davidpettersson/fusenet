@@ -9,7 +9,6 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include "cs-connection.h"
 #include "transport.h"
 
 namespace fusenet {

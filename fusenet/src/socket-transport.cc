@@ -6,9 +6,9 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <cassert>
+#include <sys/socket.h>
+#include <sys/types.h>
 
 #include "socket-transport.h"
 
