@@ -95,6 +95,7 @@ namespace fusenet {
 	  }
 	} catch (client_server::ConnectionClosedException e) {
 	  std::cerr << PREFIX "Got ConnectionClosedException, closing connection" << std::endl;
+	  server->deregisterConnection(e.connection);
 	  delete e.connection;
 	}
       }
