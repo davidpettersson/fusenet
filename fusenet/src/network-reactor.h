@@ -52,8 +52,9 @@ namespace fusenet {
      * @param portNumber the port number to react on
      * @param protocolCreator the protocol creator
      */
-    void serve(int portNumber, const ProtocolCreator* protocolCreator);
-
+    void serve(int portNumber, 
+	       const ProtocolCreator* protocolCreator);
+    
     /**
      * Initiates a connection. This method initiates a connection
      * toward a server and uses the given protocol instance for
@@ -61,9 +62,10 @@ namespace fusenet {
      *
      * @param hostName the hostname to connect to
      * @param portNumber the port number on the host to connect to
-     * @param protocol the protocol instance
+     * @param protocolCreator the protocol creator
      */
-    void initiate(const char* const hostName, int portNumber, 
+    void initiate(const char* const hostName, 
+		  int portNumber, 
 		  const ProtocolCreator* protocolCreator);
 
     /**
