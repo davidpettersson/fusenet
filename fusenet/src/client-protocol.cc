@@ -105,10 +105,21 @@ namespace fusenet {
     std::cout << "Got " << command << ", hehe..." << std::endl;
 
     switch (command) {
-    case 'l':
+
+    case 'l': {
       listNewsgroups();
       break;
-    default:
+    }
+
+    case 'c': {
+      std::string newsgroupName;
+      std::cout << "Enter newgroup name: ";
+      std::cin >> newsgroupName;
+      createNewsgroup(newsgroupName);
+      break;
+    }
+
+    default: {
       std::cout << "Huh?" << std::endl;
       break;
     }

@@ -8,10 +8,14 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
-#include "client-protocol.h"
+#include <cstdio>
+
 #include "client-protocol-creator.h"
+#include "client-protocol.h"
 #include "network-reactor.h"
 #include "protocol.h"
+#include "server-protocol-creator.h"
+#include "server-protocol.h"
 #include "transport.h"
 
 #ifdef ENABLE_ECHO
@@ -32,14 +36,15 @@ namespace fusenet {
 }
 
 static void serverBehaviour(void) {
-#ifdef ENABLE_ECHO
   fusenet::NetworkReactor networkReactor;
+
+#ifdef ENABLE_ECHO
   fusenet::EchoServerCreator creator;
-  networkReactor.serve(4000, &creator);
 #else
-  // WE NEED A SERVER! :-)
+  fusenet::ServerProtocolCreator creator;
 #endif
 
+  networkReactor.serve(4000, &creator);
 }
 
 static void clientBehaviour(void) {

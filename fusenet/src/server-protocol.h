@@ -1,8 +1,8 @@
-#ifndef CLIENT_PROTOCOL_H
-#define CLIENT_PROTOCOL_H
+#ifndef SERVER_PROTOCOL_H
+#define SERVER_PROTOCOL_H
 
 /**
- * @file client-protocol.h
+ * @file server-protocol.h
  *
  * This file contains the message protocol class.
  *
@@ -19,24 +19,24 @@ namespace fusenet {
   typedef std::pair<int, std::string> Newsgroup_t;
 
   /**
-   * Client protocol class. This class extends the base protocol class
-   * with the ability to send and parse client messages as defined in
+   * Server protocol class. This class extends the base protocol class
+   * with the ability to send and parse server messages as defined in
    * Holm's project description.
    *
    * This class currently contains the user interaction beside the
    * protocol handling. The interaction should be placed in a seperate
    * class.
    */
-  class ClientProtocol : public MessageProtocol {
+  class ServerProtocol : public MessageProtocol {
 
   public:
 
     /**
-     * Creates a client protocol instance.
+     * Creates a server protocol instance.
      *
      * @param transport the transport
      */
-    ClientProtocol(const Transport* transport) : MessageProtocol(transport) { }
+    ServerProtocol(const Transport* transport) : MessageProtocol(transport) { }
 
     /**
      * List newsgroups.
