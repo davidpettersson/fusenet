@@ -27,6 +27,7 @@ namespace fusenet {
     }
 
     void onConnectionLost(void) {
+      std::cout << "[" << this << "] Connection lost" << std::endl;
     }
 
     void onConnectionMade(void) {
