@@ -248,7 +248,7 @@ namespace fusenet {
       }
     }
 
-    assert(0 == "This cannot happen");
+    assert(THIS_CANNOT_HAPPEN);
     return -1;
   }
 
@@ -301,7 +301,7 @@ namespace fusenet {
   };
 
   /**
-   * Clearing visitor. Removes the entire database.
+   * Clearing visitor.
    */
   class ClearVisitor : public Visitor {
   public:
@@ -321,10 +321,7 @@ namespace fusenet {
     }
   };
 
-  /*
-   * FilesystemDatabase implementation
-   */
-      
+
   FilesystemDatabase::FilesystemDatabase(void) {
     // Ignore error code, we cannot do anything anyway
     mkdir(baseDirectory.c_str(), directoryMode);
