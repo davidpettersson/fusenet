@@ -133,7 +133,9 @@ namespace fusenet {
   };
 
   /**
-   * Walk function for the visitors.
+   * Walk function for the visitors. This is not a method in the
+   * FilesystemDatabase class since it need to be access outside the
+   * class (e.g. by the visitors).
    */
   bool Walk(const std::string directoryPath,
 	    Visitor& visitor) {
@@ -173,7 +175,7 @@ namespace fusenet {
     ClearVisitor clearVisitor;
 
     if (Walk(baseDirectory, clearVisitor)) {
-      
+      // FIXME: What goes here?
     }
 
     return status;
@@ -239,7 +241,23 @@ namespace fusenet {
   }
 
   Status_t FilesystemDatabase::deleteNewsgroup(int newsgroupIdentifier) {
-    return STATUS_FAILURE;
+    Status_t status = STATUS_FAILURE;
+    std::string newsgroupPath;
+    std::ostringstream numberString;
+    ClearVisitor clearVisitor;
+
+    numberString << newsgroupIdentifier;
+    newsgroupPath = baseDirectory + numberString.str();
+
+    if (pathAvailable(newsgroupPath)) {
+      if (Walk(newsgroupPath, clearVisitor)) {
+	status = STATUS_SUCCESS;
+      }
+    } else {
+      status = STATUS_FAILURE_N_DOES_NOT_EXIST;
+    }
+      
+    return status;;
   }
 
   Status_t FilesystemDatabase::listArticles(int newsgroupIdentifier,
@@ -261,6 +279,11 @@ namespace fusenet {
 					  int articleIdentifier,
 					  Article_t& article) {
     return STATUS_FAILURE;
+  }
+
+  bool FilesystemDatabase::pathAvailable(const std::string& path) {
+    int rv = access(path.c_str(), 0);
+    return (rv == 0);
   }
 
   FilesystemDatabase::~FilesystemDatabase(void) {
