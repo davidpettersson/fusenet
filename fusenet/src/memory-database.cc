@@ -8,11 +8,12 @@
  */
 
 #include <iostream>
+#include <cassert>
 
 #include "memory-database.h"
 
 #define INVALID_NID(x) ((static_cast<size_t>(x) >= mapping.size()) || (mapping[x] == NULL))
-#define INVALID_AID(x, y) ((static_cast<size_t>(x) >= mapping[y]->second->size()) || (mapping[y]->second->at(x) == NULL))
+#define INVALID_AID(x, y) (mapping[y]->second == NULL || ((static_cast<size_t>(x) >= mapping[y]->second->size()) || (mapping[y]->second->at(x) == NULL)))
 
 namespace fusenet {
 
