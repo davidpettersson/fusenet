@@ -89,7 +89,7 @@ namespace fusenet {
     /**
      * Internal connection -> (transport, protocol) mapping.
      */
-    std::map<client_server::Connection*, std::pair<Transport*,Protocol*> > table;
+    std::map<client_server::Connection*, std::pair<Transport*, Protocol*> > table;
   };
 }
 
