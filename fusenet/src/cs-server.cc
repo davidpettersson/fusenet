@@ -21,7 +21,7 @@
 //
 // ------------------------------------------------------------------
 
-#include "server.h"
+#include "cs-server.h"
 
 #include <iostream>
 #include <algorithm>

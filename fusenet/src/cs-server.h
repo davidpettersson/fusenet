@@ -25,7 +25,7 @@
 #define SERVER_H
 
 #include <vector>
-#include "connection.h"
+#include "cs-connection.h"
 
 namespace client_server {
     /* A server listens to a port and handles multiple connections */

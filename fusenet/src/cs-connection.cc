@@ -21,8 +21,8 @@
 //
 // ------------------------------------------------------------------
 
-#include "connection.h"
-#include "connectionclosedexception.h"
+#include "cs-connection.h"
+#include "cs-connectionclosedexception.h"
 
 #include <iostream>
 #include <cstring>       /* memcpy() */
