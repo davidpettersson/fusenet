@@ -6,16 +6,20 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
+#include <arpa/inet.h>
 #include <cassert>
 #include <math.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <signal.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sstream>
 
 #include "network-reactor.h"
 
 #define PREFIX "[NetworkReactor] "
+#define TRANSPORT_PREFIX(tp) PREFIX << "[" << (tp)->getName() << "] "
 #define BACKLOG 8
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
@@ -23,19 +27,21 @@
 namespace fusenet {
 
   NetworkReactor::NetworkReactor(void) {
-    // Do nothing
+    // Disable broken pipe signal
+    signal(SIGPIPE, SIG_IGN);
   }
 
   void NetworkReactor::handleIncomingData(SocketTransport* transport) {
     Protocol* protocol = table[transport];
-    protocol->onDataReceived(static_cast<uint8_t>(transport->receive()));
+    uint8_t data = static_cast<uint8_t>(transport->receive());
+
+    if (!transport->isClosed()) {
+      std::cout << TRANSPORT_PREFIX(transport) << "Receiving data" << std::endl;
+      protocol->onDataReceived(data);
+    }
 
     if (transport->isClosed()) {
-      try {
-	handleLostConnection(transport);
-      } catch (ProtocolException e) {
-	std::cerr << "Protocol exception!" << std::endl;
-      }
+      handleLostConnection(transport);
     }
   }
 
@@ -43,25 +49,35 @@ namespace fusenet {
     Protocol* protocol = table[transport];
     protocol->onConnectionLost();
     table.erase(transport);
+
+    std::cout << TRANSPORT_PREFIX(transport) << "Lost connection" << std::endl;
+
     delete protocol;
     delete transport;
-
-    std::cout << PREFIX "Lost transport for descriptor " << transport->getDescriptor() << std::endl;
   }
 
-  int NetworkReactor::handleNewConnection(int acceptSocket) {
+  int NetworkReactor::handleNewConnection(int acceptDescriptor) {
+    std::string transportName;
+    std::ostringstream port;
+    struct sockaddr_in remote;
     SocketTransport* transport;
     Protocol* protocol;
-    int socket;
+    int descriptor;
+    socklen_t remoteLength = sizeof(remote);
 
-    socket = accept(acceptSocket, 0, 0);
+    descriptor = accept(acceptDescriptor, reinterpret_cast<struct sockaddr*>(&remote), &remoteLength);
 
-    if (socket == -1) {
+    if (descriptor == -1) {
       std::cerr << PREFIX "Unable to accept new connection, aborting" << std::endl;
       return -1;
     }
 
-    transport = new SocketTransport(socket);
+    port << remote.sin_port;
+    transportName = inet_ntoa(remote.sin_addr);
+    transportName += ":";
+    transportName += port.str();
+
+    transport = new SocketTransport(descriptor, transportName);
 
     if (transport == NULL) {
       std::cerr << PREFIX "Unable to create transport, aborting" << std::endl;
@@ -79,8 +95,8 @@ namespace fusenet {
     table[transport] = protocol;
     protocol->onConnectionMade();
 
-    std::cout << PREFIX "Connection made for descriptor " << socket << std::endl;
-    return socket;
+    std::cout << TRANSPORT_PREFIX(transport) << "Connection established" << std::endl;
+    return descriptor;
   }
 
   int NetworkReactor::createAcceptSocket(int portNumber) {
@@ -123,15 +139,15 @@ namespace fusenet {
   void NetworkReactor::serve(int portNumber, 
 			     const ProtocolCreator* protocolCreator) {
     bool done = false;
-    int acceptSocket;
+    int acceptDescriptor;
     std::map<SocketTransport*, Protocol*>::iterator i;
     int status;
     int largestSocket = -1;
 
     this->protocolCreator = protocolCreator;
-    largestSocket = acceptSocket = createAcceptSocket(portNumber);
+    largestSocket = acceptDescriptor = createAcceptSocket(portNumber);
     
-    if (acceptSocket == -1) {
+    if (acceptDescriptor == -1) {
       std::cerr << PREFIX "Unable to create socket, aborting" << std::endl;
       return;
     }
@@ -143,7 +159,7 @@ namespace fusenet {
       FD_ZERO(&read_set);
 
       // Add accept socket
-      FD_SET(acceptSocket, &read_set);
+      FD_SET(acceptDescriptor, &read_set);
 
       for (i = table.begin(); i != table.end(); i++) {
 	SocketTransport* t = (*i).first;
@@ -164,11 +180,14 @@ namespace fusenet {
       }
       
       // Check for new connections
-      if (FD_ISSET(acceptSocket, &read_set)) {
-	int newSocket = handleNewConnection(acceptSocket);
+      if (FD_ISSET(acceptDescriptor, &read_set)) {
+	int newSocket = handleNewConnection(acceptDescriptor);
 	largestSocket = MAX(largestSocket, newSocket);
       }
     }
+
+    // We won't reach this statement... :-/
+    stopServing();
   }
 
   void NetworkReactor::initiate(const char* const hostName, int portNumber,
@@ -204,7 +223,7 @@ namespace fusenet {
       std::cerr << PREFIX "Unable to establish connection to " << hostName << std::endl;
       return;
     }
-
+    
     SocketTransport transport(descriptor);
     Protocol* protocol = protocolCreator->create(&transport);
 
@@ -213,10 +232,11 @@ namespace fusenet {
     } else {
       protocol->onConnectionMade();
 
-      while (true) {
+      while (!transport.isClosed()) {
 	protocol->onDataReceived(transport.receive());
       }
 
+      std::cout << TRANSPORT_PREFIX(&transport) << "Lost connection, exiting" << std::endl;
       protocol->onConnectionLost();
       delete protocol;
     }

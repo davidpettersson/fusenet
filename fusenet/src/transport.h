@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <stdint.h>
+#include <string>
 
 namespace fusenet {
 
@@ -22,7 +23,15 @@ namespace fusenet {
 
   public:
 
+    /**
+     * Create transport.
+     */
     Transport(void);
+
+    /**
+     * Create transport with name.
+     */
+    Transport(std::string& name);
 
     /**
      * Send data.
@@ -47,11 +56,23 @@ namespace fusenet {
     virtual bool isClosed(void) const = 0;
 
     /**
+     * Transport name.
+     */
+    std::string& getName(void);
+
+    /**
      * Destruct instance.
      *
      * @todo Why can't I just say that the destructor should be = 0?
      */
     virtual ~Transport(void);
+    
+  private:
+
+    /**
+     * Internal name.
+     */
+    std::string transportName;
   };
 }
 
