@@ -7,8 +7,7 @@
  * This file contains the network reactor interface. The network
  * reactor reacts to network events such as incoming connections,
  * received data and lost connections. It forwards these events to
- * event handlers, which in turn relay the messages to protocol
- * instances.
+ * protocol instances.
  *
  * This design is based upon a the Reactor pattern by
  * Schmidt. Although modified a bit, the idea is the same.
@@ -16,11 +15,13 @@
  * @author David Pettersson <david@shebang.nu>
  */
 
+#include "protocol-creator.h"
+
 namespace fusenet {
 
   /**
    * Reacts to network events. This class reacts to different kinds of
-   * network events, and creates new handler instances when
+   * network events, and creates new protocol instances when
    * necessary.
    *
    * This reactor is custom made for BSD sockets, but could be adapted
@@ -31,16 +32,13 @@ namespace fusenet {
   public:
 
     /**
-     * Creates a new network reactor instance. Takes a socket handler
-     * factory pointer as an argument, which is later used when new
-     * handlers are required.
+     * Creates a new network reactor instance.
      *
      * @param portNumber the port number to react on
-     * @param handlerFactory the handler factory
-     *
-     * @todo Add handler factory parameter
+     * @param protocolCreator the protocol creator
      */
-    NetworkReactor(int portNumber);
+    NetworkReactor(int portNumber, 
+		   const ProtocolCreator* protocolCreator);
   };
 
 }
