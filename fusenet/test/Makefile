@@ -6,21 +6,17 @@
 
 CXX = g++
 CXXFLAGS = -pipe -O2 -Wall -W -ansi -pedantic-errors -Wmissing-braces
-CXXFLAGS += -Wparentheses -Wold-style-cast -g
-VPATH	= ../src:./
-LDFLAGS =
+CXXFLAGS += -Wparentheses -Wold-style-cast -g -I../src
+VPATH	= ../src:.
+LDFLAGS = -lcppunit -ldl
 
-program = fusenet
 sources = $(notdir $(wildcard ../src/*.cc))
 objects = $(sources:.cc=.o)
 depends = $(sources:.cc=.d)
 
-all: $(program) 
+all: test-database
 
 test-database: test-database.o memory-database.o database.o
-	$(CXX) -lcppunit -ldl $^ -o $@
-
-$(program): $(objects)
 	$(CXX) $(LDFLAGS) -o $@ $^
 
 %.d: %.cc
@@ -29,7 +25,10 @@ $(program): $(objects)
 -include $(depends)
 
 clean:
-	rm -f $(objects) $(depends) $(program) *~
+	rm test-database
+	rm -f $(depends)
+	rm -f *.o 
+	rm -f *~
 
 .PHONY: all clean
 
