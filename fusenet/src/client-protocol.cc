@@ -22,7 +22,6 @@ namespace fusenet {
   }
   
   void ClientProtocol::receiveListNewsgroups(void) {
-    MessageIdentifier_t status;
     size_t n, i;
     std::vector<Newsgroup_t> newsgroupList;
     Newsgroup_t newsgroup;
@@ -35,9 +34,7 @@ namespace fusenet {
       newsgroupList.push_back(newsgroup);
     }
 
-    status = receiveCommand();
-    assert(status == ANS_END);
-    
+    expectCommand(ANS_END);
     onListNewsgroups(newsgroupList);
   }
 
@@ -72,9 +69,7 @@ namespace fusenet {
       }
     }
 
-    status = receiveCommand();
-    assert(status == ANS_END);
-
+    expectCommand(ANS_END);
     interact();
   }
 
@@ -100,9 +95,7 @@ namespace fusenet {
       }
     }
 
-    status = receiveCommand();
-    assert(status == ANS_END);
-
+    expectCommand(ANS_END);
     interact();
   }
 
@@ -118,6 +111,7 @@ namespace fusenet {
     Article_t article;
     int n;
     int i;
+    bool success;
 
     if (status == ANS_ACK) {
       receiveParameter(&n);
@@ -128,10 +122,13 @@ namespace fusenet {
 	articleList.push_back(article);
       }
 
-      onListArticles(true, articleList);
+      success = true;
     } else {
-      onListArticles(false, articleList);
+      success = false;
     }
+
+    expectCommand(ANS_END);
+    onListArticles(success, articleList);
   }
 
   void ClientProtocol::onListArticles(bool success,
@@ -178,9 +175,7 @@ namespace fusenet {
       }
     }
 
-    status = receiveCommand();
-    assert(status == ANS_END);
-
+    expectCommand(ANS_END);
     interact();
   }
   
@@ -211,9 +206,7 @@ namespace fusenet {
       }
     }
 
-    status = receiveCommand();
-    assert(status == ANS_END);
-
+    expectCommand(ANS_END);
     interact();
   }
 
@@ -254,9 +247,7 @@ namespace fusenet {
       }
     }
 
-    status = receiveCommand();
-    assert(status == ANS_END);
-
+    expectCommand(ANS_END);
     interact();
   }
   

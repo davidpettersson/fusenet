@@ -31,7 +31,11 @@ namespace fusenet {
     protocol->onDataReceived(static_cast<uint8_t>(transport->receive()));
 
     if (transport->isClosed()) {
-      handleLostConnection(transport);
+      try {
+	handleLostConnection(transport);
+      } catch (ProtocolException e) {
+	std::cerr << "Protocol exception!" << std::endl;
+      }
     }
   }
 

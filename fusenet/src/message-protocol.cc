@@ -57,7 +57,7 @@ namespace fusenet {
     size_t i;
     size_t n;
 
-    assert(transport->receive() == PAR_STRING);
+    expectCommand(PAR_STRING);
 
     for (i = 0; i < 4; i++) {
       number[i] = transport->receive();
@@ -76,7 +76,7 @@ namespace fusenet {
     uint8_t number[4];
     size_t i;
 
-    assert(transport->receive() == PAR_NUM);
+    expectCommand(PAR_NUM);
 
     for (i = 0; i < 4; i++) {
       number[i] = transport->receive();
@@ -87,6 +87,14 @@ namespace fusenet {
 
   void MessageProtocol::onConnectionLost(void) {
     // Ignore for now
+  }
+
+  void MessageProtocol::expectCommand(MessageIdentifier_t expected) {
+    MessageIdentifier_t actual = static_cast<MessageIdentifier_t>(transport->receive());
+
+    if (actual != expected) {
+      std::cerr << "Protocol error, got " << actual << ", but expected " << expected << std::endl;
+    }
   }
 
   void MessageProtocol::unpack(uint32_t integer, 

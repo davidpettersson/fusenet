@@ -17,6 +17,15 @@
 namespace fusenet {
 
   /**
+   * Protocol exception class. This exception is thrown whenever there
+   * is a protocol error.
+   */
+  class ProtocolException {
+    // No need for anything
+  };
+
+
+  /**
    * Base class for all protocols. Protocols are defined seperately
    * for both client and server. To create a new protocol, create a
    * new class that inherits from this one, and override the data

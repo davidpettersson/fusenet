@@ -66,6 +66,13 @@ namespace fusenet {
     MessageIdentifier_t receiveCommand(void);
 
     /**
+     * Expect a command. This call consumes a command byte and throws
+     * an exception if the actual command received is not the expected
+     * one.
+     */
+    void expectCommand(MessageIdentifier_t expected);
+    
+    /**
      * Receive a string parameter.
      *
      * @param parameter the parameter.
