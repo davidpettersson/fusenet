@@ -28,9 +28,15 @@ namespace fusenet {
      * Send data.
      *
      * @param data the data to send
-     * @param size the size of the data
      */
-    virtual void send(uint8_t* data, size_t size) const = 0;
+    virtual void send(uint8_t data) const = 0;
+
+    /**
+     * Destruct instance.
+     *
+     * @todo Why can't I just say that the destructor should be = 0?
+     */
+    virtual ~Transport(void) { };
   };
 }
 

@@ -40,7 +40,7 @@ namespace fusenet {
      * @param data the data received
      * @param size the size of the data
      */
-    virtual void onDataReceived(uint8_t* data, size_t size) = 0;
+    virtual void onDataReceived(uint8_t data) = 0;
 
     /**
      * Called on lost connection.

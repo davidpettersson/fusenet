@@ -21,9 +21,9 @@ namespace fusenet {
       std::cout << "Created!" << std::endl;
     }
 
-    void onDataReceived(uint8_t* data, size_t size) {
+    void onDataReceived(uint8_t data) {
       std::cout << "Got some data!" << std::endl;
-      transport->send(data, size);
+      transport->send(data);
     }
 
     void onConnectionLost(void) {
@@ -36,7 +36,7 @@ namespace fusenet {
 
   class EchoServerCreator : public ProtocolCreator {
   public:
-    Protocol* create(const Transport* transport) {
+    Protocol* create(const Transport* transport) const {
       return new EchoServer(transport);
     }
   };
@@ -54,20 +54,14 @@ namespace fusenet {
 
 static void serverBehaviour(void) {
   fusenet::EchoServerCreator creator;
-  fusenet::Protocol* protocol;
-
-  uint8_t* data;
-  data = new uint8_t[5];
-  memcpy(data, "hello", 5);
-
-  fusenet::TerminalTransport terminalTransport;
-  protocol = creator.create(&terminalTransport);
-  protocol->onDataReceived(data, 5);
-  protocol->onConnectionLost();
-  delete protocol;
+  fusenet::NetworkReactor networkReactor(4000, &creator);
+  networkReactor.serveForever();
 }
 
 int main(int argc, char* argv[]) {
+  (void) argc;
+  (void) argv;
+
   serverBehaviour();
   return 0;
 }
