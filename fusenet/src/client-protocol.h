@@ -174,6 +174,11 @@ namespace fusenet {
     void receiveGetArticle(void);
 
     /**
+     * Print the help message.
+     */
+    void printHelpMsg(void);
+
+    /**
      * Ask user for string value.
      *
      * @param question
