@@ -147,7 +147,7 @@ public:
   void testNonEmpty() {
     std::string name("foo");
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
-    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->deleteNewsgroup(-1)));
+    CPPUNIT_ASSERT(pDatabase->deleteNewsgroup(-1) == STATUS_FAILURE_N_DOES_NOT_EXIST);
   }
   void testSingle() {
     NewsgroupList_t newsgroupList;
