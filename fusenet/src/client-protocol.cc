@@ -257,6 +257,18 @@ namespace fusenet {
     return answer;
   }
   
+  void ClientProtocol::printHelpMsg(void) {
+    std::cout << "l\t-\tlist newsgroups" << std::endl;
+    std::cout << "c\t-\tcreate newsgroup" << std::endl;
+    std::cout << "k\t-\tdelete newsgroup" << std::endl;
+    std::cout << "a\t-\tlist articles" << std::endl;
+    std::cout << "n\t-\tcreate article" << std::endl;
+    std::cout << "d\t-\tdelete article" << std::endl;
+    std::cout << "g\t-\tget article" << std::endl;
+    std::cout << "h\t-\tthis help message" << std::endl;
+    interact();
+  }
+  
   void ClientProtocol::interact(void) {
     std::string command;
     
@@ -321,7 +333,7 @@ namespace fusenet {
 
     default: 
       {
-	std::cout << "Huh?" << std::endl;
+	printHelpMsg();
 	break;
       }
     }
