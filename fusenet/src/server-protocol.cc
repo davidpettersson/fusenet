@@ -13,16 +13,39 @@
 
 namespace fusenet {
 
+  static MessageIdentifier_t TranslateError(Status_t identifier) {
+    MessageIdentifier_t status = ANS_ACK;
+    
+    switch (identifier) {
+    case STATUS_FAILURE_ALREADY_EXISTS:
+      status = ERR_NG_ALREADY_EXISTS;
+      break;
+    case STATUS_FAILURE_N_DOES_NOT_EXIST:
+      status = ERR_NG_DOES_NOT_EXIST;
+      break;
+    case STATUS_FAILURE_A_DOES_NOT_EXIST:
+      status = ERR_ART_DOES_NOT_EXIST;
+      break;
+    case STATUS_FAILURE:
+      status = ERR_NG_DOES_NOT_EXIST; // This is broken
+      break;
+    default:
+      assert(0 == "This cannot happen");
+      break;
+    }
+    
+    return status;
+  }
+
   void ServerProtocol::replyListNewsgroups(NewsgroupList_t& newsgroupList) {
     NewsgroupList_t::iterator i;
-    int j;
 
     sendCommand(ANS_LIST_NG);
     sendParameter(newsgroupList.size());
 
-    for (i = newsgroupList.begin(), j = 0; i != newsgroupList.end(); i++, j++) {
+    for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
       Newsgroup_t& newsgroup = *i;
-      sendParameter(j);
+      sendParameter(newsgroup.id);
       sendParameter(newsgroup.name);
     }
 
@@ -31,13 +54,32 @@ namespace fusenet {
 
   void ServerProtocol::replyCreateNewsgroup(Status_t status) {
     sendCommand(ANS_CREATE_NG);
-    sendCommand(ANS_ACK);
+    sendStatus(status);
     sendCommand(ANS_END);
   }
 
   void ServerProtocol::replyDeleteNewsgroup(Status_t status) {
     sendCommand(ANS_DELETE_NG);
-    sendCommand(ANS_ACK);
+    sendStatus(status);
+    sendCommand(ANS_END);
+  }
+
+  void ServerProtocol::replyListArticles(Status_t status,
+					 ArticleList_t& articleList) {
+    ArticleList_t::iterator i;
+
+    sendCommand(ANS_LIST_ART);
+    sendStatus(status);
+
+    if (IS_SUCCESS(status)) {
+      sendParameter(articleList.size());
+      for (i = articleList.begin(); i != articleList.end(); i++) {
+	Article_t& article = *i;
+	sendParameter(article.id);
+	sendParameter(article.title);
+      }
+    }
+
     sendCommand(ANS_END);
   }
 
@@ -92,6 +134,15 @@ namespace fusenet {
     receiveParameter(&aid);
     receiveCommand();
     onGetArticle(gid, aid);
+  }
+
+  void ServerProtocol::sendStatus(Status_t status) {
+    if (IS_SUCCESS(status)) {
+      sendCommand(ANS_ACK);
+    } else {
+      sendCommand(ANS_NAK);
+      sendCommand(TranslateError(status));
+    }
   }
 
   void ServerProtocol::onDataReceived(uint8_t data) {
