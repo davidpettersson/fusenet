@@ -11,8 +11,8 @@
 
 #include "memory-database.h"
 
-#define INVALID_NID(x) ((static_cast<size_t>(x) > mapping.size()) || (mapping[x] == NULL))
-#define INVALID_AID(x, y) ((static_cast<size_t>(x) > mapping[y]->second->size()) || (mapping[y]->second->at(x) == NULL))
+#define INVALID_NID(x) ((static_cast<size_t>(x) >= mapping.size()) || (mapping[x] == NULL))
+#define INVALID_AID(x, y) ((static_cast<size_t>(x) >= mapping[y]->second->size()) || (mapping[y]->second->at(x) == NULL))
 
 namespace fusenet {
 
@@ -22,9 +22,6 @@ namespace fusenet {
   }
 
   Status_t MemoryDatabase::getNewsgroupList(NewsgroupList_t& newsgroupList) {
-    if (mapping.size() < 1)
-	    return STATUS_FAILURE;
-
     for (size_t i = 0; i < mapping.size(); ++i)
     {
 	    if (mapping[i])
@@ -64,6 +61,9 @@ namespace fusenet {
 					ArticleList_t& articleList) {
    if (INVALID_NID(newsgroupIdentifier))
 	    return STATUS_FAILURE_N_DOES_NOT_EXIST;
+
+   if (!mapping[newsgroupIdentifier]->second)
+	   return STATUS_SUCCESS;
    
    for (size_t i = 0; i < mapping[newsgroupIdentifier]->second->size(); ++i)
 	   articleList.push_back(*(mapping[newsgroupIdentifier]->second->at(i)));
@@ -106,5 +106,6 @@ namespace fusenet {
   }
   
   MemoryDatabase::~MemoryDatabase(void) {
+
   }
 }

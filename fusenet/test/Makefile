@@ -5,8 +5,8 @@
 #
 
 CXX = g++
-CXXFLAGS = -pipe -O2 -Wall -W -ansi -pedantic-errors -Wmissing-braces
-CXXFLAGS += -Wparentheses -Wold-style-cast -g -I../src
+CXXFLAGS = -pipe -Wall -W -ansi -pedantic-errors -Wmissing-braces
+CXXFLAGS += -Wparentheses -Wold-style-cast -ggdb -I../src
 VPATH	= ../src:.
 LDFLAGS = -lcppunit -ldl
 
