@@ -50,7 +50,11 @@ namespace fusenet {
     if (INVALID_NID(newsgroupIdentifier))
 	    return STATUS_FAILURE_N_DOES_NOT_EXIST;
     if (mapping[newsgroupIdentifier]->second)
-            delete mapping[newsgroupIdentifier]->second;
+    {
+	    for (size_t i = 0; i < mapping[newsgroupIdentifier]->second->size(); ++i)
+		    delete mapping[newsgroupIdentifier]->second->at(i);
+    }
+    delete mapping[newsgroupIdentifier]->second;
     delete idmap[newsgroupIdentifier];
     delete mapping[newsgroupIdentifier];
     idmap[newsgroupIdentifier] = NULL;
@@ -90,6 +94,7 @@ namespace fusenet {
     
     if (INVALID_AID(articleIdentifier, newsgroupIdentifier))
 	    return STATUS_FAILURE_A_DOES_NOT_EXIST;
+
     delete mapping[newsgroupIdentifier]->second->at(articleIdentifier);
     mapping[newsgroupIdentifier]->second->at(articleIdentifier) = NULL;
     return STATUS_SUCCESS;
@@ -107,6 +112,15 @@ namespace fusenet {
   }
   
   MemoryDatabase::~MemoryDatabase(void) {
-
+    for (size_t i = 0; i < mapping.size(); ++i)
+    {
+	    if (mapping[i] && mapping[i]->second)
+	    {
+		    for (size_t j = 0; j < mapping[i]->second->size(); ++j)
+			    delete mapping[i]->second->at(j);
+	    }
+	    delete mapping[i];
+	    delete idmap[i];
+    }
   }
 }
