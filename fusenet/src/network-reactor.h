@@ -40,19 +40,31 @@ namespace fusenet {
 
     /**
      * Creates a new network reactor instance.
+     */
+    NetworkReactor(void);
+
+    /**
+     * Start servicing network events. This method returns when it is
+     * time to shut down. This might be due to an error, or because of
+     * user intervention. When a new connection is made, a protocol
+     * instance is created.
      *
      * @param portNumber the port number to react on
      * @param protocolCreator the protocol creator
      */
-    NetworkReactor(int portNumber, 
-		   const ProtocolCreator* protocolCreator);
+    void serve(int portNumber, const ProtocolCreator* protocolCreator);
 
     /**
-     * Service events. This method returns when it is time to shut
-     * down. This might be due to an error, or because of user
-     * intervention.
+     * Initiates a connection. This method initiates a connection
+     * toward a server and uses the given protocol instance for
+     * communication.
+     *
+     * @param hostName the hostname to connect to
+     * @param portNumber the port number on the host to connect to
+     * @param protocol the protocol instance
      */
-    void serveForever(void);
+    void initiate(const char* const hostName, int portNumber, 
+		  const Protocol* protocol);
 
     /**
      * Destroys a network reactor instance.
@@ -76,6 +88,11 @@ namespace fusenet {
      */
     void handleNewConnection(void);
 
+    /**
+     * Stop serving.
+     */
+    void stopServing(void);
+    
     /**
      * Internal server instance.
      */
