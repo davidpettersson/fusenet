@@ -20,7 +20,7 @@ namespace fusenet {
     if (connection->isConnected()) {
       try {
 #ifdef ENABLE_DEBUG
-	std::cout << PREFIX "send(" << data << ")" << std::endl;
+	std::cout << PREFIX "send(" << (int) data << ")" << std::endl;
 #endif
 	connection->write(static_cast<unsigned char>(data));
       } catch (client_server::ConnectionClosedException e) {
@@ -34,7 +34,7 @@ namespace fusenet {
       try {
 	uint8_t data = connection->read();
 #ifdef ENABLE_DEBUG
-	std::cout << PREFIX "receive() = " << data << std::endl;
+	std::cout << PREFIX "receive() = " << (int) data << std::endl;
 #endif
 	return data;
       } catch (client_server::ConnectionClosedException e) {
