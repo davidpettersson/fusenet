@@ -6,7 +6,7 @@
 
 CXX = g++
 CXXFLAGS = -pipe -O2 -Wall -W -ansi -pedantic-errors -Wmissing-braces
-CXXFLAGS += -Wparentheses -Wold-style-cast -g
+CXXFLAGS += -Wparentheses -Wold-style-cast -g -DENABLE_DEBUG
 VPATH	= ../src:./
 
 program = fusenet

@@ -56,7 +56,7 @@ static void clientBehaviour(void) {
   fusenet::ClientProtocolCreator creator;
 #endif
 
-  networkReactor.initiate("localhost", 4000, &creator);
+  networkReactor.initiate("pi", 4000, &creator);
 }
 
 static void printUsage(void) {
