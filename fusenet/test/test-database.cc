@@ -123,7 +123,10 @@ class DeleteNewsgroupTest : public NewsgroupTestFixture {
   CPPUNIT_TEST_SUITE(DeleteNewsgroupTest);
   CPPUNIT_TEST(testEmpty1);
   CPPUNIT_TEST(testEmpty2);
+  CPPUNIT_TEST(testEmpty3);
+  CPPUNIT_TEST(testNonEmpty);
   CPPUNIT_TEST(testSingle);
+  CPPUNIT_TEST(testWithArticles);
   CPPUNIT_TEST_SUITE_END();
 public:
   void testEmpty1() {
@@ -154,6 +157,23 @@ public:
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getNewsgroupList(newsgroupList)));
     CPPUNIT_ASSERT(newsgroupList.size() == 1);
     newsgroup = newsgroupList.front();
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->deleteNewsgroup(newsgroup.id)));
+  }
+  void testWithArticles() {
+    NewsgroupList_t newsgroupList;
+    Newsgroup_t newsgroup;
+    Article_t article;
+
+    article.title = "a";
+    article.author = "b";
+    article.text = "c";
+
+    std::string name("foo");
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getNewsgroupList(newsgroupList)));
+    CPPUNIT_ASSERT(newsgroupList.size() == 1);
+    newsgroup = newsgroupList.front();
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createArticle(newsgroup.id, article)));
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->deleteNewsgroup(newsgroup.id)));
   }
 };
