@@ -33,7 +33,7 @@ namespace fusenet {
       newsgroupList.push_back(newsgroup);
     }
 
-    assert(receiveAnswer() == ANS_END);
+    assert(receiveCommand() == ANS_END);
     
     onListNewsgroups(newsgroupList);
   }
@@ -44,6 +44,8 @@ namespace fusenet {
     for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
       std::cout << (*i).first << " " << (*i).second << std::endl;
     }
+
+    interact();
   }
 
   void ClientProtocol::createNewsgroup(const std::string& name) {
@@ -52,16 +54,93 @@ namespace fusenet {
     sendCommand(COM_END);
   }
 
+  void ClientProtocol::receiveCreateNewsgroup(void) {
+    MessageIdentifier_t status = receiveCommand();
+
+    if (status == ANS_ACK) {
+      onCreateNewsgroup(true);
+    } else {
+      receiveCommand();
+      onCreateNewsgroup(false);
+    }
+  }
+
+  void ClientProtocol::onCreateNewsgroup(bool success) {
+    if (success) {
+      std::cout << "Newsgroup created" << std::endl;
+    } else {
+      std::cout << "Newsgroup not created" << std::endl;
+    }
+
+    interact();
+  }
+
   void ClientProtocol::deleteNewsgroup(int newsgroupIdentifier) {
     sendCommand(COM_DELETE_NG);
     sendParameter(newsgroupIdentifier);
     sendCommand(COM_END);
   }
 
+  void ClientProtocol::receiveDeleteNewsgroup(void) {
+    MessageIdentifier_t status = receiveCommand();
+
+    if (status == ANS_ACK) {
+      onCreateNewsgroup(true);
+    } else {
+      receiveCommand();
+      onCreateNewsgroup(false);
+    }
+  }
+
+  void ClientProtocol::onDeleteNewsgroup(bool success) {
+    if (success) {
+      std::cout << "Newsgroup deleted" << std::endl;
+    } else {
+      std::cout << "Newsgroup not deleted" << std::endl;
+    }
+
+    interact();
+  }
+
   void ClientProtocol::listArticles(int newsgroupIdentifier) {
     sendCommand(COM_LIST_ART);
     sendParameter(newsgroupIdentifier);
     sendCommand(COM_END);    
+  }
+
+  void ClientProtocol::receiveListArticles(void) {
+    MessageIdentifier_t status = receiveCommand();
+    std::vector<Article_t> articleList;
+    Article_t article;
+    int n;
+    int i;
+
+    if (status == ANS_ACK) {
+      receiveParameter(&n);
+
+      for (i = 0; i < n; i++) {
+	receiveParameter(&article.first);
+	receiveParameter(article.second);
+	articleList.push_back(article);
+      }
+
+      onListArticles(true, articleList);
+    } else {
+      onListArticles(false, articleList);
+    }
+  }
+
+  void ClientProtocol::onListArticles(bool success,
+				      std::vector<Newsgroup_t> newsgroupList) {
+    std::vector<Newsgroup_t>::iterator i;
+
+    if (success) {
+      for (i = newsgroupList.begin(); i != newsgroupList.end(); i++) {
+	std::cout << (*i).first << " " << (*i).second << std::endl;
+      }
+    } else {
+      std::cout << "No such newsgroup" << std::endl;
+    }
   }
 
   void ClientProtocol::createArticle(int newsgroupIdentifier,
@@ -91,42 +170,103 @@ namespace fusenet {
     sendParameter(articleIdentifier);
     sendCommand(COM_END);
   }
-
+  
   void ClientProtocol::onConnectionMade(void) {
     interact();
   }
-
+  
+  std::string ClientProtocol::askString(const std::string& question) {
+    std::string answer;
+    
+    std::cout << question << ": ";
+    std::cin >> answer;
+    
+    return answer;
+  }
+  
+  int ClientProtocol::askInteger(const std::string& question) {
+    int answer;
+    
+    std::cout << question << ": ";
+    std::cin >> answer;
+    
+    return answer;
+  }
+  
   void ClientProtocol::interact(void) {
-    char command;
-
-    std::cout << "Enter command: ";
-    std::cin >> command;
-
+    std::string command;
+    
+    command = askString("Enter command");
     std::cout << "Got " << command << ", hehe..." << std::endl;
+    
+    switch (command[0]) {
+      
+    case 'l': 
+      {
+	listNewsgroups();
+	break;
+      }
+      
+    case 'c': 
+      {
+	std::string newsgroupName = askString("Enter newsgroup name");
+	createNewsgroup(newsgroupName);
+	break;
+      }
+      
+    case 'k': 
+      {
+	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
+	deleteNewsgroup(newsgroupIdentifier);
+	break;
+      }
+      
+    case 'a': 
+      {
+	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
+	listArticles(newsgroupIdentifier);
+	break;
+      }
+      
+    case 'n': 
+      {
+	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
+	std::string articleTitle = askString("Enter article title");
+	std::string articleAuthor = askString("Enter article author");
+	std::string articleText = askString("Enter article text");
+	createArticle(newsgroupIdentifier, 
+		      articleTitle, 
+		      articleAuthor, 
+		      articleText);
+	break;
+      }
+   
+    case 'd':
+      {
+	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
+	int articleIdentifier = askInteger("Enter article identifier");
+	deleteArticle(newsgroupIdentifier, articleIdentifier);
+	break;
+      }
 
-    switch (command) {
+    case 'g':
+      {
+	int newsgroupIdentifier = askInteger("Enter newsgroup identifier");
+	int articleIdentifier = askInteger("Enter article identifier");
+	getArticle(newsgroupIdentifier, articleIdentifier);
+	break;
+      }
 
-    case 'l': {
-      listNewsgroups();
-      break;
-    }
-
-    case 'c': {
-      std::string newsgroupName;
-      std::cout << "Enter newgroup name: ";
-      std::cin >> newsgroupName;
-      createNewsgroup(newsgroupName);
-      break;
-    }
-
-    default: {
-      std::cout << "Huh?" << std::endl;
-      break;
+    default: 
+      {
+	std::cout << "Huh?" << std::endl;
+	break;
+      }
     }
   }
-
+  
   void ClientProtocol::onDataReceived(uint8_t data) {
-
+    
     switch (data) {
     case ANS_LIST_NG:
       receiveListNewsgroups();

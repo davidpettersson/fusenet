@@ -33,7 +33,7 @@ namespace fusenet {
       newsgroupList.push_back(newsgroup);
     }
 
-    assert(receiveAnswer() == ANS_END);
+    assert(receiveCommand() == ANS_END);
     
     onListNewsgroups(newsgroupList);
   }
