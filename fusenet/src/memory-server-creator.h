@@ -1,10 +1,10 @@
-#ifndef SERVER_PROTOCOL_CREATOR_H
-#define SERVER_PROTOCOL_CREATOR_H
+#ifndef MEMORY_SERVER_CREATOR_H
+#define MEMORY_SERVER_CREATOR_H
 
 /**
- * @file server-protocol-creator.h
+ * @file memory-server-creator.h
  *
- * This file contains the server protocol creator interface.
+ * This file contains the memory server creator interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */
@@ -18,7 +18,7 @@ namespace fusenet {
   /**
    * Class for creating instances of the server protocol.
    */
-  class ServerProtocolCreator : public ProtocolCreator {
+  class MemoryServerCreator : public ProtocolCreator {
 
   public:
     /**

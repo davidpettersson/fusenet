@@ -14,8 +14,8 @@
 #include "client.h"
 #include "network-reactor.h"
 #include "protocol.h"
-#include "server-protocol-creator.h"
-#include "server-protocol.h"
+#include "memory-server-creator.h"
+#include "memory-server.h"
 #include "transport.h"
 
 #ifdef ENABLE_ECHO
@@ -35,21 +35,26 @@ namespace fusenet {
   };
 }
 
-static void serverBehaviour(int port) {
-  std::cout << "fusenet server started" << std::endl;
+static void serverBehaviour(int port, bool useMemoryBackend) {
+  std::cout << "Fusenet server started" << std::endl;
   fusenet::NetworkReactor networkReactor;
 
 #ifdef ENABLE_ECHO
   fusenet::EchoServerCreator creator;
-#else
-  fusenet::ServerProtocolCreator creator;
-#endif
-
   networkReactor.serve(port, &creator);
+#else
+  if (useMemoryBackend) {
+    std::cout << "Memory backend selected" << std::endl;
+    fusenet::MemoryServerCreator creator;
+    networkReactor.serve(port, &creator);
+  } else {
+    std::cout << "File system backend selected" << std::endl;
+  }
+#endif
 }
 
 static void clientBehaviour(const char* const host, int port) {
-  std::cout << "fusenet client started" << std::endl;
+  std::cout << "Fusenet client started" << std::endl;
   fusenet::NetworkReactor networkReactor;
 
 #ifdef ENABLE_ECHO
@@ -62,7 +67,7 @@ static void clientBehaviour(const char* const host, int port) {
 }
 
 static void printUsage(void) {
-  std::cerr << "usage: fusenet [ --client HOST PORT | --server PORT ]" << std::endl;
+  std::cerr << "usage: fusenet [ --client HOST PORT | --server PORT ( mem | fs ) ]" << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -73,8 +78,8 @@ int main(int argc, char* argv[]) {
 
   if (argc == 4 && strcmp(argv[1], "--client") == 0) {
     clientBehaviour(argv[2], atoi(argv[3]));
-  } else if (argc == 3 && strcmp(argv[1], "--server") == 0) {
-    serverBehaviour(atoi(argv[2]));
+  } else if (argc == 4 && strcmp(argv[1], "--server") == 0) {
+    serverBehaviour(atoi(argv[2]), strcmp(argv[3], "mem") == 0);
   } else {
     printUsage();
   }
