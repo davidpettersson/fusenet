@@ -107,11 +107,15 @@ public:
     CPPUNIT_ASSERT(newsgroupList.size() == 0);
     CPPUNIT_ASSERT(!IS_SUCCESS(pDatabase->deleteNewsgroup(-1)));
   }
+  void testNonEmpty() {
+    std::string name("foo");
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->deleteNewsgroup(-1)));
+  }
   void testSingle() {
     NewsgroupList_t newsgroupList;
     Newsgroup_t newsgroup;
     std::string name("foo");
-    CPPUNIT_ASSERT(newsgroupList.size() == 0);
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getNewsgroupList(newsgroupList)));
     CPPUNIT_ASSERT(newsgroupList.size() == 1);
