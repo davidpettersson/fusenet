@@ -112,8 +112,10 @@ namespace fusenet {
     int i;
     int n;
 
-    // FIXME: Error handling
     articleStream.open(path.c_str());
+    assert(articleStream);
+
+    // Read title and author
     getline(articleStream, article.title);
     getline(articleStream, article.author);
 
@@ -143,11 +145,14 @@ namespace fusenet {
     int i;
     int n;
 
-    // FIXME: Error handling
     articleStream.open(path.c_str());
+    assert(articleStream);
+
+    // Write title and author
     articleStream << article.title << std::endl;
     articleStream << article.author << std::endl;
 
+    // Write text
     n = article.text.length();
     articleStream << n << std::endl;
 
@@ -169,8 +174,8 @@ namespace fusenet {
 
     path = newsgroupPath + metaFilename;
 
-    // FIXME: Error handling
     metaStream.open(path.c_str());
+    assert(metaStream);
     getline(metaStream, newsgroupName);
     metaStream.close();
 
@@ -187,8 +192,8 @@ namespace fusenet {
 
     path = newsgroupPath + metaFilename;
 
-    // FIXME: Error handling
     metaStream.open(path.c_str());
+    assert(metaStream);
     metaStream << newsgroupName;
     metaStream.close();
 
@@ -330,7 +335,7 @@ namespace fusenet {
     ClearVisitor clearVisitor;
 
     if (Walk(baseDirectory, clearVisitor)) {
-      // FIXME: What goes here?
+      status = STATUS_SUCCESS;
     }
 
     return status;
@@ -361,9 +366,8 @@ namespace fusenet {
       }
     }
     
-    // FIXME: Error handling
     path = GetNewsgroupPath(GetNextNumber(baseDirectory));
-    mkdir(path.c_str(), directoryMode);
+    assert(mkdir(path.c_str(), directoryMode) == 0);
     WriteNewsgroupName(path, newsgroupName);
     status = STATUS_SUCCESS;
 
@@ -445,7 +449,7 @@ namespace fusenet {
       path = GetArticlePath(newsgroupIdentifier, articleIdentifier);
 
       if (PathAvailable(path)) {
-	unlink(path.c_str());
+	assert(unlink(path.c_str()) == 0);
 	status = STATUS_SUCCESS;
       } else {
 	status = STATUS_FAILURE_A_DOES_NOT_EXIST;
