@@ -17,7 +17,6 @@
 
 namespace fusenet {
 
-  std::map<int, Newsgroup_t> Newsgroups;
   MemoryDatabase::MemoryDatabase(void) {
     // Does nothing
   }
