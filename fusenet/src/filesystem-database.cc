@@ -34,7 +34,8 @@ namespace fusenet {
     return STATUS_FAILURE;
   }
 
-  Status_t FilesystemDatabase::createArticle(Article_t& article) {
+  Status_t FilesystemDatabase::createArticle(int newsgroupIdentifier,
+					     Article_t& article) {
     return STATUS_FAILURE;
   }
 

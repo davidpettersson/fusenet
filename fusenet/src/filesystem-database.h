@@ -50,7 +50,8 @@ namespace fusenet {
     /**
      * Create article.
      */
-    Status_t createArticle(Article_t& article);
+    Status_t createArticle(int newsgroupIdentifier,
+			   Article_t& article);
 
     /**
      * Delete article.

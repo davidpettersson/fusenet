@@ -83,6 +83,32 @@ namespace fusenet {
     sendCommand(ANS_END);
   }
 
+  void ServerProtocol::replyCreateArticle(Status_t status) {
+    sendCommand(ANS_CREATE_ART);
+    sendStatus(status);
+    sendCommand(ANS_END);
+  }
+
+  void ServerProtocol::replyDeleteArticle(Status_t status) {
+    sendCommand(ANS_CREATE_ART);
+    sendStatus(status);
+    sendCommand(ANS_END);
+  }
+
+  void ServerProtocol::replyGetArticle(Status_t status,
+				       Article_t& article) {
+    sendCommand(ANS_GET_ART);
+    sendStatus(status);
+
+    if (IS_SUCCESS(status)) {
+      sendParameter(article.title);
+      sendParameter(article.author);
+      sendParameter(article.text);
+    }
+
+    sendCommand(ANS_END);
+  }
+
   void ServerProtocol::handleListNewsgroups(void) {
     receiveCommand();
     onListNewsgroups();

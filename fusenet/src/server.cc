@@ -30,12 +30,14 @@ namespace fusenet {
   }
 
   void Server::onCreateNewsgroup(std::string& newsgroupName) {
-    std::cout << PREFIX << "Replying to create newsgroup '" << newsgroupName << "'" << std::endl;
+    std::cout << PREFIX << "Replying to create newsgroup '" 
+	      << newsgroupName << "'" << std::endl;
     replyCreateNewsgroup(database->createNewsgroup(newsgroupName));
   }
 
   void Server::onDeleteNewsgroup(int newsgroupIdentifier) {
-    std::cout << PREFIX << "Replying to delete newsgroup " << newsgroupIdentifier << std::endl;
+    std::cout << PREFIX << "Replying to delete newsgroup " 
+	      << newsgroupIdentifier << std::endl;
     replyDeleteNewsgroup(database->deleteNewsgroup(newsgroupIdentifier));
   }
 
@@ -51,26 +53,40 @@ namespace fusenet {
   }
 
   void Server::onCreateArticle(int newsgroupIdentifier,
-				       Article_t& article) {
-    sendCommand(ANS_CREATE_ART);
-    sendCommand(ANS_NAK);
-    sendCommand(ERR_NG_DOES_NOT_EXIST);
-    sendCommand(ANS_END);
+			       Article_t& article) {
+    Status_t status;
+
+    std::cout << PREFIX << "Creating article " << article.id 
+	      << " in newsgroup " << newsgroupIdentifier << std::endl;
+    status = database->createArticle(newsgroupIdentifier, article);
+
+    std::cout << PREFIX << "Replying to create article" << std::endl;
+    replyCreateArticle(status);
   }
   
   void Server::onDeleteArticle(int newsgroupIdentifier,
-				       int articlIdentifier) {
-    sendCommand(ANS_DELETE_ART);
-    sendCommand(ANS_ACK);
-    sendCommand(ANS_END);
+			       int articleIdentifier) {
+    Status_t status;
+
+    std::cout << PREFIX << "Deleting article " << articleIdentifier
+	      << " in newsgroup " << newsgroupIdentifier << std::endl;
+    status = database->deleteArticle(newsgroupIdentifier, articleIdentifier);
+
+    std::cout << PREFIX << "Replying to delete article" << std::endl;
+    replyDeleteArticle(status);
   }
 
   void Server::onGetArticle(int newsgroupIdentifier,
-				    int articleIdentifier) {
-    sendCommand(ANS_GET_ART);
-    sendCommand(ANS_NAK);
-    sendCommand(ERR_NG_DOES_NOT_EXIST);
-    sendCommand(ANS_END);
+			    int articleIdentifier) {
+    Article_t article;
+    Status_t status;
+
+    std::cout << PREFIX << "Getting article " << articleIdentifier
+	      << " in newsgroup " << newsgroupIdentifier << std::endl;
+    status = database->getArticle(newsgroupIdentifier, articleIdentifier, article);
+
+    std::cout << PREFIX << "Replying to get article" << std::endl;
+    replyGetArticle(status, article);
   }
 
   void Server::onConnectionMade(void) {
