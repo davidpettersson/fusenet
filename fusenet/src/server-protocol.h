@@ -72,6 +72,12 @@ namespace fusenet {
     virtual void onListArticles(int newsgroupIdentifier) = 0;
 
     /**
+     * Reply list articles.
+     */
+    void replyListArticles(Status_t status,
+			   ArticleList_t& articleList);
+    
+    /**
      * Create article.
      */
     virtual void onCreateArticle(int newsgroupIdentifier,
@@ -135,6 +141,11 @@ namespace fusenet {
      * Handle get article.
      */
     void handleGetArticle(void);
+
+    /**
+     * Send status message.
+     */
+    void sendStatus(Status_t);
 
     /**
      * Called on data receival.

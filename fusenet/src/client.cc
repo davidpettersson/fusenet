@@ -23,8 +23,11 @@ namespace fusenet {
     case STATUS_FAILURE_ALREADY_EXISTS:
       std::cout << "Operation failed, item does not exist" << std::endl;
       break;
-    case STATUS_FAILURE_DOES_NOT_EXIST:
-      std::cout << "Operation failed, no such item" << std::endl;
+    case STATUS_FAILURE_N_DOES_NOT_EXIST:
+      std::cout << "Operation failed, no such newsgroup" << std::endl;
+      break;
+    case STATUS_FAILURE_A_DOES_NOT_EXIST:
+      std::cout << "Operation failed, no such article" << std::endl;
       break;
     default:
       assert(0);

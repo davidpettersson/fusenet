@@ -40,21 +40,14 @@ namespace fusenet {
   }
 
   void Server::onListArticles(int newsgroupIdentifier) {
-    sendCommand(ANS_LIST_ART);
+    ArticleList_t articleList;
+    Status_t status;
 
-    if (newsgroupIdentifier == 1) {
-      sendCommand(ANS_ACK);
-      sendParameter(2);
-      sendParameter(1);
-      sendParameter("haXX0r");
-      sendParameter(2);
-      sendParameter("eller ngt");
-    } else {
-      sendCommand(ANS_NAK);
-      sendCommand(ERR_NG_DOES_NOT_EXIST);
-    }
+    std::cout << PREFIX << "Getting list of list articles" << std::endl;
+    status = database->listArticles(newsgroupIdentifier, articleList);
 
-    sendCommand(ANS_END);
+    std::cout << PREFIX << "Replying to list articles" << std::endl;
+    replyListArticles(status, articleList);
   }
 
   void Server::onCreateArticle(int newsgroupIdentifier,

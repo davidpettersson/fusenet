@@ -25,10 +25,10 @@ namespace fusenet {
       status = STATUS_FAILURE_ALREADY_EXISTS;
       break;
     case ERR_NG_DOES_NOT_EXIST:
-      status = STATUS_FAILURE_DOES_NOT_EXIST;
+      status = STATUS_FAILURE_N_DOES_NOT_EXIST;
       break;
     case ERR_ART_DOES_NOT_EXIST:
-      status = STATUS_FAILURE_DOES_NOT_EXIST;
+      status = STATUS_FAILURE_A_DOES_NOT_EXIST;
       break;
     default:
       status = STATUS_FAILURE;
