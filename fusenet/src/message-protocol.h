@@ -59,11 +59,11 @@ namespace fusenet {
     void sendParameter(int parameter);
 
     /**
-     * Receive an answer.
+     * Receive an command.
      *
-     * @return the answer
+     * @return the command
      */
-    MessageIdentifier_t receiveAnswer(void);
+    MessageIdentifier_t receiveCommand(void);
 
     /**
      * Receive a string parameter.

@@ -15,8 +15,16 @@
 #include "message-protocol.h"
 
 namespace fusenet {
-
+  
+  /**
+   * Newsgroup type.
+   */
   typedef std::pair<int, std::string> Newsgroup_t;
+
+  /**
+   * Article type.
+   */
+  typedef std::pair<int, std::string> Article_t;
 
   /**
    * Client protocol class. This class extends the base protocol class
@@ -56,11 +64,25 @@ namespace fusenet {
     void createNewsgroup(const std::string& name);
 
     /**
+     * Create newsgroup callback.
+     *
+     * @param success if successful
+     */
+    void onCreateNewsgroup(bool success);
+
+    /**
      * Delete newsgroup.
      *
      * @param newsgroupIdentifier the newsgroup identifier
      */
     void deleteNewsgroup(int newsgroupIdentifier);
+
+    /**
+     * Delete newsgroup callback.
+     *
+     * @param success if successful
+     */
+    void onDeleteNewsgroup(bool success);
 
     /**
      * List articles.
@@ -70,6 +92,15 @@ namespace fusenet {
     void listArticles(int newsgroupIdentifier);
 
     /**
+     * List articles answer.
+     *
+     * @param success
+     * @param articleList the article list
+     */
+    void onListArticles(bool succces,
+			std::vector<Article_t> articleList);
+
+     /**
      * Create article.
      *
      * @param newsgroupIdentifier the newsgroup identifier
@@ -108,10 +139,41 @@ namespace fusenet {
     void onConnectionMade(void);
 
     /**
-     * Receive newsgroup list.
+     * Receive list newsgroup answer.
      */
     void receiveListNewsgroups(void);
 
+    /**
+     * Receive create newsgroup answer.
+     */
+    void receiveCreateNewsgroup(void);
+
+    /**
+     * Receive create newsgroup answer.
+     */
+    void receiveDeleteNewsgroup(void);
+
+    /**
+     * Receive list newsgroup answer.
+     */
+    void receiveListArticles(void);
+
+    /**
+     * Ask user for string value.
+     *
+     * @param question
+     * @return the answer
+     */
+    std::string askString(const std::string& question);
+    
+    /**
+     * Ask user for integer value.
+     *
+     * @param question
+     * @return the answer
+     */
+    int askInteger(const std::string& question);
+    
     /**
      * Interact with the user.
      */

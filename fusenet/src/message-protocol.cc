@@ -48,7 +48,7 @@ namespace fusenet {
     }
   }
 
-  MessageIdentifier_t MessageProtocol::receiveAnswer(void) {
+  MessageIdentifier_t MessageProtocol::receiveCommand(void) {
     return static_cast<MessageIdentifier_t>(transport->receive());
   }
 
