@@ -40,6 +40,7 @@ namespace fusenet {
     ANS_END        = 27,          //!< Answer end
     ANS_ACK        = 28,          //!< Acknowledge (not really answers)
     ANS_NAK        = 29,          //!< Negative acknowledge (not really answers)
+
     // Parameter identifiers
     PAR_STRING     = 40,          //!< String
     PAR_NUM        = 41,          //!< Number

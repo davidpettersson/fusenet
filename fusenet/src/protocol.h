@@ -35,17 +35,16 @@ namespace fusenet {
     Protocol(const Transport* transport);
 
     /**
-     * Called on data receival.
-     *
-     * @param data the data received
-     * @param size the size of the data
-     */
-    virtual void onDataReceived(uint8_t data) = 0;
-
-    /**
      * Called on made connection.
      */
     virtual void onConnectionMade(void) = 0;
+
+    /**
+     * Called on data receival.
+     *
+     * @param data the data received
+     */
+    virtual void onDataReceived(uint8_t data) = 0;
 
     /**
      * Called on lost connection.
