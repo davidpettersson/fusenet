@@ -21,6 +21,8 @@ namespace fusenet {
 
   void Server::onListNewsgroups(void) {
     NewsgroupList_t newsgroupList;
+    
+    std::cout << PREFIX << "Getting list of newsgroups" << std::endl;
     database->getNewsgroupList(newsgroupList);
 
     std::cout << PREFIX << "Replying to list newsgroups" << std::endl;
@@ -28,12 +30,12 @@ namespace fusenet {
   }
 
   void Server::onCreateNewsgroup(std::string& newsgroupName) {
-    std::cout << PREFIX << "Creating newsgroup '" << newsgroupName << "'" << std::endl;
+    std::cout << PREFIX << "Replying to create newsgroup '" << newsgroupName << "'" << std::endl;
     replyCreateNewsgroup(database->createNewsgroup(newsgroupName));
   }
 
   void Server::onDeleteNewsgroup(int newsgroupIdentifier) {
-    std::cout << PREFIX << "Replying to delete newsgroup" << std::endl;
+    std::cout << PREFIX << "Replying to delete newsgroup " << newsgroupIdentifier << std::endl;
     replyDeleteNewsgroup(database->deleteNewsgroup(newsgroupIdentifier));
   }
 
