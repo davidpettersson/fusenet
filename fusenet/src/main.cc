@@ -54,8 +54,12 @@ namespace fusenet {
 
 static void serverBehaviour(void) {
   fusenet::EchoServerCreator creator;
-  fusenet::NetworkReactor networkReactor(4000, &creator);
-  networkReactor.serveForever();
+  fusenet::NetworkReactor networkReactor;
+  networkReactor.serve(4000, &creator);
+}
+
+static void clientBehaviour(void) {
+
 }
 
 int main(int argc, char* argv[]) {

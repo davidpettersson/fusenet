@@ -13,10 +13,8 @@
 
 namespace fusenet {
 
-  NetworkReactor::NetworkReactor(int portNumber,
-				 const ProtocolCreator* protocolCreator) {
-    this->protocolCreator = protocolCreator;
-    this->server = new client_server::Server(portNumber);
+  NetworkReactor::NetworkReactor(void) {
+    // Do nothing
   }
 
   void NetworkReactor::handleIncomingData(client_server::Connection* connection) {
@@ -66,9 +64,13 @@ namespace fusenet {
     table[connection] = std::make_pair(socketTransport, protocol);
   }
 
-  void NetworkReactor::serveForever(void) {
+  void NetworkReactor::serve(int portNumber, 
+			     const ProtocolCreator* protocolCreator) {
     client_server::Connection* connection;
     bool done = false;
+
+    this->protocolCreator = protocolCreator;
+    this->server = new client_server::Server(portNumber);
 
     if (!server->isReady()) {
       std::cerr << PREFIX "Server not ready" << std::endl;
@@ -92,7 +94,7 @@ namespace fusenet {
 	  }
 	} catch (client_server::ConnectionClosedException e) {
 	  std::cerr << PREFIX "Got ConnectionClosedException, aborting" << std::endl;
-	  std::cerr << PREFIX "This is likely due to a bug in client_server::Server (see comment)" << std::endl;
+	  std::cerr << PREFIX "This is due to a bug in client_server::Server" << std::endl;
 
 	  /*
 	   * The client_server::Server class only uses the read set
@@ -102,13 +104,14 @@ namespace fusenet {
 	   * their code.
 	   */
 
+	  stopServing();
 	  return;
 	}
       }
     }
   }
  
-  NetworkReactor::~NetworkReactor(void) {
+  void NetworkReactor::stopServing(void) {
     std::map<client_server::Connection*, std::pair<Transport*, Protocol*> >::iterator i;
     std::pair<Transport*, Protocol*> value;
 
@@ -117,10 +120,13 @@ namespace fusenet {
       value.second->onConnectionLost();
       delete value.second;
       delete value.first;
-      delete (*i).first;
     }
 
     delete server;
+  }
+
+  NetworkReactor::~NetworkReactor(void) {
+    // Do nothing
   }
 }
 
