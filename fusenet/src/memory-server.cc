@@ -11,28 +11,40 @@
 
 #include "memory-server.h"
 
+#define PREFIX "[MemoryServer] [" << transport->getName() << "] "
+
 namespace fusenet {
 
+  MemoryServer::MemoryServer(Transport* transport) : ServerProtocol(transport) {
+    newsgroupCounter = 0;
+  }
+
   void MemoryServer::onListNewsgroups(void) {
-    sendCommand(ANS_LIST_NG);
-    sendParameter(2);
-    sendParameter(1);
-    sendParameter("foo");
-    sendParameter(2);
-    sendParameter("bar");
-    sendCommand(ANS_END);
+    std::cout << PREFIX << "Replying to list newsgroups" << std::endl;
+
+    // FIXME: Replace with calls to database interface
+    replyListNewsgroups(newsgroupList);
   }
 
   void MemoryServer::onCreateNewsgroup(std::string& newsgroupName) {
-    sendCommand(ANS_CREATE_NG);
-    sendCommand(ANS_ACK);
-    sendCommand(ANS_END);
+    Newsgroup_t newsgroup;
+
+    std::cout << PREFIX << "Creating newsgroup '" << newsgroupName << "'" << std::endl;
+    
+    // FIXME: Replace with calls to database interface
+    newsgroup.id = newsgroupCounter++;
+    newsgroup.name = newsgroupName;
+    newsgroupList.push_back(newsgroup);
+
+    std::cout << PREFIX << "Replying to create newsgroup" << std::endl;
+    replyCreateNewsgroup(STATUS_SUCCESS);
   }
 
   void MemoryServer::onDeleteNewsgroup(int newsgroupIdentifier) {
-    sendCommand(ANS_DELETE_NG);
-    sendCommand(ANS_ACK);
-    sendCommand(ANS_END);
+    std::cout << PREFIX << "Replying to delete newsgroup" << std::endl;
+
+    // FIXME: Broken!
+    replyDeleteNewsgroup(STATUS_SUCCESS);
   }
 
   void MemoryServer::onListArticles(int newsgroupIdentifier) {
@@ -77,11 +89,11 @@ namespace fusenet {
   }
 
   void MemoryServer::onConnectionMade(void) {
-    // Do nothing yet
+    std::cout << PREFIX << "Connection established" << std::endl;
   }
 
   void MemoryServer::onConnectionLost(void) {
-    // Do nothing yet
+    std::cout << PREFIX << "Connection lost" << std::endl;
   }
 
 }

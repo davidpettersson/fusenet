@@ -42,14 +42,29 @@ namespace fusenet {
     virtual void onListNewsgroups(void) = 0;
 
     /**
+     * Reply list newsgroups.
+     */
+    void replyListNewsgroups(NewsgroupList_t& newsgroupList);
+
+    /**
      * Create newsgroup.
      */
     virtual void onCreateNewsgroup(std::string& newsgroupName) = 0;
 
     /**
+     * Reply create newsgroup.
+     */
+    void replyCreateNewsgroup(Status_t status);
+
+    /**
      * Delete newsgroup.
      */
     virtual void onDeleteNewsgroup(int newsgroupIdentifier) = 0;
+
+    /**
+     * Reply create newsgroup.
+     */
+    void replyDeleteNewsgroup(Status_t status);
 
     /**
      * List articles.
