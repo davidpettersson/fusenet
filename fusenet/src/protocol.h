@@ -49,14 +49,6 @@ namespace fusenet {
      */
     virtual void onLostConnection(void) = 0;
 
-    /**
-     * Send data.
-     *
-     * @param data the data received
-     * @param size the size of the data
-     */
-    void sendData(uint8_t* data, size_t);
-
   private:
 
     /**
