@@ -70,7 +70,10 @@ namespace fusenet {
 	   return STATUS_SUCCESS;
    
    for (size_t i = 0; i < mapping[newsgroupIdentifier]->second->size(); ++i)
-	   articleList.push_back(*(mapping[newsgroupIdentifier]->second->at(i)));
+   {
+	   if (mapping[newsgroupIdentifier]->second->at(i))
+		   articleList.push_back(*(mapping[newsgroupIdentifier]->second->at(i)));
+   }
     
     return STATUS_SUCCESS;
   }
