@@ -90,7 +90,7 @@ namespace fusenet {
   }
 
   void ServerProtocol::replyDeleteArticle(Status_t status) {
-    sendCommand(ANS_CREATE_ART);
+    sendCommand(ANS_DELETE_ART);
     sendStatus(status);
     sendCommand(ANS_END);
   }
