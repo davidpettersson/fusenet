@@ -29,7 +29,7 @@ namespace fusenet {
      *
      * @param transport the transport
      */
-    MemoryServer(Transport* transport) : ServerProtocol(transport) { }
+    MemoryServer(Transport* transport);
 
     /**
      * List newsgroups callback.
@@ -80,6 +80,16 @@ namespace fusenet {
      * Called on lost connection.
      */
     void onConnectionLost(void);
+
+    /**
+     * Internal newsgroup counter.
+     */
+    int newsgroupCounter;
+
+    /**
+     * Internal newsgroup list.
+     */
+    NewsgroupList_t newsgroupList;
   };
 
 }

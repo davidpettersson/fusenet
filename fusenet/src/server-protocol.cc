@@ -13,6 +13,34 @@
 
 namespace fusenet {
 
+  void ServerProtocol::replyListNewsgroups(NewsgroupList_t& newsgroupList) {
+    NewsgroupList_t::iterator i;
+    int j;
+
+    sendCommand(ANS_LIST_NG);
+    sendParameter(newsgroupList.size());
+
+    for (i = newsgroupList.begin(), j = 0; i != newsgroupList.end(); i++, j++) {
+      Newsgroup_t& newsgroup = *i;
+      sendParameter(j);
+      sendParameter(newsgroup.name);
+    }
+
+    sendCommand(ANS_END);
+  }
+
+  void ServerProtocol::replyCreateNewsgroup(Status_t status) {
+    sendCommand(ANS_CREATE_NG);
+    sendCommand(ANS_ACK);
+    sendCommand(ANS_END);
+  }
+
+  void ServerProtocol::replyDeleteNewsgroup(Status_t status) {
+    sendCommand(ANS_DELETE_NG);
+    sendCommand(ANS_ACK);
+    sendCommand(ANS_END);
+  }
+
   void ServerProtocol::handleListNewsgroups(void) {
     receiveCommand();
     onListNewsgroups();
