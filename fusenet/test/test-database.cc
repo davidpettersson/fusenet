@@ -15,15 +15,30 @@
 
 #include "fusenet-types.h"
 #include "memory-database.h"
+#include "filesystem-database.h"
 
 using namespace fusenet;
+
+static bool UseMemoryDatabase = false;
+
+static Database* MakeDatabase(void) {
+  if (UseMemoryDatabase) {
+    return new MemoryDatabase();
+  } else {
+    FilesystemDatabase* pDatabase = new FilesystemDatabase();
+    if (pDatabase != NULL) {
+      pDatabase->clear();
+    }
+    return pDatabase;
+  }
+}
 
 class NewsgroupTestFixture : public CppUnit::TestFixture {
 protected:
   Database* pDatabase;
 public:
   void setUp() {
-    pDatabase = new MemoryDatabase();
+    pDatabase = MakeDatabase();
     CPPUNIT_ASSERT(pDatabase != NULL);
   }
   void tearDown() {
@@ -40,7 +55,7 @@ public:
   void setUp() {
     NewsgroupList_t newsgroupList;
     std::string name("foo");
-    pDatabase = new MemoryDatabase();
+    pDatabase = MakeDatabase();
     CPPUNIT_ASSERT(pDatabase != NULL);
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createNewsgroup(name)));
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->getNewsgroupList(newsgroupList)));
@@ -285,12 +300,28 @@ public:
   }
 };
 
-int main(void)
+int main(int argc, char* argv[])
 {
   CppUnit::TestResult result;
   CppUnit::TextTestRunner runner;
   bool success;
   
+  if (argc == 2) {
+    if (strcmp("mem", argv[1]) == 0) {
+      std::cout << "Using memory database" << std::endl;
+      UseMemoryDatabase = true;
+    } else if (strcmp("fs", argv[1]) == 0) {
+      std::cout << "Using filesystem database" << std::endl;
+      UseMemoryDatabase = false;
+    } else {
+      std::cerr << "usage: test-database [ mem | fs ]" << std::endl;
+      return 1;
+    }
+  } else {
+    std::cerr << "usage: test-database [ mem | fs ]" << std::endl;
+    return 1;
+  }
+
   CPPUNIT_TEST_SUITE_REGISTRATION(CreateNewsgroupTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(ListNewsgroupsTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(DeleteNewsgroupTest);
@@ -299,6 +330,8 @@ int main(void)
   CPPUNIT_TEST_SUITE_REGISTRATION(ListArticlesTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(DeleteArticleTest);
   CPPUNIT_TEST_SUITE_REGISTRATION(GetArticleTest);
+  /*
+  */
 
   CppUnit::Test* test =
     CppUnit::TestFactoryRegistry::getRegistry().makeTest();

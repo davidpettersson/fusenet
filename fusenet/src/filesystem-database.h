@@ -12,6 +12,8 @@
 #include "fusenet-types.h"
 #include "database.h"
 
+#include <string>
+
 namespace fusenet {
 
   /**
@@ -19,15 +21,17 @@ namespace fusenet {
    * directory structure with plain text files as its back end. The
    * directory for a working database looks like this:
    *
-   *  db/ --+-- 1/ ---+--- meta
-   *        |         |
-   *        |         +--- 1
-   *        |         |
-   *        |         +--- 2
-   *        |
-   *        +-- 2/
-   *        |
-   *        :
+   * <pre>
+   *   db/ --+-- 1/ ---+--- meta
+   *         |         |
+   *         |         +--- 1
+   *         |         |
+   *         |         +--- 2
+   *         |
+   *         +-- 2/
+   *         |
+   *         :
+   * </pre>
    *
    * The database is contained in a db/ directory that lies in the
    * current working directory. Inside the db directory, there exists
@@ -43,6 +47,11 @@ namespace fusenet {
      * Create instance.
      */
     FilesystemDatabase(void);
+
+    /**
+     * Clear the database.
+     */
+    Status_t clear(void);
 
     /**
      * Get all newsgroups.
@@ -88,6 +97,7 @@ namespace fusenet {
      * Destroy instance.
      */
     virtual ~FilesystemDatabase(void);
+
   };
 }
 
