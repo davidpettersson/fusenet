@@ -33,7 +33,12 @@ namespace fusenet {
    * Meta filename for newsgroups.
    */
   const std::string metaFilename = "meta";
-  
+
+  /**
+   * Last filename for keeping track of next index value.
+   */
+  const std::string lastFilename = "last";
+
   /**
    * Standard directory mode.
    */
@@ -172,7 +177,8 @@ namespace fusenet {
     std::ifstream metaStream;
     std::string path;
 
-    path = newsgroupPath + metaFilename;
+    path += newsgroupPath;
+    path += metaFilename;
 
     metaStream.open(path.c_str());
     assert(metaStream);
@@ -190,7 +196,8 @@ namespace fusenet {
     std::ofstream metaStream;
     std::string path;
 
-    path = newsgroupPath + metaFilename;
+    path += newsgroupPath;
+    path += metaFilename;
 
     metaStream.open(path.c_str());
     assert(metaStream);
@@ -208,48 +215,35 @@ namespace fusenet {
   }
 
   /**
-   * Fetches the largest entity.
-   */
-  class MaxVisitor : public Visitor {
-  private:
-    int max;
-  public:
-    MaxVisitor(void) {
-      max = 0;
-    }
-    
-    void visit(const std::string& directory, 
-	       const std::string& filename) {
-      (void) directory;
-
-      if (filename != metaFilename) {
-	int current = atoi(filename.c_str());
-	
-	if (current > max) {
-	  max = current;
-	}
-      }
-    }
-    
-    int getMax(void) {
-      return max;
-    }       
-  };
-
-  /**
    * Get next filename number in directory.
    */
   int GetNextNumber(const std::string& directory) {
-    MaxVisitor maxVisitor;
+    std::string path;
+    int next = 0;
+    int last = -1;
+    std::ifstream lastStream;
+    std::ofstream nextStream;
 
-    if (Walk(directory, maxVisitor)) {
-      if (maxVisitor.getMax() >= 0) {
-	return maxVisitor.getMax() + 1;
-      }
+    path += directory;
+    path += lastFilename;
+
+    lastStream.open(path.c_str(), std::ifstream::in);
+
+    if (nextStream) {
+      lastStream >> last;
+      lastStream.close();
     }
 
-    assert(THIS_CANNOT_HAPPEN);
-    return -1;
+    next = last + 1;
+
+    nextStream.open(path.c_str(), std::ifstream::out|std::ifstream::trunc);
+
+    if (nextStream) {
+      nextStream << next;
+      nextStream.close();
+    }
+
+    return next;
   }
 
   /**
@@ -266,11 +260,17 @@ namespace fusenet {
     void visit(const std::string& directory, 
 	       const std::string& filename) {
       Newsgroup_t newsgroup;
-      std::string path = directory + filename + "/";
+      std::string path;
 
-      if (ReadNewsgroupName(path, newsgroup.name)) {
-	newsgroup.id = atoi(filename.c_str());
-	newsgroupList->push_back(newsgroup);
+      path += directory;
+      path += filename;
+      path += "/";
+
+      if (filename != metaFilename && filename != lastFilename) {
+	if (ReadNewsgroupName(path, newsgroup.name)) {
+	  newsgroup.id = atoi(filename.c_str());
+	  newsgroupList->push_back(newsgroup);
+	}
       }
     }
   };
@@ -285,13 +285,13 @@ namespace fusenet {
     ArticleListVisitor(ArticleList_t& articleList) {
       this->articleList = &articleList;
     }
-
+    
     void visit(const std::string& directory, 
 	       const std::string& filename) {
       Article_t article;
       std::string path = directory + filename;
-
-      if (filename != metaFilename) {
+      
+      if (filename != metaFilename && filename != lastFilename) {
 	if (ReadArticle(path, article)) {
 	  article.id = atoi(filename.c_str());
 	  articleList->push_back(article);
