@@ -2,9 +2,9 @@
 #define CLIENT_PROTOCOL_H
 
 /**
- * @file client-protocol.h
+ * @file
  *
- * This file contains the message protocol class.
+ * This file contains the client protocol interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */
@@ -63,7 +63,7 @@ namespace fusenet {
     /**
      * Create newsgroup callback.
      *
-     * @param success if successful
+     * @param status the status
      */
     virtual void onCreateNewsgroup(Status_t status) = 0;
 
@@ -77,7 +77,7 @@ namespace fusenet {
     /**
      * Delete newsgroup callback.
      *
-     * @param success if successful
+     * @param status the status
      */
     virtual void onDeleteNewsgroup(Status_t status) = 0;
 
@@ -113,7 +113,7 @@ namespace fusenet {
     /**
      * Create article callback.
      *
-     * @param success if successful
+     * @param status the status
      */
     virtual void onCreateArticle(Status_t status) = 0;
 
@@ -129,7 +129,7 @@ namespace fusenet {
     /**
      * Delete article callback.
      *
-     * @param success if successful.
+     * @param status the status.
      */
     virtual void onDeleteArticle(Status_t status) = 0;
 

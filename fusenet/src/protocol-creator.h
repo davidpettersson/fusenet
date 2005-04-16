@@ -2,7 +2,7 @@
 #define PROTOCOL_CREATOR_H
 
 /**
- * @file protocol-creator.h
+ * @file
  *
  * This file contains the protocol creator interface.
  *

@@ -2,9 +2,9 @@
 #define SOCKET_TRANSPORT_H
 
 /**
- * @file socket-transport.h
+ * @file
  *
- * This file contains the socket transport class.
+ * This file contains the socket transport interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */

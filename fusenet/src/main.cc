@@ -1,5 +1,5 @@
 /**
- * @file main.cc
+ * @file
  *
  * This file contains the application entry point. Just having one
  * main.cc simplifies the build process, since we don't have to mess

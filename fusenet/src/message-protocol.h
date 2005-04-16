@@ -2,9 +2,9 @@
 #define MESSAGE_PROTOCOL_H
 
 /**
- * @file message-protocol.h
+ * @file
  *
- * This file contains the base message protocol class.
+ * This file contains the message protocol interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */

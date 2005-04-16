@@ -1,7 +1,7 @@
 /**
- * @file socket-transport.cc
+ * @file
  *
- * This file contains the implementation of the socket transport class.
+ * This file contains the socket transport implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

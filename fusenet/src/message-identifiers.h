@@ -2,9 +2,9 @@
 #define MESSAGE_IDENTIFIERS_H
 
 /**
- * @file message-identifiers.h
+ * @file
  *
- * This file contains the message identifier definitions.
+ * This file contains the message identifier.
  *
  * @author David Pettersson <david@shebang.nu>
  */

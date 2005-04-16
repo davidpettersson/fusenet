@@ -2,9 +2,9 @@
 #define CLIENT_H
 
 /**
- * @file client.h
+ * @file
  *
- * This file contains the base client class.
+ * This file contains the client interface class.
  *
  * @author David Pettersson <david@shebang.nu>
  */

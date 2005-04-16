@@ -1,7 +1,7 @@
 /**
- * @file client-protocol.cc
+ * @file
  *
- * This file contains the implementation of the client protocol class.
+ * This file contains the client protocol implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

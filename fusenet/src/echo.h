@@ -1,5 +1,5 @@
 /**
- * @file echo.h
+ * @file
  *
  * This file contains the echo demo. This is a bit ugly, but on the
  * other hand it is nothing more than a demo.

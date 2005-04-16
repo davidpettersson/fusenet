@@ -2,7 +2,7 @@
 #define CLIENT_CREATOR_H
 
 /**
- * @file client-creator.h
+ * @file
  *
  * This file contains the client creator interface.
  *

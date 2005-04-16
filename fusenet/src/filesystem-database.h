@@ -2,9 +2,9 @@
 #define FILESYSTEM_DATABASE_H
 
 /**
- * @file filesystem-database.h
+ * @file
  *
- * This file contains the base database class.
+ * This file contains the filesystem database interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */

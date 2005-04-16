@@ -1,7 +1,7 @@
 /**
- * @file client-creator.h
+ * @file
  *
- * This file contains the implementation of the client creator class.
+ * This file contains the client creator implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

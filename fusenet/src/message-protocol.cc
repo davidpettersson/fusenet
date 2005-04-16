@@ -1,7 +1,7 @@
 /**
- * @file message-protocol.cc
+ * @file
  *
- * This file contains the implementation of the message protocol class.
+ * This file contains the message protocol implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

@@ -2,7 +2,7 @@
 #define SERVER_CREATOR_H
 
 /**
- * @file server-creator.h
+ * @file
  *
  * This file contains the server creator interface.
  *

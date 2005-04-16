@@ -2,9 +2,9 @@
 #define DATABASE_H
 
 /**
- * @file database.h
+ * @file
  *
- * This file contains the base database class.
+ * This file contains the database interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */

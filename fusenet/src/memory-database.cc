@@ -1,10 +1,9 @@
 /**
- * @file memory-database.cc
+ * @file
  *
- * This file contains the mostly implementation of the memory
- * database.
+ * This file contains the memory database implementation.
  *
- * @author David Pettersson <david@shebang.nu>
+ * @author Ian Kumlien <pomac@vapor.com>
  */
 
 #include <iostream>

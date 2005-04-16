@@ -1,7 +1,7 @@
 /**
- * @file server.cc
+ * @file
  *
- * This file contains the implementation of the server class.
+ * This file contains the server implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

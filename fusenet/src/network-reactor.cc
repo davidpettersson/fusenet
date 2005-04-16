@@ -1,7 +1,7 @@
 /**
- * @file network-reactor.cc
+ * @file
  *
- * This file contains the implementation of the network reactor class.
+ * This file contains the network reactor implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

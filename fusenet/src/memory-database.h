@@ -2,9 +2,9 @@
 #define MEMORY_DATABASE_H
 
 /**
- * @file memory-database.h
+ * @file
  *
- * This file contains the base database class.
+ * This file contains the memory database interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */
