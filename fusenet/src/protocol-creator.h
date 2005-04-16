@@ -25,8 +25,11 @@ namespace fusenet {
   class ProtocolCreator {
 
   public:
+
     /**
      * Creates instances of protocols.
+     *
+     * @param transport the transport to give the protocol
      */
     virtual Protocol* create(Transport* const transport) const = 0;
   };

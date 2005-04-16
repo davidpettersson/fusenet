@@ -21,9 +21,7 @@ namespace fusenet {
    * with the ability to send and parse server messages as defined in
    * Holm's project description.
    *
-   * This class currently contains the user interaction beside the
-   * protocol handling. The interaction should be placed in a seperate
-   * class.
+   * All servers should inherit the functionality from this class.
    */
   class ServerProtocol : public MessageProtocol {
 
@@ -43,70 +41,101 @@ namespace fusenet {
 
     /**
      * Reply list newsgroups.
+     *
+     * @param newsgroupList the list of newsgroups
      */
     void replyListNewsgroups(NewsgroupList_t& newsgroupList);
 
     /**
      * Create newsgroup.
+     *
+     * @param newsgroupName the name of the newsgroup
      */
     virtual void onCreateNewsgroup(std::string& newsgroupName) = 0;
 
     /**
      * Reply create newsgroup.
+     *
+     * @param status the status
      */
     void replyCreateNewsgroup(Status_t status);
 
     /**
      * Delete newsgroup.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
      */
     virtual void onDeleteNewsgroup(int newsgroupIdentifier) = 0;
 
     /**
      * Reply create newsgroup.
+     *
+     * @param status the status
      */
     void replyDeleteNewsgroup(Status_t status);
 
     /**
      * List articles.
+     *
+     * @param newsgroupIdentifier the newsgroup identifiers
      */
     virtual void onListArticles(int newsgroupIdentifier) = 0;
 
     /**
      * Reply list articles.
+     *
+     * @param status the status
+     * @param articleList the article list
      */
     void replyListArticles(Status_t status,
 			   ArticleList_t& articleList);
     
     /**
      * Create article.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier.
+     * @param article the article
      */
     virtual void onCreateArticle(int newsgroupIdentifier,
 				 Article_t& article) = 0;
 
     /**
      * Reply create article.
+     *
+     * @param status the status
      */
     void replyCreateArticle(Status_t status);
 
     /**
      * Delete article.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
+     * @param articleIdentifier the article identifier
      */
     virtual void onDeleteArticle(int newsgroupIdentifier,
-				 int articlIdentifier) = 0;
+				 int articleIdentifier) = 0;
 
     /**
      * Reply delete article.
+     *
+     * @param status the status
      */
     void replyDeleteArticle(Status_t status);
 
     /**
      * Get article.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
+     * @param articleIdentifier the article identifier
      */
     virtual void onGetArticle(int newsgroupIdentifier,
 			      int articleIdentifier) = 0;
 
     /**
      * Reply get article.
+     *
+     * @param status the status
+     * @param article the article
      */
     void replyGetArticle(Status_t status,
 			 Article_t& article);

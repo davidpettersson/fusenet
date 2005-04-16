@@ -42,38 +42,55 @@ namespace fusenet {
 
     /**
      * Called on list newsgroups.
+     *
+     * @param status the status
+     * @param newsgroupList the newsgroup list
      */
     void onListNewsgroups(Status_t status,
 			  NewsgroupList_t& newsgroupList);
 
     /**
      * Called on create newsgroup.
+     *
+     * @param status the status
      */
     void onCreateNewsgroup(Status_t status);
 
     /**
      * Called on delete newsgroup.
+     *
+     * @param status the status
      */
     void onDeleteNewsgroup(Status_t status);
 
     /**
      * Called on list articles.
+     *
+     * @param status the status
+     * @param articleList the article list
      */
     void onListArticles(Status_t status,
 			ArticleList_t& articleList);
 
     /**
      * Called on create article.
+     *
+     * @param status the status
      */
     void onCreateArticle(Status_t status);
 
     /**
      * Called on delete article.
+     *
+     * @param status the status
      */
     void onDeleteArticle(Status_t status);
 
     /**
      * Called on get article.
+     *
+     * @param status the status
+     * @param article the article
      */
     void onGetArticle(Status_t status,
 		      Article_t& article);
