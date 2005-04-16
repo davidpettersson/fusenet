@@ -1,8 +1,7 @@
 /**
- * @file server-creator.h
+ * @file
  *
- * This file contains the implementation of the server creator
- * class.
+ * This file contains the server creator implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

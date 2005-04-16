@@ -1,7 +1,7 @@
 /**
- * @file transport.cc
+ * @file
  *
- * This file contains the mostly empty implementation of the transport class.
+ * This file contains the transport implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

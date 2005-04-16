@@ -1,7 +1,7 @@
 /**
- * @file filesystem-database.cc
+ * @file
  *
- * This file contains the implementation of the filesystem database.
+ * This file contains the filesystem database implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

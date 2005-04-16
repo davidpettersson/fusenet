@@ -1,8 +1,7 @@
 /**
- * @file database.cc
+ * @file
  *
- * This file contains the mostly empty implementation of the database
- * class.
+ * This file contains the database implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

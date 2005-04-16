@@ -2,9 +2,9 @@
 #define PROTOCOL_H
 
 /**
- * @file protocol.h
+ * @file
  *
- * This file contains the base protocol class.
+ * This file contains protocol interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */

@@ -1,7 +1,7 @@
 /**
- * @file protocol.cc
+ * @file
  *
- * This file contains the implementation of the base protocol class.
+ * This file contains the protocol implementation.
  *
  * @author David Pettersson <david@shebang.nu>
  */

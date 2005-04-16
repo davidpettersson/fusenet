@@ -2,9 +2,9 @@
 #define SERVER_H
 
 /**
- * @file server.h
+ * @file
  *
- * This file contains the message protocol class.
+ * This file contains the server interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */
@@ -28,6 +28,7 @@ namespace fusenet {
      * Creates a server instance.
      *
      * @param transport the transport
+     * @param database the database
      */
     Server(Transport* transport, Database* database);
 

@@ -2,9 +2,9 @@
 #define SERVER_PROTOCOL_H
 
 /**
- * @file server-protocol.h
+ * @file
  *
- * This file contains the message protocol class.
+ * This file contains the server protocol interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */

@@ -2,7 +2,7 @@
 #define DOCUMENTATION_H
 
 /**
- * @file documentation.h
+ * @file
  *
  * This file contains extra documentation for Doxygen. It must not be
  * included in any source file.

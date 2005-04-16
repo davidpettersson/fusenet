@@ -2,9 +2,9 @@
 #define TRANSPORT_H
 
 /**
- * @file transport.h
+ * @file
  *
- * This file contains the base transport class.
+ * This file contains the transport interface.
  *
  * @author David Pettersson <david@shebang.nu>
  */

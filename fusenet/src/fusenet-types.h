@@ -2,9 +2,9 @@
 #define FUSENET_TYPES_H
 
 /**
- * @file fusenet-types.h
+ * @file
  *
- * This file contains all the fusenet types.
+ * This file contains all the common types.
  *
  * @author David Pettersson <david@shebang.nu>
  */
