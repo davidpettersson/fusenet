@@ -17,7 +17,7 @@
 namespace fusenet {
 
   /**
-   * Class for creating instances of the server protocol.
+   * Class for creating instances of the server.
    */
   class ServerCreator : public ProtocolCreator {
 
@@ -25,11 +25,15 @@ namespace fusenet {
 
     /**
      * Construct a server with a given database.
+     *
+     * @param database the database to give the server instance.
      */
     ServerCreator(Database* const Database);
 
     /**
      * Creates instances of server protocols.
+     *
+     * @param transport the transport to give the protocol
      */
     Protocol* create(Transport* const transport) const;
 

@@ -19,7 +19,11 @@ namespace fusenet {
   /**
    * Base class for all message protocols. This class provides some
    * convenience methods that are useful when implementing the message
-   * based protocols.
+   * based protocols as defined by Holm et al.
+   *
+   * Creating classes that inherit this support simplifies the
+   * implementation and hides the low-level bit and byte juggling of
+   * the message protocol primitives.
    */
   class MessageProtocol : public Protocol {
 
@@ -109,7 +113,6 @@ namespace fusenet {
      */
     void pack(const uint8_t* const array, size_t* const integer);
   };
-
 
 }
 

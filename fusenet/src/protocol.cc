@@ -14,5 +14,9 @@ namespace fusenet {
     this->transport = transport;
   }
 
+  Protocol::~Protocol(void) {
+    // Does nothing
+  }
+
 }
 

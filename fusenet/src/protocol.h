@@ -17,15 +17,6 @@
 namespace fusenet {
 
   /**
-   * Protocol exception class. This exception is thrown whenever there
-   * is a protocol error.
-   */
-  class ProtocolException {
-    // No need for anything
-  };
-
-
-  /**
    * Base class for all protocols. Protocols are defined seperately
    * for both client and server. To create a new protocol, create a
    * new class that inherits from this one, and override the data
@@ -62,11 +53,8 @@ namespace fusenet {
 
     /**
      * Destroys an instance.
-     *
-     * @todo Link errors occur if the destructor has no body. Is that
-     *       correct? Why can't I write virtual ~Foo(void) = 0;?
      */
-    virtual ~Protocol(void) { };
+    virtual ~Protocol(void);
 
   protected:
 

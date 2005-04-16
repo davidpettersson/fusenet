@@ -39,33 +39,48 @@ namespace fusenet {
 
     /**
      * Create newsgroup.
+     *
+     * @param newsgroupName the newsgroup name
      */
     void onCreateNewsgroup(std::string& newsgroupName);
 
     /**
      * Delete newsgroup.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
      */
     void onDeleteNewsgroup(int newsgroupIdentifier);
 
     /**
      * List articles.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
      */
     void onListArticles(int newsgroupIdentifier);
 
     /**
      * Create article.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
+     * @param article the article
      */
     void onCreateArticle(int newsgroupIdentifier,
 			 Article_t& article);
 
     /**
      * Delete article.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
+     * @param articleIdentifier the article identifier
      */
     void onDeleteArticle(int newsgroupIdentifier,
-			 int articlIdentifier);
+			 int articleIdentifier);
 
     /**
      * Get article.
+     *
+     * @param newsgroupIdentifier the newsgroup identifier
+     * @param articleIdentifier the article identifier
      */
     void onGetArticle(int newsgroupIdentifier,
 		      int articleIdentifier);
@@ -83,7 +98,7 @@ namespace fusenet {
     void onConnectionLost(void);
 
     /**
-     * Database.
+     * Database to use.
      */
     Database* database;
   };

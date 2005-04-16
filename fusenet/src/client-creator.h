@@ -16,13 +16,16 @@
 namespace fusenet {
 
   /**
-   * Class for creating instances of the client protocol.
+   * Class for creating instances of the client.
    */
   class ClientCreator : public ProtocolCreator {
 
   public:
+
     /**
      * Creates instances of client protocols.
+     *
+     * @param transport the transport to give the protocol
      */
     Protocol* create(Transport* const transport) const;
   };

@@ -18,13 +18,14 @@
 namespace fusenet {
   
   /**
-   * Client protocol class. This class extends the base protocol class
-   * with the ability to send and parse client messages as defined in
-   * Holm's project description.
+   * Client protocol class. This class extends the message protocol
+   * class with the ability to send and parse client messages as
+   * defined in Holm's project description.
    *
-   * This class currently contains the user interaction beside the
-   * protocol handling. The interaction should be placed in a seperate
-   * class.
+   * All client applications should inherit from this class. However,
+   * to be useful, the clients must not return from the
+   * onConnectionMade call without having called on the command
+   * methods, or the client will never be able to communicate.
    */
   class ClientProtocol : public MessageProtocol {
 
@@ -49,6 +50,9 @@ namespace fusenet {
 
     /**
      * List newsgroups callback.
+     *
+     * @param status the status
+     * @param newsgroupList the newsgroup list
      */
     virtual void onListNewsgroups(Status_t status,
 				  NewsgroupList_t& newsgroupList) = 0;
@@ -91,7 +95,7 @@ namespace fusenet {
     /**
      * List articles callback.
      *
-     * @param success
+     * @param status the status
      * @param articleList the article list
      */
     virtual void onListArticles(Status_t status,
@@ -144,6 +148,9 @@ namespace fusenet {
 
     /**
      * Get article callback.
+     *
+     * @param status the status
+     * @param article the article
      */
     virtual void onGetArticle(Status_t status,
 			      Article_t& article) = 0;
