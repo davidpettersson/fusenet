@@ -197,6 +197,7 @@ class CreateArticleTest : public ArticleTestFixture {
   CPPUNIT_TEST_SUITE(CreateArticleTest);
   CPPUNIT_TEST(testWrongNewsgroup);
   CPPUNIT_TEST(testRightNewsgroup);
+  CPPUNIT_TEST(testIncrement);
   CPPUNIT_TEST_SUITE_END();
 public:
   void testWrongNewsgroup() {
@@ -219,9 +220,32 @@ public:
     article.text = "Big brother ...";
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->listArticles(newsgroup.id, articleList)));
     CPPUNIT_ASSERT(articleList.size() == 0);
-    CPPUNIT_ASSERT(!IS_SUCCESS(pDatabase->createArticle(newsgroup.id + 1, article)));
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createArticle(newsgroup.id, article)));
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->listArticles(newsgroup.id, articleList)));
+    CPPUNIT_ASSERT(articleList.size() == 1);
+  }
+  void testIncrement() {
+    Article_t article;
+    ArticleList_t articleList;
+    int increment = -1;
+    article.title = "1984";
+    article.author = "George Orwell";
+    article.text = "Big brother ...";
     CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->listArticles(newsgroup.id, articleList)));
     CPPUNIT_ASSERT(articleList.size() == 0);
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createArticle(newsgroup.id, article)));
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->listArticles(newsgroup.id, articleList)));
+    CPPUNIT_ASSERT(articleList.size() == 1);
+    increment = articleList[0].id;
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->deleteArticle(newsgroup.id, increment)));
+    articleList.clear();
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->listArticles(newsgroup.id, articleList)));
+    CPPUNIT_ASSERT(articleList.size() == 0);
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->createArticle(newsgroup.id, article)));
+    articleList.clear();
+    CPPUNIT_ASSERT(IS_SUCCESS(pDatabase->listArticles(newsgroup.id, articleList)));
+    CPPUNIT_ASSERT(articleList.size() == 1);
+    CPPUNIT_ASSERT(articleList[0].id == increment + 1);
   }
 };
 
