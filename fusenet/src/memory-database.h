@@ -6,19 +6,11 @@
  *
  * This file contains the memory database interface.
  *
- * @author David Pettersson <david@shebang.nu>
+ * @author Ian Kumlien <pomac@vapor.com>
  */
 
 #include "fusenet-types.h"
 #include "database.h"
-
-typedef struct {
-	fusenet::Newsgroup_t first;
-	std::vector<fusenet::Article_t*> *second;
-} pair_t;
-
-typedef std::vector<std::string*> idmap_t;
-typedef std::vector<pair_t*> mapping_t;
 
 namespace fusenet {
 
@@ -80,6 +72,18 @@ namespace fusenet {
     virtual ~MemoryDatabase(void);
 
   private:
+
+    /**
+     * Pair type.
+     */
+    typedef struct {
+      fusenet::Newsgroup_t first;
+      std::vector<fusenet::Article_t*> *second;
+    } pair_t;
+
+    typedef std::vector<std::string*> idmap_t;
+    typedef std::vector<pair_t*> mapping_t;
+
     idmap_t idmap;
     mapping_t mapping;
   };
