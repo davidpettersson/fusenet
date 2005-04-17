@@ -109,10 +109,13 @@ namespace fusenet {
   
   std::string Client::askString(const std::string& question) {
     std::string answer;
-    
+
     std::cout << question << ": ";
-    std::cin >> answer;
-    
+
+    while (answer == "") {
+      getline(std::cin, answer);
+    }
+
     return answer;
   }
   
@@ -121,27 +124,28 @@ namespace fusenet {
     
     std::cout << question << ": ";
     std::cin >> answer;
-    
+
     return answer;
   }
   
   void Client::printHelpMsg(void) {
-    std::cout << "l\t-\tlist newsgroups" << std::endl;
-    std::cout << "c\t-\tcreate newsgroup" << std::endl;
-    std::cout << "k\t-\tdelete newsgroup" << std::endl;
-    std::cout << "a\t-\tlist articles" << std::endl;
-    std::cout << "n\t-\tcreate article" << std::endl;
-    std::cout << "d\t-\tdelete article" << std::endl;
-    std::cout << "g\t-\tget article" << std::endl;
-    std::cout << "h\t-\tthis help message" << std::endl;
+    std::cout << "Available commands:" << std::endl;
+    std::cout << "  a  list articles" << std::endl;
+    std::cout << "  c  create newsgroup" << std::endl;
+    std::cout << "  d  delete article" << std::endl;
+    std::cout << "  g  get article" << std::endl;
+    std::cout << "  h  this help message" << std::endl;
+    std::cout << "  k  delete newsgroup" << std::endl;
+    std::cout << "  l  list newsgroups" << std::endl;
+    std::cout << "  n  create article" << std::endl;
     interact();
   }
   
   void Client::interact(void) {
     std::string command;
     
-    command = askString("Enter command");
-    std::cout << "Got " << command << ", hehe..." << std::endl;
+    command = askString("Command (h for help)");
+    std::cout << "Got '" << command << "'... excellent..." << std::endl;
     
     switch (command[0]) {
       
