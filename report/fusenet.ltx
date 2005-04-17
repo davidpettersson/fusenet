@@ -40,6 +40,52 @@ en diskbaserad och vars livslängs sträcker sig över flera körningar
 med applikationen, samt en som är minnesbaserad och vars livslängd är
 begränsad till den pågående körningen.
 
+\section{Användarhandledning}
+
+Oavsett vilken del av applikationen man vill köra så ska man alltid
+exekvera samma binär, dock med olika flaggor. Nedan ges en beskrivning
+av hur man kör de olika delfunktionaliteterna. Beskrivningarna
+förutsätter att du har byggt applikationen och att du befinner dig i
+\verb+build/+-katalogen. 
+
+Du får också en kort syntaxhjälp om du kör applikationen utan några
+flaggor.
+
+\subsection{Klient}
+
+För att använda klienten måste du veta vilket datornamn och port som
+servern du önskar koppla upp dig mot finns på. När du väl vet detta så
+kan du starta klienten på följande sätt:
+
+\begin{verbatim}
+  ./fusenet --client DATOR PORT
+\end{verbatim}
+
+\noindent där \verb+DATOR+ ersätt med datornamnet på vilken servern
+körs, och \verb+PORT+ med portnumret som önskas. Om du inte kör
+applikationen som användaren \verb+root+ måste du välja ett portnummer
+större än 1024 men mindre än 65536. Giltiga kommandon i klienten får
+du om du anger kommandot \verb+h+.
+
+\subsection{Server}
+
+För att använda servern måste du först bestämma dig för vilken
+lagringsmetod du önskar, och vilken port du önskar använda. När du väl
+veta detta kan du starta servern på följande sätt:
+
+\begin{verbatim}
+  ./fusenet --server PORT LAGRING
+\end{verbatim}
+
+\noindent där \verb+PORT+ är den port du önskar använda, och
+\verb+LAGRING+ antingen är \verb+mem+ för internminnet eller \verb+fs+
+för filsystemet. Servern avslutas genom att trycka Ctrl+C.
+
+Om du vill ta bort filsystemsdatabasen så gör du det enklast genom att
+ta bort underkatalogen \verb+db/+ som skapats efter körningen med
+server och filsystemdatabasen. Ändra dock inget i denna katalog då den
+annars kan bli korrupt.
+
 \section{Design}
 
 Applikationens design har försökts hållas så enkel som möjligt. Målet
@@ -131,11 +177,24 @@ och större återanvändning.
 
 \subsection{Lagring}
 
-a
+Lagring av nyhetsgrupper och artiklar sker antingen i internminnet
+eller mot disk. Gemensamt för de bägge är att de båda uppfyller
+\class{Database}-gränssnittet.
+
+Klassen \class{MemoryDatabase} handhar lagring i internminnet med
+hjälp av standardbibliotekets vektorklass. Klassen
+\class{FilesystemDatabase} handhar på samma sätt lagringen i
+filsystemet. Struktur för artiklar och nyhetsgrupper lagras framgår ur
+referensmanualen\cite{refman}.
+
+För att vi skulle få samma beteende togs också särkilda unittester
+fram för \class{Database}-gränssnittet. Detta vad ett väldigt bra sätt
+att se till så att allting fungerade precis likandant oavsett
+databastyp.
 
 \section{Sammanfattning}
 
-a
+fixme
 
 \newpage
 
