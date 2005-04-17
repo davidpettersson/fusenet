@@ -3,6 +3,10 @@
  *
  * This file contains the memory database implementation.
  *
+ * The database is based on vectors to keep it all in memory and also to
+ * keep the AID/NID unique. This wastes memory (4 bytes / removed node)
+ * but it's a loss we can take.
+ * 
  * @author Ian Kumlien <pomac@vapor.com>
  */
 
@@ -11,8 +15,11 @@
 
 #include "memory-database.h"
 
+/* Macros to see if a newsgroup or article id is invalid */
 #define INVALID_NID(x) ((static_cast<size_t>(x) >= mapping.size()) || (mapping[x] == NULL))
-#define INVALID_AID(x, y) (mapping[y]->second == NULL || ((static_cast<size_t>(x) >= mapping[y]->second->size()) || (mapping[y]->second->at(x) == NULL)))
+#define INVALID_AID(x, y) (mapping[y]->second == NULL || \
+		((static_cast<size_t>(x) >= mapping[y]->second->size()) || \
+		 (mapping[y]->second->at(x) == NULL)))
 
 namespace fusenet {
 
@@ -20,16 +27,21 @@ namespace fusenet {
     // Does nothing
   }
 
+  /**
+   * Get a list of newsgroups that are in the memory database.
+   */
   Status_t MemoryDatabase::getNewsgroupList(NewsgroupList_t& newsgroupList) {
     for (size_t i = 0; i < mapping.size(); ++i) {
       if (mapping[i]) {
 	newsgroupList.push_back(mapping[i]->first);
       }
     }
-
     return STATUS_SUCCESS;
   }
   
+  /**
+   * Create a new newsgroup.
+   */
   Status_t MemoryDatabase::createNewsgroup(std::string& newsgroupName) {
     for (size_t i = 0; i < idmap.size(); ++i) {
       if (idmap[i] && !idmap[i]->compare(newsgroupName)) {
@@ -37,6 +49,7 @@ namespace fusenet {
       }
     }
 
+    /* create and init a new newsgroup entry */
     Newsgroup_t ng = {idmap.size(), newsgroupName};
     pair_t *tmp = new pair_t;
     tmp->first = ng;
@@ -47,6 +60,9 @@ namespace fusenet {
     return STATUS_SUCCESS;
   }
 
+  /**
+   * Delete newsgroup.
+   */
   Status_t MemoryDatabase::deleteNewsgroup(int newsgroupIdentifier) {
     if (INVALID_NID(newsgroupIdentifier)) {
       return STATUS_FAILURE_N_DOES_NOT_EXIST;
@@ -67,65 +83,68 @@ namespace fusenet {
     return STATUS_SUCCESS;
   }
 
+  /**
+   * List articles in a newsgroup.
+   */
   Status_t MemoryDatabase::listArticles(int newsgroupIdentifier,
 					ArticleList_t& articleList) {
-    if (INVALID_NID(newsgroupIdentifier)) {
+    if (INVALID_NID(newsgroupIdentifier))
       return STATUS_FAILURE_N_DOES_NOT_EXIST;
-    }
 
-    if (!mapping[newsgroupIdentifier]->second) {
+    if (!mapping[newsgroupIdentifier]->second)
       return STATUS_SUCCESS;
-    }
 
     for (size_t i = 0; i < mapping[newsgroupIdentifier]->second->size(); ++i) {
-      if (mapping[newsgroupIdentifier]->second->at(i)) {
+      if (mapping[newsgroupIdentifier]->second->at(i))
 	articleList.push_back(*(mapping[newsgroupIdentifier]->second->at(i)));
-      }
     }
 
     return STATUS_SUCCESS;
   }
 
+  /**
+   * Create a article in a newsgroup.
+   */
   Status_t MemoryDatabase::createArticle(int newsgroupIdentifier,
                                          Article_t& article) {
-    if (INVALID_NID(newsgroupIdentifier)) {
+    if (INVALID_NID(newsgroupIdentifier))
       return STATUS_FAILURE_N_DOES_NOT_EXIST;
-    }
 
-    if (mapping[newsgroupIdentifier]->second == NULL) {
+    if (mapping[newsgroupIdentifier]->second == NULL)
       mapping[newsgroupIdentifier]->second = new std::vector<Article_t *>;
-    }
 
     article.id = mapping[newsgroupIdentifier]->second->size();
     mapping[newsgroupIdentifier]->second->push_back(new Article_t(article));
     return STATUS_SUCCESS;
   }
 
+  /**
+   * Delete a article in a newsgroup.
+   */
   Status_t MemoryDatabase::deleteArticle(int newsgroupIdentifier,
 					 int articleIdentifier) {
-    if (INVALID_NID(newsgroupIdentifier)) {
+    if (INVALID_NID(newsgroupIdentifier))
       return STATUS_FAILURE_N_DOES_NOT_EXIST;
-    }
 
-    if (INVALID_AID(articleIdentifier, newsgroupIdentifier)) {
+    if (INVALID_AID(articleIdentifier, newsgroupIdentifier))
       return STATUS_FAILURE_A_DOES_NOT_EXIST;
-    }
 
     delete mapping[newsgroupIdentifier]->second->at(articleIdentifier);
     mapping[newsgroupIdentifier]->second->at(articleIdentifier) = NULL;
     return STATUS_SUCCESS;
   }
 
+  /**
+   * Get a article from a newsgroup
+   */
   Status_t MemoryDatabase::getArticle(int newsgroupIdentifier,
 				      int articleIdentifier,
 				      Article_t& article) {
-    if (INVALID_NID(newsgroupIdentifier)) {
+    if (INVALID_NID(newsgroupIdentifier))
       return STATUS_FAILURE_N_DOES_NOT_EXIST;
-    }
 
-    if (INVALID_AID(articleIdentifier, newsgroupIdentifier)) {
+    if (INVALID_AID(articleIdentifier, newsgroupIdentifier))
       return STATUS_FAILURE_A_DOES_NOT_EXIST;
-    }
 
     article = *(mapping[newsgroupIdentifier]->second->at(articleIdentifier));
     return STATUS_SUCCESS;
@@ -144,3 +163,4 @@ namespace fusenet {
     }
   }
 }
+
