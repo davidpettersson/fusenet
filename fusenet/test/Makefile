@@ -30,6 +30,8 @@ clean:
 	rm -f $(depends)
 	rm -f *.o 
 	rm -f *~
+	rm -f *.bb *.da *.bbg
+	rm -rf db/
 
 .PHONY: all clean
 
