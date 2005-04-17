@@ -1,0 +1,156 @@
+%
+% fusenet.ltx
+%
+
+\documentclass[11pt,a4paper,titlepage]{article}
+
+\usepackage[swedish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{latexsym}
+\usepackage[dvips]{graphicx}
+\usepackage{palatino}
+
+\newcommand{\fusenet}{\texttt{\textbf{fusenet}}~}
+\newcommand{\class}[1]{\textit{#1}}
+
+\title{\fusenet\\{\Large En lösning på projektuppgiften i kursen C++-programmering}}
+\date{\today} % 17 april 2005
+\author{David Pettersson (david@shebang.nu) \and Ian Kumlien (pomac@vapor.com) \and Alexander Felix (someone@someplace)}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduktion}
+
+\fusenet är en implementation av både klient och server för det
+Usenet-liknande protokoll som beskrivs i Per Holms projektbeskrivning
+för kursen i C++-programming. 
+
+Implementationen består av en enda exekverbar fil som, beroende på
+vilka flaggor som angetts, kan agera såväl server som klient. Klienten
+har ett väldigt spartanskt textbaserat användargränssnitt, servern
+saknar helt ett interaktivit gränssnitt -- det enda den gör är att
+logga vad som pågår till terminalen.
+
+Enligt projektbeskrivningen skulle servern ha två möjliga databaser:
+en diskbaserad och vars livslängs sträcker sig över flera körningar
+med applikationen, samt en som är minnesbaserad och vars livslängd är
+begränsad till den pågående körningen.
+
+\section{Design}
+
+Applikationens design har försökts hållas så enkel som möjligt. Målet
+har varit att det ska vara uppenbart hur applikationen är uppbyggd,
+och vad varje klass och fil ansvarar för.
+
+För att förenkla förståelsen så har en stor del av koden dokumenterats
+med hjälp av verktyget Doxygen\cite{doxygen}, som närmast kan jämföras
+med \verb+javadoc+ för C++.  Detta verktyg framställer klassdiagram i
+UML-stil, samt extraherar dokumentationen om klasser och metoder från
+källkoden. Denna referensmanual finns tillgänglig på
+nätet\cite{refman}.
+
+\subsection{Kommunikation}
+
+För att göra kommunikationen enkel har
+\class{Reactor}-mönstret\cite{reactor} som Schmidt tagit fram
+använts. Eftersom servern, och i princip klienten, båda är objekt som
+är händelsebaserade visade sig detta mönster vara ett bra sätt att
+hantera både exekveringsflödet och protokollhanteringen.
+
+\class{Reactor}-mönstret bygger på att man har ett objekt som reagerar
+på händelser från ett viss källa, i detta fall nätverket, och som
+distribuerar vidare dessa händelser till en eller flera
+hanterare. Dessa hanterare behöver inte veta något om den
+underliggande transporten, bara de ges möjlighet att kunna skicka
+tillbaka data via den. 
+
+I implementationen så är det klassen \class{NetworkReactor} som
+handhar distributionen av nätverkshändelsern till instanser av
+subklasser till gränssnittsklassen \class{Protocol}. För att göra det
+möjligt för protokollen att skicka tillbaka data, har en
+gränssnittsklass \class{Transport} används, som har en subklass
+\class{SocketTransport} som handhar läsandet och skrivandet till
+nätverkskopplingen.
+
+När en ny klient ansluter sig så skapar \class{NetworkReactor} en ny
+protokollinstans med hjälp av klassen
+\class{ProtocolCreator}. Därefter skapas en instans av
+\class{SocketTransport} och protokollinstansen meddelas att en ny
+uppkoppling är skapad. När sedan data anländer till denna instans så
+ser \class{NetworkReactor} till att rätt instans får data.
+
+Protokollet är implementerat i flera nivåer, där varje nivå
+abstraherar kommunikationen. \class{NetworkReactor} är inte medveten
+om vilket protokoll det är som används, bara att den har förmågan att
+kommunicera via det gränssnittet som presenteras i
+\class{Transport}. I implementationen återfinns ett antal olika
+protokollnivåer:
+
+\begin{description}
+
+\item[\class{Protocol}] är den grundläggande protokollklassen. Denna
+  klass har metoder som låter \class{NetworkReactor} meddela den om
+  grundläggande händelser såsom att en uppkoppling har skett eller
+  försvunnit, och att data har anlänt. Denna klass innehar också en
+  referens till transporten vilket gör det möjligt för den att skicka
+  tillbaka data.
+
+\item[\class{MessageProtocol}] abstraherar bort tolkning av de olika
+  primitiverna i det givna protokollet. Med hjälp av denna klass kan
+  man direkt läsa och skriva parametrar, strängar och kommandon utan
+  att behöva bekymra sig om hur de ska skickas över transporten.
+
+\item[\class{ClientProtocol} och \class{ServerProtocol}] är något av
+  parhästar när det gäller de övergripande kommandona. Det är i dessa
+  två klasser huvudfunktionaliteten när det gäller kommunikationen
+  finns.
+
+  I \class{ClientProtocol} finns det en metod \class{listNewsgroups()}
+  som skickar iväg kommandon för att lista alla nyhetsgrupper. När
+  kommandot anländer på serversidan så anropas
+  \class{onListNewsgroups()}, databasen tillfrågas och svaret skickas
+  med \class{replyListNewsgroups()}. När svaret anländer hos klient
+  anropas denna gång \class{onListNewsgroups()} med en vektor på alla
+  nyhetgrupper på servern. På samma sätt fungerar alla andra
+  kommandon.
+
+\item[\class{Client} och \class{Server}] är bägge ändpunkter på
+  respektive sida. \class{Client} driver interaktionen med användaren
+  och skickar iväg frågorna, och \class{Server} delegerar vidare
+  frågorna till rätt databastyp. 
+
+\end{description}
+
+Denna design har gjort den enkelt att både implementera och testa att
+kommunikationen fungerar felfritt. Det har också lett till mindre kod
+och större återanvändning.
+
+\subsection{Lagring}
+
+a
+
+\section{Sammanfattning}
+
+a
+
+\newpage
+
+\begin{thebibliography}{99}
+
+\bibitem{doxygen}
+  Doxygen, \verb+http://www.doxygen.org+
+
+\bibitem{refman}
+  Referensmanual, \verb+http://shebang.nu/~david/fusenet/+
+
+\bibitem{reactor} Schmidt, \emph{Reactor -- An Object Behavioral
+  Pattern for Event Demultiplexing and Event Handler Dispatching},
+  \verb+http://www.cs.wustl.edu/~schmidt/PDF/reactor-siemens.pdf+
+
+\end{thebibliography}
+
+\end{document}
