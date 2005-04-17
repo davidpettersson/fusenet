@@ -1,0 +1,17 @@
+Please see the documentation for precise instructions on how the client
+and server works. A few examples for the impatient.
+
+Connect using the client to a server on localhost listening to port 4000:
+
+  ./fusenet --client localhost 4000
+
+Start a server using the memory backend on port 3900:
+
+  ./fusenet --server 3900 mem
+
+Start a server using the filesystem backend on port 3800:
+
+  ./fusenet --server 3800 fs
+
+Now go read that documentation! :-)
+
