@@ -3,10 +3,6 @@
  *
  * This file contains the memory database implementation.
  *
- * The database is based on vectors to keep it all in memory and also to
- * keep the AID/NID unique. This wastes memory (4 bytes / removed node)
- * but it's a loss we can take.
- * 
  * @author Ian Kumlien <pomac@vapor.com>
  */
 

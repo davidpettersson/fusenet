@@ -16,6 +16,11 @@ namespace fusenet {
 
   /**
    * Memory database.
+   *
+   * The database is based on vectors to keep it all in memory and
+   * also to keep the article identifier and newsgroup identifier
+   * unique. This wastes memory (4 bytes per removed node) but it's a
+   * loss we can take.
    */
   class MemoryDatabase : public Database {
 
