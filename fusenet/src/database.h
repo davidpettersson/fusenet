@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains the database interface.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <string>

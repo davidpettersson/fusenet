@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains protocol interface.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <iostream>

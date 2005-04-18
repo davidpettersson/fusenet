@@ -2,8 +2,6 @@
  * @file
  *
  * This file contains the protocol implementation.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include "protocol.h"

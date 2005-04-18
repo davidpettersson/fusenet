@@ -2,8 +2,6 @@
  * @file
  *
  * This file contains the client protocol implementation.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <cassert>

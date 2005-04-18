@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains the message identifier.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 namespace fusenet {

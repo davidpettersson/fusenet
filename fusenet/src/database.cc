@@ -2,8 +2,6 @@
  * @file
  *
  * This file contains the database implementation.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <iostream>

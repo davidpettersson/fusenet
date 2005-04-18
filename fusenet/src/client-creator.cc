@@ -2,8 +2,6 @@
  * @file
  *
  * This file contains the client creator implementation.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include "client-creator.h"

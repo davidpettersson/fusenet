@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains the client interface class.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include "client-protocol.h"

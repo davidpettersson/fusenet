@@ -6,8 +6,6 @@
  *
  * This file contains extra documentation for Doxygen. It must not be
  * included in any source file.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 #error This file must not be used in any source file
 
