@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains all the common types.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <iostream>

@@ -2,8 +2,6 @@
  * @file
  *
  * This file contains the network reactor implementation.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <arpa/inet.h>

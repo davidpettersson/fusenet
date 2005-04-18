@@ -2,8 +2,6 @@
  * @file
  *
  * This file contains the server creator implementation.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include "server-creator.h"

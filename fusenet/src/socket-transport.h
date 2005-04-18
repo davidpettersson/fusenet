@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains the socket transport interface.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include "transport.h"

@@ -2,8 +2,6 @@
  * @file
  *
  * This file contains the memory database implementation.
- *
- * @author Ian Kumlien <pomac@vapor.com>
  */
 
 #include <iostream>

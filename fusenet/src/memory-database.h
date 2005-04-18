@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains the memory database interface.
- *
- * @author Ian Kumlien <pomac@vapor.com>
  */
 
 #include "fusenet-types.h"

@@ -5,8 +5,6 @@
  * @file
  *
  * This file contains the protocol creator interface.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <iostream>

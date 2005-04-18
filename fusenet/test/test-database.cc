@@ -1,9 +1,7 @@
 /**
- * @file test-database.cc
+ * @file
  *
  * Tests the database implementations.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <cppunit/TestCaller.h>

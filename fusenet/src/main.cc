@@ -4,8 +4,6 @@
  * This file contains the application entry point. Just having one
  * main.cc simplifies the build process, since we don't have to mess
  * about with several different make targets.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include <cstdio>

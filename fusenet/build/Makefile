@@ -1,8 +1,6 @@
 #
 # Makefile
 #
-# David Pettersson <david@shebang.nu>
-#
 
 CXX = g++
 CXXFLAGS = -pipe -O2 -Wall -W -ansi -pedantic-errors -Wmissing-braces

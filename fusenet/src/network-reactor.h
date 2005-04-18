@@ -5,15 +5,13 @@
  * @file
  *
  * This file contains the network reactor interface.
-
+ *
  * The network reactor reacts to network events such as incoming
  * connections, received data and lost connections. It forwards these
  * events to protocol instances.
  *
  * This design is based upon a the Reactor pattern by
  * Schmidt. Although modified a bit, the idea is the same.
- *
- * @author David Pettersson <david@shebang.nu>
  */
 
 #include "protocol-creator.h"
