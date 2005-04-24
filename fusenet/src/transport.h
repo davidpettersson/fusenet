@@ -8,9 +8,13 @@
  */
 
 #include <iostream>
-#include <stdint.h>
 #include <string>
 
+#include "fusenet-types.h"
+
+/**
+ * Convenience macro for prefixing printouts.
+ */
 #define TRANSPORT_PREFIX(tp) PREFIX << "[" << (tp)->getName() << "] "
 
 namespace fusenet {

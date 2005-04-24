@@ -6,7 +6,12 @@ CXX = g++
 CXXFLAGS = -pipe -O2 -Wall -W -ansi -pedantic-errors -Wmissing-braces
 CXXFLAGS += -Wparentheses -Wold-style-cast -g
 VPATH	= ../src:./
-LDFLAGS =
+
+UNAME = $(shell uname)
+
+ifeq ($(UNAME), SunOS)
+LDFLAGS = -lsocket -lnsl
+endif
 
 program = fusenet
 sources = $(notdir $(wildcard ../src/*.cc))
