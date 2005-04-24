@@ -7,11 +7,15 @@
  * This file contains all the common types.
  */
 
+#include <inttypes.h>
 #include <iostream>
 #include <vector>
 
 #include "message-identifiers.h"
 
+/**
+ * Convenience macro.
+ */
 #define IS_SUCCESS(s) ((s) == STATUS_SUCCESS)
 
 namespace fusenet {
@@ -55,7 +59,6 @@ namespace fusenet {
     STATUS_FAILURE_A_DOES_NOT_EXIST
   }
   Status_t;
-    
 }
 
 #endif

@@ -8,8 +8,8 @@
  */
 
 #include <iostream>
-#include <stdint.h>
 
+#include "fusenet-types.h"
 #include "transport.h"
 
 namespace fusenet {
